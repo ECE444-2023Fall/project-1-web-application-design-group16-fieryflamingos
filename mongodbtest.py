@@ -1,3 +1,11 @@
+"""
+NOTE: need to create secret.py file in local directory.
+Add two variables to secret.py: 
+    userdb (your database username)
+    passworddb (your database password)
+This script tests if you can connect to the database.
+"""
+
 import secret
 
 from pymongo.mongo_client import MongoClient
