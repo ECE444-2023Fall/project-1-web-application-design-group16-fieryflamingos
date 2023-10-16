@@ -1,4 +1,9 @@
 .venv
+venv
 .vscode
 __pycache__
 secret.py
+*.db
+*.log
+*.pyc
+config.py
