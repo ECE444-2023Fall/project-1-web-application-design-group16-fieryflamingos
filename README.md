@@ -22,12 +22,6 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
@@ -35,13 +29,12 @@
 <br />
 <div align="center">
   <a href="https://github.com/ECE444-2023Fall/project-1-web-application-design-group16-fieryflamingos">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Occasional: Event Hosting Platform</h3>
 
   <p align="center">
-    The main objective of this project is to design and develop a web application called Occasional. With Occasional, University of Toronto students will enjoy a convenient way to discover the rich array of campus events and clubs. The existing system for students to learn about these events is distributed across various university websites and resources, making it challenging for students to learn about events they may be interested in. We aspire to enhance this current system by centralizing all this scattered information into a single accessible events hub. Students should have easy access to all event details, thereby giving them an increased opportunity to expand their horizons. They can also create meaningful social connections, foster a sense of community, and improve their overall campus life.  
+    Occasional, University of Toronto students will enjoy a convenient way to discover the rich array of campus events and clubs. 
     <br />
     <a href="https://github.com/ECE444-2023Fall/project-1-web-application-design-group16-fieryflamingos"><strong>Explore the docs »</strong></a>
     <br />
@@ -87,9 +80,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+The main objective of this project is to design and develop a web application called Occasional. With Occasional, University of Toronto students will enjoy a convenient way to discover the rich array of campus events and clubs. The existing system for students to learn about these events is distributed across various university websites and resources, making it challenging for students to learn about events they may be interested in. We aspire to enhance this current system by centralizing all this scattered information into a single accessible events hub. Students should have easy access to all event details, thereby giving them an increased opportunity to expand their horizons. They can also create meaningful social connections, foster a sense of community, and improve their overall campus life.  
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -113,8 +104,7 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+The below steps detail how you can start and install Occasional
 
 ### Prerequisites
 
@@ -147,9 +137,7 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+The usage 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -158,10 +146,16 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+Current User Epics to be implemented, specific criterion is still in flux. 
+
+- [ ] Filter and Search 
+- [ ] Export and Share
+    - [ ] Calendar Export
+- [ ] Event Creation
+- [ ] Comments and Feedback 
+- [ ] Event Recommendations 
+- [ ] Notifications and Alerts
+    
 
 See the [open issues](https://github.com/ECE444-2023Fall/project-1-web-application-design-group16-fieryflamingos/issues) for a full list of proposed features (and known issues).
 
@@ -172,16 +166,7 @@ See the [open issues](https://github.com/ECE444-2023Fall/project-1-web-applicati
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+This is a closed project for ECE444. We will not be accepting contributions at this time. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -199,7 +184,13 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+To Contact Us: 
+Mohammed Amir - m.amir@mail.utoronto.ca
+Sebastian Czyrny - sebastian.czyrny@mail.utoronto.ca
+Tommy Ni - tommy.ni@mail.utoronto.ca
+Mehak Sharma - emm.sharma@mail.utoronto.ca
+Mathura Shivakaran - mathura.shivakaran@mail.utoronto.ca
+Dylan Sun - zhangjie.sun@mail.utoronto.ca
 
 Project Link: [https://github.com/ECE444-2023Fall/project-1-web-application-design-group16-fieryflamingos](https://github.com/ECE444-2023Fall/project-1-web-application-design-group16-fieryflamingos)
 
@@ -210,9 +201,15 @@ Project Link: [https://github.com/ECE444-2023Fall/project-1-web-application-desi
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+Listed Resources used in the creation of this readme
+* [Choose an Open Source License](https://choosealicense.com)
+* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
+* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
+* [Malven's Grid Cheatsheet](https://grid.malven.co/)
+* [Img Shields](https://shields.io)
+* [GitHub Pages](https://pages.github.com)
+* [Font Awesome](https://fontawesome.com)
+* [React Icons](https://react-icons.github.io/react-icons/search)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
