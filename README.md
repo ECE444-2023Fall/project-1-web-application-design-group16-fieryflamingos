@@ -47,6 +47,7 @@
   </p>
 </div>
 
+<p>Boiler Plate Code taken from the following repo: <a href="https://github.com/MaxHalford/flask-boilerplate/">https://github.com/MaxHalford/flask-boilerplate/</a></p>
 
 
 <!-- TABLE OF CONTENTS -->
