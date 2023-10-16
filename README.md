@@ -1,6 +1,6 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=11965017&assignment_repo_type=AssignmentRepo)
 
-<h3 align="center">Referenced Template From: https://github.com/ECE444-2023Fall/project-1-web-application-design-group16-fieryflamingos</h3>
+<h3 align="center">Referenced Template From: https://github.com/othneildrew/Best-README-Template/tree/master</h3>
 
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
