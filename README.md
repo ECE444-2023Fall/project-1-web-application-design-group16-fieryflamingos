@@ -137,7 +137,7 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-The usage 
+The Occasional web application aims to address the diverse needs of the University of Toronto community by providing a comprehensive and centralized hub for discovering and managing campus events and clubs. For Club Executives, Occasional serves as a crucial platform for efficiently promoting and recruiting members for their clubs, improving event attendance, and achieving their club's goals. Busy University Students, benefit from Occasional by effortlessly finding and attending events that align with their interests, making friends, and enhancing their campus experience despite demanding academic and work commitments. University Faculty, can use Occasional for increasing event participation among students, eliminating the reliance on often-ignored emails, and creating a more effective channel to communicate valuable academic and career-oriented opportunities. Overall, Occasional bridges the gap between students, clubs, and faculty, fostering a vibrant, connected, and engaged University of Toronto community. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
