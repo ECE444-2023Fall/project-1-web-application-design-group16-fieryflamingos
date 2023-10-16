@@ -185,11 +185,16 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Contact
 
 To Contact Us: 
-Mohammed Amir - m.amir@mail.utoronto.ca
+Mohammed Amir - m.amir@mail.utoronto.ca 
+
 Sebastian Czyrny - sebastian.czyrny@mail.utoronto.ca
+
 Tommy Ni - tommy.ni@mail.utoronto.ca
+
 Mehak Sharma - emm.sharma@mail.utoronto.ca
+
 Mathura Shivakaran - mathura.shivakaran@mail.utoronto.ca
+
 Dylan Sun - zhangjie.sun@mail.utoronto.ca
 
 Project Link: [https://github.com/ECE444-2023Fall/project-1-web-application-design-group16-fieryflamingos](https://github.com/ECE444-2023Fall/project-1-web-application-design-group16-fieryflamingos)
