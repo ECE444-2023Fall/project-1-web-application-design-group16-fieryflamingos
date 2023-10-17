@@ -47,7 +47,7 @@
   </p>
 </div>
 
-<p>Boiler Plate Code taken from the following repo: <a href="https://github.com/MaxHalford/flask-boilerplate/">https://github.com/MaxHalford/flask-boilerplate/</a></p>
+<p>Boiler Plate Code taken from the textbook: Flask Web Development 2e (Chapter 7)</p>
 
 
 <!-- TABLE OF CONTENTS -->
@@ -89,14 +89,35 @@ The main objective of this project is to design and develop a web application ca
 
 ### Built With
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+#### Front End
+<ul>
+  <li>
+    <a href="https://semantic-ui.com/">Semantic UI</a> for global styles
+  </li>
+  <li>
+    <a href="https://getbootstrap.com/">Bootstrap</a> for global styles
+  </li>
+</ul>
+
+#### Back End
+<ul>
+  <li><a href="https://flask.palletsprojects.com/en/3.0.x/">Flask</a></li>
+  <li><a href="https://flask-login.readthedocs.org/en/latest/">Flask Login</a> for user accounts</li>
+  <li><a href="https://flask-wtf.readthedocs.org/en/latest/">Flask WTF</a> for form handling</li>
+  <li><a href="https://pythonhosted.org/Flask-Mail/">Flask Mail</a> for sending emails</li>
+  <li><a href="http://pythonhosted.org/itsdangerous/">itsdangerous</a> for generating random email confirmation tokens</li>
+  <li><a href="https://flask-bcrypt.readthedocs.org/en/latest/">Flask Bcrypt</a> for password crypto hash generation</li>
+  <li><a href="https://docs.mongoengine.org/projects/flask-mongoengine/en/latest/index.html">Flask MongoEngine</a> for connecting to the MongoDB database</li>
+</ul>
+
+#### Database
+<ul>
+  <li><a href="https://www.mongodb.com/">MongoDB</a> for data storage</li>
+</ul>
+
+#### Server
+TBD
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
