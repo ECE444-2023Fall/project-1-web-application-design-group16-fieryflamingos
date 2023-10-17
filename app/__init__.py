@@ -3,16 +3,15 @@ from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_moment import Moment
 from flask_bcrypt import Bcrypt
-from flask_mongoengine import Mongoengine
+from flask_mongoengine import MongoEngine
 from flask_login import LoginManager
-
 from config import config
 
 mail = Mail()
 bcrypt = Bcrypt()
 moment = Moment()
+db = MongoEngine()
 bootstrap = Bootstrap()
-db = Mongoengine()
 login_manager = LoginManager()
 
 def create_app(config_name):
@@ -24,6 +23,7 @@ def create_app(config_name):
     moment.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
+
 
     # attach routes and custom error pages here
     from .main import main as main_blueprint

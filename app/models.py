@@ -3,7 +3,7 @@ from datetime import datetime
 from mongoengine import Document, StringField, EmailField, DateTimeField
 from flask_bcrypt import generate_password_hash
 
-import config
+from config import Config
 
 class User(Document):
     registered_date = DateTimeField(default=datetime.now)
@@ -27,7 +27,7 @@ class User(Document):
     role = StringField(required=True, default="regular")
 
     meta = {
-        'db_alias': config.MONGO_DATABASE_ALIAS,
+        'db_alias': Config.MONGODB_SETTINGS['alias'],
         'collection': 'users'
     }
 
@@ -47,7 +47,7 @@ class User(Document):
         if len(email_domain) != 2:
             raise  Exception(f"'{self.email}' not a valid email (email validation failed)")
         email_domain_part = email_domain[-1].lower()
-        for domain in config.DOMAIN_WHITELIST:  
+        for domain in Config.DOMAIN_WHITELIST:  
             if domain == email_domain_part:
                 email_valid = True
                 break
