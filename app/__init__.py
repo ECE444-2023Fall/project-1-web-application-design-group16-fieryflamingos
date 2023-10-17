@@ -1,44 +1,32 @@
-from flask import Flask
-
-app = Flask(__name__)
-
-# Setup the app with the config.py file
-app.config.from_object('app.config')
-
-# Setup the logger
-from app.logger_setup import logger
-
-# Setup the database
-
-# Setup the mail server
+from flask import Flask, render_template
+from flask_bootstrap import Bootstrap
 from flask_mail import Mail
-mail = Mail(app)
-
-# Setup the debug toolbar
-from flask_debugtoolbar import DebugToolbarExtension
-app.config['DEBUG_TB_TEMPLATE_EDITOR_ENABLED'] = True
-app.config['DEBUG_TB_PROFILER_ENABLED'] = True
-toolbar = DebugToolbarExtension(app)
-
-# Setup the password crypting
+from flask_moment import Moment
 from flask_bcrypt import Bcrypt
-bcrypt = Bcrypt(app)
-
-# Import the views
-from app.views import main, user, error
-app.register_blueprint(user.userbp)
-
-# Setup the user login process
+from flask_mongoengine import Mongoengine
 from flask_login import LoginManager
-from app.models import User
 
+from config import config
+
+mail = Mail()
+bcrypt = Bcrypt()
+moment = Moment()
+bootstrap = Bootstrap()
+db = Mongoengine()
 login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'userbp.signin'
 
+def create_app(config_name):
+    app = Flask(__name__)
+    app.config.from_object(config[config_name])
+    config[config_name].init_app(app)
+    bootstrap.init_app(app)
+    mail.init_app(app)
+    moment.init_app(app)
+    db.init_app(app)
+    login_manager.init_app(app)
 
-@login_manager.user_loader
-def load_user(email):
-    return User.query.filter(User.email == email).first()
+    # attach routes and custom error pages here
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint)
 
-from app import admin
+    return app
