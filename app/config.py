@@ -1,6 +1,6 @@
 import logging
+import secret
 
-from app.config_common import *
 
 
 # DEBUG can only be set to True in a development environment for security reasons
@@ -13,8 +13,7 @@ SECRET_KEY = 'houdini'
 ADMIN_CREDENTIALS = ('admin', 'pa$$word')
 
 # Database choice
-SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
-SQLALCHEMY_TRACK_MODIFICATIONS = True
+MONGO_DATABASE_URI = f"mongodb+srv://{secret.userdb}:{secret.passworddb}@cluster0.9dnqbir.mongodb.net/?retryWrites=true&w=majority"
 
 # Configuration of a Gmail account for sending mails
 MAIL_SERVER = 'smtp.googlemail.com'

@@ -6,4 +6,3 @@ secret.py
 *.db
 *.log
 *.pyc
-config.py

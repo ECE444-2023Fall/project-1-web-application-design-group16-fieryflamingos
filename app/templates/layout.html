@@ -23,27 +23,9 @@
 				<title>{{ title }}</title>
 				<!-- Navbar -->
 				<div class="ui attached inverted menu">
-				  	{{ m.nav_link('index', 'Home') }}
-				  	{{ m.nav_link('map', 'Map') }}
-					{{ m.nav_link('contact', 'Contact') }}
 				 	<div class="right menu">
 				 		<!-- User is logged in -->
-				      	{% if current_user.is_authenticated %}
-				      		<div class="item">
-				        		<a class="ui primary button" href="/user/account">{{ current_user.full_name }}</a>
-				    		</div>
-				    		<div class="item">
-				        		<a class="ui default button" href="/user/signout">Sign out</a>
-				    		</div>
-			          	<!-- User is not logged in -->
-			          	{% else %}
-			          		<div class="item">
-				        		<a class="ui primary button" href="/user/signin">Sign in</a>
-				    		</div>
-				    		<div class="item">
-				        		<a class="ui default button" href="/user/signup">Sign up</a>
-				    		</div>
-						{% endif %}
+				    
 			  		</div>
 				</div>
 			{% endblock %}
