@@ -12,7 +12,7 @@ bcrypt = Bcrypt()
 moment = Moment()
 db = MongoEngine()
 bootstrap = Bootstrap()
-login_manager = LoginManager()
+# login_manager = LoginManager()
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -22,7 +22,7 @@ def create_app(config_name):
     mail.init_app(app)
     moment.init_app(app)
     db.init_app(app)
-    login_manager.init_app(app)
+    # login_manager.init_app(app)
 
 
     # attach routes and custom error pages here

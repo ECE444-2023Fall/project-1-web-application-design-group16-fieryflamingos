@@ -8,5 +8,6 @@ from ..models import User
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
+    print("in index route...")
     return render_template('index.html',
                             current_time=datetime.utcnow())

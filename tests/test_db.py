@@ -14,9 +14,9 @@ class BasicsTestCase(unittest.TestCase):
 
     def test_user(self):
         user = User()
-        user.email = "test1@mail.utoronto.ca"
-        user.first_name = "Test"
-        user.last_name = "Last"
+        user.email = "mehak.sharma@mail.utoronto.ca"
+        user.first_name = "Mehak"
+        user.last_name = "Sharma"
         user.password = "P@assword123!"
 
         user = user.save()
