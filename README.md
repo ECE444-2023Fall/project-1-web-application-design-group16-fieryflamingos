@@ -59,13 +59,12 @@
       <ul>
         <li><a href="#built-with">Built With</a></li>
       </ul>
+      <ul>
+        <li><a href="#project-mangement">Project Management</a></li>
+      </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
@@ -121,6 +120,12 @@ TBD
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Project Management
+
+Task tracking and project management done with <a href="https://www.atlassian.com/software/jira">Jira</a>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 
 <!-- GETTING STARTED -->
@@ -128,29 +133,7 @@ TBD
 
 The below steps detail how you can start and install Occasional
 
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/ECE444-2023Fall/project-1-web-application-design-group16-fieryflamingos.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+Coming soon...
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
