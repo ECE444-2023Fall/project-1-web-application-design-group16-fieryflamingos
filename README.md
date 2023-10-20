@@ -122,7 +122,7 @@ TBD
 
 ### Project Management
 
-Task tracking and project management done with <a href="https://www.atlassian.com/software/jira">Jira</a>
+Task tracking and project management done with <a href="https://jira.atlassian.com/">Jira</a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
