@@ -58,9 +58,14 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
-      </ul>
-      <ul>
+        <ul>
+        <li><a href="#front-end">Front End</a></li>
+        <li><a href="#back-end">Back End</a></li>
+        <li><a href="#database">Database</a></li>
+        <li><a href="#server">Server</a></li>
+        </ul>
         <li><a href="#project-mangement">Project Management</a></li>
+        <li><a href="#user-interface-design">User Interface Design</a></li>
       </ul>
     </li>
     <li>
@@ -126,6 +131,11 @@ Task tracking and project management done with <a href="https://jira.atlassian.c
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### User Interface Design
+
+User Interface was done using <a href="https://www.figma.com">Figma</a>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- GETTING STARTED -->
