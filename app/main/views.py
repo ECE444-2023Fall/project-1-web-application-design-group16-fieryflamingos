@@ -11,3 +11,29 @@ def index():
     print("in index route...")
     return render_template('index.html',
                             current_time=datetime.utcnow())
+
+""" Event Details form"""
+
+
+""" Events detail route """
+
+
+
+""" Event listings route
+query parameters in the url """
+
+
+
+""" Sign in route """
+@main.route('/sign-in', methods=['GET'])
+def sign_in():
+    return render_template('sign-in.html')
+
+
+""" Register route """
+@main.route('/register', methods=['GET'])
+def register():
+    return render_template('register.html')
+
+
+""" User Profile route """
