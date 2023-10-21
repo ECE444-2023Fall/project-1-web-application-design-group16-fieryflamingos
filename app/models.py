@@ -1,16 +1,12 @@
 from datetime import datetime
 
-from mongoengine import Document, StringField, EmailField, DateTimeField
+from mongoengine import Document, StringField, EmailField, DateTimeField, ListField, IntField
 from flask_bcrypt import generate_password_hash
 
 from config import Config
 
 class User(Document):
     registered_date = DateTimeField(default=datetime.now)
-
-    first_name = StringField(required=True, regex="^[a-zA-Z \-]+$", max_length=20)
-
-    last_name = StringField(required=True, regex="^[a-zA-Z \-]+$", max_length=20)
 
     email = EmailField(unique=True, required=True, max_length=50)
     
@@ -25,6 +21,7 @@ class User(Document):
     #   regular - no event creation allowed
     #   organization - event creation allowed
     role = StringField(required=True, default="regular")
+
 
     meta = {
         'db_alias': Config.MONGODB_SETTINGS['alias'],
@@ -54,3 +51,61 @@ class User(Document):
         if email_valid == False:
             raise Exception(f"'{email_domain_part}' not a valid domain (email validation failed)")
         return email_valid
+    
+class RegularUser(User):
+    first_name = StringField(required=True, regex="^[a-zA-Z \-]+$", max_length=20)
+
+    last_name = StringField(required=True, regex="^[a-zA-Z \-]+$", max_length=20)
+
+    preferences = ListField(required=True, default=[])
+
+
+class OrganizationUser(User):
+    name = StringField(unique=True, required=True)
+
+    """ Events the organization has organized """
+    events = ListField()
+
+    
+
+class Location(Document):
+    place = StringField()
+    address = StringField()
+    room = StringField()
+
+
+""" Events """
+class Events(Document):
+    registered_date = DateTimeField(default=datetime.now())
+
+    event_date = DateTimeField(required=True)
+
+    location = StringField(required=True)
+
+    title = Location()
+
+    targeted_preferences = ListField(required=True, default=[])
+
+    organizer = OrganizationUser()
+
+    description = StringField(required=True, max_length=1000)
+
+    """ List of attendees, should be RegularUser objects """
+    attendees = ListField(required=True, default=[])
+
+    """ List of Comments """
+    comments = ListField()
+
+
+""" Comments """
+class Comments(Document):
+    registered_date = DateTimeField(default=datetime.now())
+
+    author = User()
+
+    comment = StringField(required=True, max_length=1000)
+
+    rating = IntField(required=True, min_value=1, max_value=5)
+
+
+
