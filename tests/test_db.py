@@ -1,18 +1,17 @@
 import unittest
 from flask import current_app
 from app import create_app, db
-from app.models import User
+from app.models import User, RegularUser, OrganizationUser, Location, UserInfo, Reply, Comment, Events
 
-import unittest
 from datetime import datetime
 from mongoengine import connect
-from models import User, RegularUser, OrganizationUser, Location, UserInfo, Reply, Comment, Events
-
-connect('test_db', host='localhost', port=27017)
 
 class TestUser(unittest.TestCase):
 
     def setUp(self):
+        self.app = create_app('testing')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
         self.user = RegularUser(
             first_name='John',
             last_name='Doe',
@@ -21,6 +20,9 @@ class TestUser(unittest.TestCase):
             preferences=['preference1', 'preference2'],
             registered_events=[]
         )
+
+    def tearDown(self):
+        self.app_context.pop()
 
     def test_validate_email_validEmail(self):
         result = self.user.validate_email()
@@ -40,8 +42,12 @@ class TestUser(unittest.TestCase):
     def test_validate_password_invalid(self):
         self.assertFalse(self.user.validate_password('password'))
 class TestRegularUser(unittest.TestCase):
-
+   
+        
     def setUp(self):
+        self.app = create_app('testing')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
         self.regular_user = RegularUser(
             first_name='John',
             last_name='Doe',
@@ -51,12 +57,18 @@ class TestRegularUser(unittest.TestCase):
             registered_events=[]
         )
 
+    def tearDown(self):
+        self.app_context.pop()
+
     def test_registered_events_defaultValue(self):
         self.assertEqual(self.regular_user.registered_events, [])
 
 class TestOrganizationUser(unittest.TestCase):
 
     def setUp(self):
+        self.app = create_app('testing')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
         self.organization_user = OrganizationUser(
             name='Organization',
             email='org@example.com',
@@ -64,18 +76,27 @@ class TestOrganizationUser(unittest.TestCase):
             events=[]
         )
 
+    def tearDown(self):
+        self.app_context.pop()
+
     def test_events_defaultValue(self):
         self.assertEqual(self.organization_user.events, [])
 
 class TestComment(unittest.TestCase):
-
+        
     def setUp(self):
+        self.app = create_app('testing')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
         self.comment = Comment(
             author=UserInfo(author_id='123', name='John Doe'),
             content='This is a comment',
             rating=4,
             replies=[]
         )
+
+    def tearDown(self):
+        self.app_context.pop()
 
     def test_replies_defaultValue(self):
         self.assertEqual(self.comment.replies, [])
@@ -84,7 +105,11 @@ class TestComment(unittest.TestCase):
 
 class TestEvents(unittest.TestCase):
 
+        
     def setUp(self):
+        self.app = create_app('testing')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
         self.events = Events(
             event_date=datetime.now(),
             location='Location',
@@ -96,8 +121,9 @@ class TestEvents(unittest.TestCase):
             comments=[]
         )
 
+    def tearDown(self):
+        self.app_context.pop()
+
     def test_comments_defaultValue(self):
         self.assertEqual(self.events.comments, [])
 
-if __name__ == '__main__':
-    unittest.main()
