@@ -43,27 +43,72 @@ from mongoengine import connect
 #     def test_validate_password_invalid(self):
 #         self.assertFalse(self.user.validate_password('password'))
 
+
+
+""" for lab 5, written by Sebastian Czyrny """
 class TestRegularUser(unittest.TestCase):
    
-        
+    # setup app context, create user object
     def setUp(self):
         self.app = create_app('testing')
         self.app_context = self.app.app_context()
         self.app_context.push()
         self.regular_user = RegularUser(
-            first_name='John',
-            last_name='Doe',
-            email='johndoe@example.com',
+            first_name='Mary',
+            last_name='Jane',
+            email='maryjane@mail.utoronto.ca',
             password='Password@123',
             preferences=['preference1', 'preference2'],
-            registered_events=[]
         )
-
+        self.regular_user = self.regular_user.save()
+       
+    # delete user from database
     def tearDown(self):
+        self.regular_user.delete()
         self.app_context.pop()
 
-    def test_registered_events_defaultValue(self):
-        self.assertEqual(self.regular_user.registered_events, [])
+   
+    # fetch user, make sure it is in database, make sure it is unique
+    def test_get_user(self):
+        # Get user from database
+        regular_user_q = RegularUser.objects(email=self.regular_user.email)
+       
+        self.assertEqual(len(regular_user_q), 1)
+    
+    # test invalid emails, make sure they can't validate
+    def test_verify_email(self):
+        regular_user1 = RegularUser(
+             first_name='John',
+            last_name='Doe',
+            email='johndoe@gmail.com',
+            password='Password@123',
+            preferences=['preference1', 'preference2'],
+        )
+
+        regular_user2 = RegularUser(
+            first_name='John',
+            last_name='Doe',
+            email='johndoe@hotmail.com',
+            password='Password@123',
+            preferences=['preference1', 'preference2'],
+        )
+
+        invalid = True
+        try:
+            regular_user1.validate()
+            regular_user2.validate()
+            invalid = False
+        except Exception as e:
+            invalid = True
+        
+        self.assertTrue(invalid)
+    
+    # test user preference query
+    def test_user_preference(self):
+
+        regular_user_q = RegularUser.objects(preferences=self.regular_user.preferences[0])
+        self.assertGreaterEqual(len(regular_user_q), 1)
+    
 
 class TestOrganizationUser(unittest.TestCase):
 

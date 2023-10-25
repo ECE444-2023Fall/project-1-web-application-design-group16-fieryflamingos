@@ -35,11 +35,11 @@ class User(Document):
     def save(self, *args, **kwargs):
         self.password = generate_password_hash(password=self.password).decode("utf-8")
         self.validate_email()
-        super().save(args, kwargs)
+        return super().save(args, kwargs)
 
     def validate(self, *args, **kwargs):
         self.validate_email()
-        super().validate()
+        return super().validate()
 
     def validate_email(self):
          # validate email properly
