@@ -2,7 +2,8 @@ from datetime import datetime
 
 from mongoengine import Document, StringField, EmailField, \
     DateTimeField, ListField, IntField, EmbeddedDocument, \
-    ObjectIdField, EmbeddedDocumentListField, EmbeddedDocumentField
+    ObjectIdField, EmbeddedDocumentListField, EmbeddedDocumentField, \
+    ImageField
 from flask_bcrypt import generate_password_hash
 
 from config import Config
@@ -19,10 +20,7 @@ class User(Document):
     # At least 1 special character
     password = StringField(required=True, regex="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&+=]).{8,25}$", min_length=10)
 
-    # USER ROLES:
-    #   regular - no event creation allowed
-    #   organization - event creation allowed
-    role = StringField(required=True, default="regular")
+    profile_image = ImageField(size=(400,400, False), thumbnail_size=(150,150,False))
 
 
     meta = {
@@ -67,6 +65,11 @@ class RegularUser(User):
      Includes past and future events """
     registered_events = ListField(ObjectIdField(), default=[])
 
+    # USER ROLES:
+    #   regular - no event creation allowed
+    #   organization - event creation allowed
+    role = StringField(required=True, default="regular")
+
 
 """ OrganizationUser """
 class OrganizationUser(User):
@@ -74,6 +77,11 @@ class OrganizationUser(User):
 
     """ Events the organization has organized """
     events = ListField(ObjectIdField(), default=[])
+
+    # USER ROLES:
+    #   regular - no event creation allowed
+    #   organization - event creation allowed
+    role = StringField(required=True, default="organization")
 
     
 """ Location """
@@ -89,39 +97,42 @@ class UserInfo(EmbeddedDocument):
     name = StringField(regex="^[a-zA-Z \-]+$", max_length=50)
 
 
-
-""" Reply """
-class Reply(EmbeddedDocument):
-    creation_date = DateTimeField(default=datetime.now())
-
-    update_date = DateTimeField()
-    author = EmbeddedDocumentField(UserInfo)
-    content = StringField(required=True, max_length=1000)
-
-
-
 """ Comments """
 class Comment(Document):
     creation_date = DateTimeField(required=True, default=datetime.now())
 
-    update_date = DateTimeField(required=False)
+    update_date = DateTimeField()
     author = EmbeddedDocumentField(UserInfo)
     content = StringField(required=True, max_length=1000)
-    rating = IntField(required=True, min_value=1, max_value=5)
-    replies = EmbeddedDocumentListField(Reply)
+   
+    likes = IntField(min_value=0, default=0)
 
     meta = {
         'db_alias': Config.MONGODB_SETTINGS['alias'],
-        'collection': 'comments'
+        'collection': 'comments',
+        'allow_inheritance': True,
+        'abstract': True
     }
 
+
+""" Comment for the actual event"""
+class EventComment(Comment):
+    event_id = ObjectIdField(rqeuired=True)
+    rating = IntField(required=True, min_value=1, max_value=5)
+    
+
+""" Replies to the events, 
+    don't have a rating """
+class Reply(Comment):
+    # reply to either an EventComment or another reply
+    reply_to_id = ObjectIdField(required=True)
 
 
 """ Events """
 class Events(Document):
     creation_date = DateTimeField(default=datetime.now())
 
-    update_date = DateTimeField(required=False)
+    update_date = DateTimeField()
     event_date = DateTimeField(required=True)
     location = StringField(required=True)
     title = EmbeddedDocumentField(Location)
@@ -132,8 +143,7 @@ class Events(Document):
     """ List of attendees, should be RegularUser objects """
     attendees = EmbeddedDocumentListField(UserInfo, required=True, default=[])
 
-    """ List of Comments """
-    comments = ListField(ObjectIdField())
+    poster = ImageField()
 
     meta = {
         'db_alias': Config.MONGODB_SETTINGS['alias'],
