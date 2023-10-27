@@ -7,8 +7,6 @@ from flask_mongoengine import MongoEngine
 from flask_login import LoginManager
 from config import config
 
-bob = 1
-
 mail = Mail()
 bcrypt = Bcrypt()
 moment = Moment()

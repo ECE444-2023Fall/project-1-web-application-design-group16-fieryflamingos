@@ -1,0 +1,39 @@
+
+:root { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+  :root { font-family: 'Inter var', sans-serif; }
+}
+
+.navbar{
+    margin-top: 20px;
+    margin-left: 40px;
+}
+
+.occasional{
+    font-family: Inter;
+    font-size: 20px;
+    font-style: bold;
+    font-weight: 700;
+    line-height: normal; 
+    color: #000;
+}
+
+.nav-link{
+    color: #64748B;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.nav-link:hover{
+ color: #25355A;
+}
+
+.nav-item{
+    padding-right: 60px;
+}
+
+
+

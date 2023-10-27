@@ -22,6 +22,13 @@ def index():
 """ Event listings route
 query parameters in the url """
 
+""" Dashboard route
+query parameters in the url """
+@main.route('/dashboard/<user_id>', methods=['GET'])
+def dashboard(user_id):
+    return render_template('dashboard.html', user=user_id)
+
+
 
 
 """ Sign in route """
