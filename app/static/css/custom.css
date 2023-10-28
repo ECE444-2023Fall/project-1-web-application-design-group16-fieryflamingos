@@ -7,12 +7,14 @@
 .navbar{
     margin-top: 20px;
     margin-left: 40px;
-    padding-bottom: 100px;
+    margin-right: 100px;
+    margin-bottom: 60px;
 }
+
 
 .occasional{
     font-family: Inter;
-    font-size: 24px;
+    font-size: 22px;
     font-style: bold;
     font-weight: 700;
     line-height: normal; 
@@ -33,5 +35,7 @@
 }
 
 .nav-item{
-    padding-right: 60px;
+    padding-right: 30px;
+    padding-left: 30px;
 }
+
