@@ -1,14 +1,21 @@
 from datetime import datetime
+import re
 
-from mongoengine import Document, StringField, EmailField, \
-    DateTimeField, ListField, IntField, EmbeddedDocument, \
-    ObjectIdField, EmbeddedDocumentListField, EmbeddedDocumentField, \
-    ImageField, FileField
-from flask_bcrypt import generate_password_hash
+from mongoengine import Document, DynamicDocument, StringField, \
+EmailField, DateTimeField, ListField, IntField, EmbeddedDocument, \
+ObjectIdField, EmbeddedDocumentListField, EmbeddedDocumentField, \
+ImageField, FileField
+# from flask_bcrypt import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from config import Config
 
-class User(Document):
+from PIL import Image
+
+Image.ANTIALIAS = Image.LANCZOS
+
+
+class User(DynamicDocument):
     creation_date = DateTimeField(default=datetime.now)
 
     email = EmailField(unique=True, required=True, max_length=50)
@@ -18,7 +25,7 @@ class User(Document):
     # At least 1 lowercase letter
     # At least 1 number
     # At least 1 special character
-    password = StringField(required=True, regex="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&+=]).{8,25}$", min_length=10)
+    password_hash = StringField(required=True)
 
     profile_image = ImageField(size=(400,400, False), thumbnail_size=(150,150,False))
 
@@ -30,9 +37,29 @@ class User(Document):
         'abstract': True
     }
 
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        if password == None:
+            return
+        regex_str="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&+=]).{8,25}$"
+        regex = re.compile(regex_str)
+        match = regex.search(password)
+        if match == None:
+            raise ValueError('password requirements not met')
+        self.password_hash = generate_password_hash(password)
+
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+
     def save(self, *args, **kwargs):
-        self.password = generate_password_hash(password=self.password).decode("utf-8")
         self.validate_email()
+        self.password = None
         return super().save(args, kwargs)
 
     def validate(self, *args, **kwargs):

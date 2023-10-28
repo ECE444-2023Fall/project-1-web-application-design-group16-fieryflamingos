@@ -13,6 +13,7 @@ class TestRegularUser(unittest.TestCase):
         self.app = create_app('testing')
         self.app_context = self.app.app_context()
         self.app_context.push()
+        self.password = 'Password@123'
         try:
             self.regular_user = RegularUser.objects(email='maryjane@mail.utoronto.ca').get()
         except:
@@ -20,7 +21,7 @@ class TestRegularUser(unittest.TestCase):
                 first_name='Mary',
                 last_name='Jane',
                 email='maryjane@mail.utoronto.ca',
-                password='Password@123',
+                password=self.password,
                 preferences=['preference1', 'preference2'],
             )
             self.regular_user = self.regular_user.save()
@@ -43,16 +44,35 @@ class TestRegularUser(unittest.TestCase):
         regular_user_q = RegularUser.objects(email=self.regular_user.email)
         self.assertEqual(len(regular_user_q), 1)
 
-    # fetch user, make sure it is in database, make sure it is unique
-    def test_get_user_no_password(self):
+
+    # test user password
+    def test_get_user_password(self):
         # Get user from database
-        regular_user_q = RegularUser.objects(email=self.regular_user.email).exclude("password")
-        password_exists = False
-        for user in regular_user_q:
-            if user.password:
-                password_exists = True
-        self.assertFalse(password_exists)
-    
+        regular_user_q = RegularUser.objects(email=self.regular_user.email).get()
+        # verify password
+        verified = regular_user_q.verify_password(self.password)
+        self.assertTrue(verified)
+
+    # test user password
+    def test_get_user_password_unique(self):
+        # Get user from database
+        regular_user1 = RegularUser(
+            first_name='John',
+            last_name='Doe',
+            email='johndoe1@gmail.utoronto.ca',
+            password='Password@123',
+            preferences=['preference1', 'preference2'],
+        )
+        regular_user2 = RegularUser(
+            first_name='John',
+            last_name='Doe',
+            email='johndoe@mail.utoronto.ca',
+            password='Password@123',
+            preferences=['preference1', 'preference2'],
+        )
+
+        self.assertNotEqual(regular_user1.password_hash, regular_user2.password_hash)
+
     # test invalid emails, make sure they can't validate
     def test_verify_email(self):
         regular_user1 = RegularUser(
