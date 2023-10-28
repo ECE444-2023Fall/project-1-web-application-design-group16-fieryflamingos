@@ -1,0 +1,74 @@
+<html lang="en">
+    <head>
+        <!-- Some Basic View Stuff -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width initial-scale=1" />
+
+        <!-- Browser tab stuff (favicon and browser title)-->
+        <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
+        <title>Occasional | {% block title %} {% endblock %}</title>
+
+        <!-- Stylesheets linked -->
+        <link rel="stylesheet" href="/static/css/custom.css" />
+        <link rel="stylesheet" href= 
+"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+          integrity= 
+"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous" /> 
+        <link rel="preconnect" href="https://rsms.me/">
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    </head>
+</html>
+<body>
+    <!-- Nav bar code -->
+    <nav class="navbar navbar-expand-sm bg-white"> 
+            <div class="navbar-brand occasional">
+                <img src="/static/img/OC_Variant3.png" width="35" height="35" class="d-inline-block align-bottom" alt="">
+              <div class="occasional d-inline-block">OCCASIONAL</div>
+            </div> 
+            <button class="navbar-toggler" type="button" 
+                    data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false" 
+                    aria-label="Toggle navigation"> 
+                <span class="navbar-toggler-icon"></span> 
+            </button> 
+  
+            <div class="collapse navbar-collapse"></div> 
+  
+            <div class="collapse navbar-collapse" 
+                 id="navbarSupportedContent"> 
+                <ul class="navbar-nav mr-auto"> 
+                    <li class="nav-item "> 
+                        <a class="nav-link" 
+                           href="#"> 
+                          DASHBOARD  
+                      </a> 
+                    </li> 
+                    <li class="nav-item"> 
+                        <a class="nav-link" 
+                           href="#"> 
+                          DISCOVER 
+                        </a> 
+                    </li> 
+                    <li class="nav-item"> 
+                        <a class="nav-link"
+                           href="#"> 
+                          PROFILE 
+                        </a> 
+                    </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link"
+                           href="#"> 
+                          CALENDAR
+                        </a> 
+                    </li>  
+                </ul> 
+        </div> 
+    </nav> 
+    <div class="content">
+        {% block content %} {% endblock %}
+    </div>
+</body>
+</html>
