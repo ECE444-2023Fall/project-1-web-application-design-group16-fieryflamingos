@@ -1,8 +1,46 @@
 import unittest
 from app import create_app
-from app.models import User, RegularUser, OrganizationUser, Location, UserInfo, Events
+from app.models import User, RegularUser, OrganizationUser, Location, UserInfo, Event, Comment, EventComment, Reply
 
 from datetime import datetime
+
+class TestUser(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app('testing')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        self.password = 'Password@123'
+        try:
+            self.regular_user = RegularUser.objects(email='maryjane1@mail.utoronto.ca').get()
+        except:
+            self.regular_user = RegularUser(
+                first_name='Mary',
+                last_name='Jane',
+                email='maryjane1@mail.utoronto.ca',
+                password=self.password,
+                preferences=['preference1', 'preference2'],
+            )
+            self.regular_user = self.regular_user.save()
+
+        try:
+            self.org_user = OrganizationUser.objects(email='johndoe3@mail.utoronto.ca').get()
+        except:
+            self.org_user = OrganizationUser(
+                email='johndoe3@mail.utoronto.ca',
+                password=self.password,
+                name="John Doe Organization"
+            )
+            self.org_user = self.org_user.save() 
+        
+    
+    def tearDown(self):
+        self.regular_user.delete()
+        self.org_user.delete()
+        self.app_context.pop()
+
+    def test_get(self):
+        users = User.objects()
+        self.assertGreaterEqual(len(users), 2)
 
 
 """ for lab 5, written by Sebastian Czyrny """
@@ -32,9 +70,9 @@ class TestRegularUser(unittest.TestCase):
         self.app_context.pop()
 
     def test_save_picture(self):
-        picture = open("./tests/pic.PNG", 'rb')
-        self.regular_user.profile_image.replace(picture, filename="pic.PNG") 
-        self.regular_user = self.regular_user.save()
+        with open("./tests/pic.PNG", 'rb') as picture:
+            self.regular_user.profile_image.replace(picture, filename="pic.PNG") 
+            self.regular_user = self.regular_user.save()
         self.assertIsNotNone(self.regular_user.profile_image)
 
 
@@ -114,19 +152,23 @@ class TestOrganizationUser(unittest.TestCase):
         self.app = create_app('testing')
         self.app_context = self.app.app_context()
         self.app_context.push()
-        self.organization_user = OrganizationUser(
-            name='Organization',
-            email='org@example.com',
-            password='Password@123',
-            events=[]
-        )
+        self.password = 'Password123@'
+        try:
+            self.org_user = OrganizationUser.objects(email='johndoe2@mail.utoronto.ca').get()
+        except:
+            self.org_user = OrganizationUser(
+                email='johndoe2@mail.utoronto.ca',
+                password=self.password,
+                name="John Doe Organization"
+            )
+            self.org_user = self.org_user.save() 
 
     def tearDown(self):
+        self.org_user.delete()
         self.app_context.pop()
 
-    def test_events_defaultValue(self):
-        self.assertEqual(self.organization_user.events, [])
 
+    
 
 ### for lab 5 - written by Dylan Sun 
 class TestEvents(unittest.TestCase):
@@ -138,15 +180,24 @@ class TestEvents(unittest.TestCase):
 
         # Create a fixed datetime for testing
         fixed_time = datetime(2023, 10, 23, 12, 0)
-
-        self.events = Events(
+        self.password = 'Password123@'
+        try:
+            self.org_user = OrganizationUser.objects(email='johndoe5@mail.utoronto.ca').get()
+        except:
+            self.org_user = OrganizationUser(
+                email='johndoe5@mail.utoronto.ca',
+                password=self.password,
+                name="John Doe Organization"
+            )
+            self.org_user = self.org_user.save() 
+        self.events = Event(
             event_date=fixed_time,
-            location='Location',
-            title=Location(place='Place', address='Address', room='Room'),
+            title='title',
+            location={"place":'Place', "address":'Address', "room":'Room'},
             targeted_preferences=['preference1', 'preference2'],
-            organizer=UserInfo(author_id='123', name='John Doe'),
+            organizer={"author_id": self.org_user.id, "name": self.org_user.name},
             description='Event description',
-            attendees=[UserInfo(author_id='456', name='Jane Smith')]
+            attendees=[{"author_id": self.org_user.id, "name": self.org_user.name}]
         )
 
     def tearDown(self):
@@ -159,11 +210,11 @@ class TestEvents(unittest.TestCase):
 
     def test_location(self):
         # Test that the location attribute is set correctly
-        self.assertEqual(self.events.location, 'Location')
+        self.assertIsInstance(self.events.location, Location)
 
     def test_title(self):
         # Test that the title attribute is an instance of Location
-        self.assertIsInstance(self.events.title, Location)
+        self.assertEqual(self.events.title, 'title')
         
     def test_targeted_preferences(self):
         # Test that the targeted_preferences attribute is a list
@@ -180,5 +231,66 @@ class TestEvents(unittest.TestCase):
     def test_attendees(self):
         # Test that the attendees attribute is a list
         self.assertIsInstance(self.events.attendees, list)
+    
+    def test_file_upload(self):
+        with open("./tests/pic.PNG", 'rb') as picture:
+            self.events.poster.replace(picture, filename="pic.PNG") 
+            self.events = self.events.save()
+        self.assertIsNotNone(self.events.poster)
 
+class TestComments(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app('testing')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        self.fixed_date = datetime(2023,10,1,0,0,0)
+        self.password = 'Password123@'
+        try:
+            self.org_user = OrganizationUser.objects(email='johndoe1@mail.utoronto.ca').get()
+        except:
+            self.org_user = OrganizationUser(
+                email='johndoe1@mail.utoronto.ca',
+                password=self.password,
+                name="John Doe Organization"
+            )
+            self.org_user = self.org_user.save() 
+        self.event = Event(title='title',
+            location={"place":'Place', "address":'Address', "room":'Room'},
+            targeted_preferences=['preference1', 'preference2'],
+            organizer={"author_id": self.org_user.id, "name": self.org_user.name},
+            description='Event description',
+            attendees=[{"author_id": self.org_user.id, "name": self.org_user.name},],
+            event_date=self.fixed_date
+        )
+        self.event = self.event.save()
+    
+    def tearDown(self):
+        # self.org_user.delete()
+        self.app_context.pop()
 
+    def test_add_comment(self):
+        comment = EventComment(event_id=self.event.id,
+            author={"author_id": self.org_user.id, "name": self.org_user.name},
+            content="Pretty Cool Event!!!",
+            likes=0,
+            rating=3
+        )
+        comment = comment.save()
+        self.assertIsNotNone(comment)
+    
+    def test_add_reply(self):
+        comment = EventComment(event_id=self.event.id,
+            author=self.event.organizer,
+            content="Pretty Cool Event!!!",
+            likes=0,
+            rating=3
+        )
+        comment = comment.save()
+        reply = Reply(event_id=self.event.id,
+            author=self.event.organizer,
+            content="Pretty Cool Event!!!",
+            likes=0,
+            reply_to_id=comment.id
+        )
+        reply=reply.save()
+        self.assertIsNotNone(reply)
