@@ -7,6 +7,7 @@ ObjectIdField, EmbeddedDocumentListField, EmbeddedDocumentField, \
 ImageField, FileField
 # from flask_bcrypt import generate_password_hash
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
 from config import Config
 
@@ -14,8 +15,13 @@ from PIL import Image
 
 Image.ANTIALIAS = Image.LANCZOS
 
+from . import login_manager
 
-class User(DynamicDocument):
+@login_manager.user_loader
+def load_user(user_id):
+    return User.objects(id=user_id).get()
+
+class User(UserMixin, DynamicDocument):
     creation_date = DateTimeField(default=datetime.now)
 
     email = EmailField(unique=True, required=True, max_length=50)
