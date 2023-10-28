@@ -39,8 +39,7 @@ class User(UserMixin, DynamicDocument):
     meta = {
         'db_alias': Config.MONGODB_SETTINGS['alias'],
         'collection': 'users',
-        'allow_inheritance': True,
-        'abstract': True
+        'allow_inheritance': True
     }
 
     @property
@@ -62,10 +61,14 @@ class User(UserMixin, DynamicDocument):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def to_mongo(self, *args, **kwargs):
+        # remove the age field from the dictionary before saving it to the database
+        mongo_dict = super().to_mongo(*args, **kwargs)
+        mongo_dict.pop("password", None)
+        return mongo_dict
 
     def save(self, *args, **kwargs):
         self.validate_email()
-        self.password = None
         return super().save(args, kwargs)
 
     def validate(self, *args, **kwargs):
@@ -108,13 +111,17 @@ class RegularUser(User):
 class OrganizationUser(User):
     name = StringField(unique=True, required=True)
 
-    """ Events the organization has organized """
-    events = ListField(ObjectIdField(), default=[])
-
     # USER ROLES:
     #   regular - no event creation allowed
     #   organization - event creation allowed
     role = StringField(required=True, default="organization")
+
+    def delete(self):
+        # delete all events
+        events = Event.objects(organizer__author_id=self.id)
+        for event in events:
+            event.delete()
+        return super().delete()
 
     
 """ Location """
@@ -127,7 +134,7 @@ class Location(EmbeddedDocument):
 """ CommentAuthor """
 class UserInfo(EmbeddedDocument):
     author_id = ObjectIdField(required=True)
-    name = StringField(regex="^[a-zA-Z \-]+$", max_length=50)
+    name = StringField()
 
 
 """ Comments """
@@ -135,6 +142,7 @@ class Comment(Document):
     creation_date = DateTimeField(required=True, default=datetime.now())
 
     update_date = DateTimeField()
+    event_id = ObjectIdField(required=True)
     author = EmbeddedDocumentField(UserInfo)
     content = StringField(required=True, max_length=1000)
    
@@ -147,11 +155,12 @@ class Comment(Document):
         'abstract': True
     }
 
+   
+
 
 """ Comment for the actual event"""
 class EventComment(Comment):
-    event_id = ObjectIdField(rqeuired=True)
-    rating = IntField(required=True, min_value=1, max_value=5)
+    rating = IntField(min_value=1, max_value=5)
     
 
 """ Replies to the events, 
@@ -162,13 +171,13 @@ class Reply(Comment):
 
 
 """ Events """
-class Events(Document):
+class Event(Document):
     creation_date = DateTimeField(default=datetime.now())
 
     update_date = DateTimeField()
     event_date = DateTimeField(required=True)
-    location = StringField(required=True)
-    title = EmbeddedDocumentField(Location)
+    location = EmbeddedDocumentField(Location)
+    title = StringField(required=True)
     targeted_preferences = ListField(StringField(), required=True, default=[])
     organizer = EmbeddedDocumentField(UserInfo)
     description = StringField(required=True, max_length=1000)
@@ -182,5 +191,12 @@ class Events(Document):
         'db_alias': Config.MONGODB_SETTINGS['alias'],
         'collection': 'events'
     }
+
+    def delete(self):
+        # delete all comments
+        comments = Comment.objects(event_id=self.id)
+        for comment in comments:
+            comment.delete()
+        return super().delete()
 
 
