@@ -164,12 +164,17 @@ class Reply(Comment):
     reply_to_id = ObjectIdField(required=True)
 
 
+class EventDate(EmbeddedDocument):
+    from_date = DateTimeField(required=True)
+    to_date = DateTimeField()
+
+
 """ Events """
 class Event(Document):
     creation_date = DateTimeField(default=datetime.now())
 
     update_date = DateTimeField()
-    event_date = DateTimeField(required=True)
+    event_date = EmbeddedDocumentField(EventDate)
     location = EmbeddedDocumentField(Location)
     title = StringField(required=True)
     targeted_preferences = ListField(StringField(), required=True, default=[])
@@ -192,5 +197,20 @@ class Event(Document):
         for comment in comments:
             comment.delete()
         return super().delete()
+
+    def validate_date(self):
+        # check to make sure date from is before date to
+        if self.event_date.to_date:
+            if self.event_date.from_date < self.event_date.to_date:
+                raise Exception(f"To date: '{self.event_date.to_date}' is earlier than From Date: '{self.event_date.from_date}'")
+
+    def validate(self, *args, **kwargs):
+        self.validate_date()
+        return super().validate()
+    
+    def save(self, *args, **kwargs):
+        self.validate_date()
+        return super().save()
+
 
 
