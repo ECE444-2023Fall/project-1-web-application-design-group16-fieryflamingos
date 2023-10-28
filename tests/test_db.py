@@ -1,48 +1,8 @@
 import unittest
-from flask import current_app
-from app import create_app, db
-from app.models import User, RegularUser, OrganizationUser, Location, UserInfo, Reply, Comment, Events
+from app import create_app
+from app.models import User, RegularUser, OrganizationUser, Location, UserInfo, Events
 
 from datetime import datetime
-from mongoengine import connect
-
-## commented this out for now, incorrect tests, need corrections
-# class TestUser(unittest.TestCase):
-
-#     def setUp(self):
-#         self.app = create_app('testing')
-#         self.app_context = self.app.app_context()
-#         self.app_context.push()
-#         self.user = RegularUser(
-#             first_name='John',
-#             last_name='Doe',
-#             email='johndoe@example.com',
-#             password='Password@123',
-#             preferences=['preference1', 'preference2'],
-#             registered_events=[]
-#         )
-
-#     def tearDown(self):
-#         self.app_context.pop()
-
-#     def test_validate_email_validEmail(self):
-#         result = self.user.validate_email()
-#         self.assertTrue(result)
-
-#     def test_validate_email_invalidEmail(self):
-#         self.user.email = 'invalid'
-#         self.assertRaises(Exception, self.user.validate_email)
-
-#     def test_save_passwordHashed(self):
-#         self.user.save()
-#         self.assertNotEqual(self.user.password, 'Password@123')
-
-#     def test_validate_password_valid(self):
-#         self.assertTrue(self.user.validate_password('Password@123'))
-
-#     def test_validate_password_invalid(self):
-#         self.assertFalse(self.user.validate_password('password'))
-
 
 
 """ for lab 5, written by Sebastian Czyrny """
@@ -53,32 +13,50 @@ class TestRegularUser(unittest.TestCase):
         self.app = create_app('testing')
         self.app_context = self.app.app_context()
         self.app_context.push()
-        self.regular_user = RegularUser(
-            first_name='Mary',
-            last_name='Jane',
-            email='maryjane@mail.utoronto.ca',
-            password='Password@123',
-            preferences=['preference1', 'preference2'],
-        )
-        self.regular_user = self.regular_user.save()
+        try:
+            self.regular_user = RegularUser.objects(email='maryjane@mail.utoronto.ca').get()
+        except:
+            self.regular_user = RegularUser(
+                first_name='Mary',
+                last_name='Jane',
+                email='maryjane@mail.utoronto.ca',
+                password='Password@123',
+                preferences=['preference1', 'preference2'],
+            )
+            self.regular_user = self.regular_user.save()
        
     # delete user from database
     def tearDown(self):
         self.regular_user.delete()
         self.app_context.pop()
 
-   
+    def test_save_picture(self):
+        picture = open("./tests/pic.PNG", 'rb')
+        self.regular_user.profile_image.replace(picture, filename="pic.PNG") 
+        self.regular_user = self.regular_user.save()
+        self.assertIsNotNone(self.regular_user.profile_image)
+
+
     # fetch user, make sure it is in database, make sure it is unique
     def test_get_user(self):
         # Get user from database
         regular_user_q = RegularUser.objects(email=self.regular_user.email)
-       
         self.assertEqual(len(regular_user_q), 1)
+
+    # fetch user, make sure it is in database, make sure it is unique
+    def test_get_user_no_password(self):
+        # Get user from database
+        regular_user_q = RegularUser.objects(email=self.regular_user.email).exclude("password")
+        password_exists = False
+        for user in regular_user_q:
+            if user.password:
+                password_exists = True
+        self.assertFalse(password_exists)
     
     # test invalid emails, make sure they can't validate
     def test_verify_email(self):
         regular_user1 = RegularUser(
-             first_name='John',
+            first_name='John',
             last_name='Doe',
             email='johndoe@gmail.com',
             password='Password@123',
@@ -129,25 +107,6 @@ class TestOrganizationUser(unittest.TestCase):
     def test_events_defaultValue(self):
         self.assertEqual(self.organization_user.events, [])
 
-class TestComment(unittest.TestCase):
-        
-    def setUp(self):
-        self.app = create_app('testing')
-        self.app_context = self.app.app_context()
-        self.app_context.push()
-        self.comment = Comment(
-            author=UserInfo(author_id='123', name='John Doe'),
-            content='This is a comment',
-            rating=4,
-            replies=[]
-        )
-
-    def tearDown(self):
-        self.app_context.pop()
-
-    def test_replies_defaultValue(self):
-        self.assertEqual(self.comment.replies, [])
-
 
 ### for lab 5 - written by Dylan Sun 
 class TestEvents(unittest.TestCase):
@@ -167,8 +126,7 @@ class TestEvents(unittest.TestCase):
             targeted_preferences=['preference1', 'preference2'],
             organizer=UserInfo(author_id='123', name='John Doe'),
             description='Event description',
-            attendees=[UserInfo(author_id='456', name='Jane Smith')],
-            comments=[]
+            attendees=[UserInfo(author_id='456', name='Jane Smith')]
         )
 
     def tearDown(self):
@@ -203,6 +161,4 @@ class TestEvents(unittest.TestCase):
         # Test that the attendees attribute is a list
         self.assertIsInstance(self.events.attendees, list)
 
-    def test_comments_defaultValue(self):
-        # Test that the comments attribute is initialized as an empty list
-        self.assertEqual(self.events.comments, [])
+

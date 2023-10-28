@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_moment import Moment
 from flask_bcrypt import Bcrypt
-from flask_mongoengine import MongoEngine
+from app.mongodb import MongoEngine
 from flask_login import LoginManager
 from config import config
 

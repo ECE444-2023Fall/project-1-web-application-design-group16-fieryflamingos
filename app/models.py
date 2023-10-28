@@ -3,7 +3,7 @@ from datetime import datetime
 from mongoengine import Document, StringField, EmailField, \
     DateTimeField, ListField, IntField, EmbeddedDocument, \
     ObjectIdField, EmbeddedDocumentListField, EmbeddedDocumentField, \
-    ImageField
+    ImageField, FileField
 from flask_bcrypt import generate_password_hash
 
 from config import Config
@@ -143,7 +143,7 @@ class Events(Document):
     """ List of attendees, should be RegularUser objects """
     attendees = EmbeddedDocumentListField(UserInfo, required=True, default=[])
 
-    poster = ImageField()
+    poster = FileField()
 
     meta = {
         'db_alias': Config.MONGODB_SETTINGS['alias'],
