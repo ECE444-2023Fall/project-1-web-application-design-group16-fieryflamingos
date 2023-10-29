@@ -187,7 +187,7 @@ class TestRSVP(unittest.TestCase):
             )
             self.regular_user = self.regular_user.save()
 
-        self.events = Event(
+        self.event = Event(
             event_date=fixed_time,
             title='title',
             location={"place":'Place', "address":'Address', "room":'Room'},
@@ -198,6 +198,11 @@ class TestRSVP(unittest.TestCase):
                        {"author_id": self.regular_user.id, "name": self.regular_user.first_name + " " + self.regular_user.last_name}]
         )
 
+     # delete user and event from database
+        def tearDown(self):
+            self.regular_user.delete()
+            self.event.delete()
+            self.app_context.pop()
 
     def testRSVP(self):
         attendee = {"author_id": self.regular_user.id, "name": self.regular_user.first_name + " " + self.regular_user.last_name}
