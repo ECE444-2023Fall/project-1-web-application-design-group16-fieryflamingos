@@ -168,7 +168,41 @@ class TestOrganizationUser(unittest.TestCase):
         self.app_context.pop()
 
 
-    
+""" for Lab 5 - written by Mohammed Amir """
+class TestRSVP(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app('testing')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        self.password = 'Password@123'
+        try:
+            self.regular_user = RegularUser.objects(email='maryjane1@mail.utoronto.ca').get()
+        except:
+            self.regular_user = RegularUser(
+                first_name='Mary',
+                last_name='Jane',
+                email='maryjane1@mail.utoronto.ca',
+                password=self.password,
+                preferences=['preference1', 'preference2'],
+            )
+            self.regular_user = self.regular_user.save()
+
+        self.events = Event(
+            event_date=fixed_time,
+            title='title',
+            location={"place":'Place', "address":'Address', "room":'Room'},
+            targeted_preferences=['preference1', 'preference2'],
+            organizer={"author_id": self.org_user.id, "name": self.org_user.name},
+            description='Event description',
+            attendees=[{"author_id": self.org_user.id, "name": self.org_user.name}, 
+                       {"author_id": self.regular_user.id, "name": self.regular_user.first_name + " " + self.regular_user.last_name}]
+        )
+
+
+    def testRSVP(self):
+        attendee = {"author_id": self.regular_user.id, "name": self.regular_user.first_name + " " + self.regular_user.last_name}
+        self.assertTrue(attendee is in self.events.attendees)
+            
 
 ### for lab 5 - written by Dylan Sun 
 class TestEvents(unittest.TestCase):
