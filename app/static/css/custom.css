@@ -7,15 +7,18 @@
 .navbar{
     margin-top: 20px;
     margin-left: 40px;
+    margin-right: 100px;
+    margin-bottom: 60px;
 }
+
 
 .occasional{
     font-family: Inter;
-    font-size: 20px;
+    font-size: 22px;
     font-style: bold;
     font-weight: 700;
     line-height: normal; 
-    color: #000;
+    color: #25355A;
 }
 
 .nav-link{
@@ -32,8 +35,28 @@
 }
 
 .nav-item{
-    padding-right: 60px;
+    padding-right: 30px;
+    padding-left: 30px;
 }
 
+.rec-sec{
+    height: 450px;
+    flex-shrink: 0;
+    background-color: #F1F5F9; 
+}
 
+.recommended{
+    color: #000000;
+    font-family: Inter;
+    font-size: 35px;
+    font-style: normal;
+    font-weight: 400;
+    background-color: #F1F5F9;
+    margin-top: 20px;
+    border-bottom: 2px;
+    border-color: #000000;
+}
 
+.col-9{
+    background-color: #F1F5F9;
+}
