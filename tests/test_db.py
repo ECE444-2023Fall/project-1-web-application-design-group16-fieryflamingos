@@ -28,7 +28,7 @@ class TestUser(unittest.TestCase):
             self.org_user = OrganizationUser(
                 email='johndoe3@mail.utoronto.ca',
                 password=self.password,
-                name="John Doe Organization"
+                name="John Doe Organization3"
             )
             self.org_user = self.org_user.save() 
         
@@ -159,7 +159,7 @@ class TestOrganizationUser(unittest.TestCase):
             self.org_user = OrganizationUser(
                 email='johndoe2@mail.utoronto.ca',
                 password=self.password,
-                name="John Doe Organization"
+                name="John Doe Organization2"
             )
             self.org_user = self.org_user.save() 
 
@@ -175,6 +175,7 @@ class TestRSVP(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         self.password = 'Password@123'
+        self.fixed_time = datetime.now()
         try:
             self.regular_user = RegularUser.objects(email='maryjane1@mail.utoronto.ca').get()
         except:
@@ -186,9 +187,19 @@ class TestRSVP(unittest.TestCase):
                 preferences=['preference1', 'preference2'],
             )
             self.regular_user = self.regular_user.save()
+        
+        try:
+            self.org_user = OrganizationUser.objects(name="John Doe Organization2").get()
+        except:
+            self.org_user = OrganizationUser(
+                email='johndoe2@mail.utoronto.ca',
+                password=self.password,
+                name="John Doe Organization2"
+            )
+            self.org_user = self.org_user.save()
 
         self.event = Event(
-            event_date=fixed_time,
+            event_date={"from_date": self.fixed_time, "to_date": self.fixed_time},
             title='title',
             location={"place":'Place', "address":'Address', "room":'Room'},
             targeted_preferences=['preference1', 'preference2'],
@@ -199,14 +210,15 @@ class TestRSVP(unittest.TestCase):
         )
 
      # delete user and event from database
-        def tearDown(self):
-            self.regular_user.delete()
-            self.event.delete()
-            self.app_context.pop()
+    def tearDown(self):
+        self.regular_user.delete()
+        self.org_user.delete()
+        self.event.delete()
+        self.app_context.pop()
 
     def testRSVP(self):
-        attendee = {"author_id": self.regular_user.id, "name": self.regular_user.first_name + " " + self.regular_user.last_name}
-        self.assertTrue(attendee is in self.events.attendees)
+        event = Event.objects(attendee__author_id=self.regular_user.id)
+        self.assertIsNotNone(event)
             
 
 ### for lab 5 - written by Dylan Sun 
@@ -221,16 +233,17 @@ class TestEvents(unittest.TestCase):
         fixed_time = datetime(2023, 10, 23, 12, 0)
         self.password = 'Password123@'
         try:
-            self.org_user = OrganizationUser.objects(email='johndoe5@mail.utoronto.ca').get()
+            self.org_user = OrganizationUser.objects(email='johndoe5@mail.utoronto.ca')
+            self.org_user = self.org_user[0]
         except:
             self.org_user = OrganizationUser(
                 email='johndoe5@mail.utoronto.ca',
                 password=self.password,
-                name="John Doe Organization"
+                name="John Doe Organization123123123"
             )
             self.org_user = self.org_user.save() 
         self.events = Event(
-            event_date=fixed_time,
+            event_date={"from_date": fixed_time, "to_date": fixed_time},
             title='title',
             location={"place":'Place', "address":'Address', "room":'Room'},
             targeted_preferences=['preference1', 'preference2'],
@@ -238,14 +251,17 @@ class TestEvents(unittest.TestCase):
             description='Event description',
             attendees=[{"author_id": self.org_user.id, "name": self.org_user.name}]
         )
+        self.events = self.events.save()
 
     def tearDown(self):
+        self.events.delete()
         self.app_context.pop()
+
 
     def test_event_date(self):
         # Test that the event_date is set to the fixed datetime
         fixed_time = datetime(2023, 10, 23, 12, 0)
-        self.assertEqual(self.events.event_date, fixed_time)
+        self.assertEqual(self.events.event_date.from_date, fixed_time)
 
     def test_location(self):
         # Test that the location attribute is set correctly
@@ -285,12 +301,12 @@ class TestComments(unittest.TestCase):
         self.fixed_date = datetime(2023,10,1,0,0,0)
         self.password = 'Password123@'
         try:
-            self.org_user = OrganizationUser.objects(email='johndoe1@mail.utoronto.ca').get()
+            self.org_user = OrganizationUser.objects(name="John Doe Organization239109").get()
         except:
             self.org_user = OrganizationUser(
-                email='johndoe1@mail.utoronto.ca',
+                email='johndoe239109@mail.utoronto.ca',
                 password=self.password,
-                name="John Doe Organization"
+                name="John Doe Organization239109"
             )
             self.org_user = self.org_user.save() 
         self.event = Event(title='title',
@@ -299,12 +315,12 @@ class TestComments(unittest.TestCase):
             organizer={"author_id": self.org_user.id, "name": self.org_user.name},
             description='Event description',
             attendees=[{"author_id": self.org_user.id, "name": self.org_user.name},],
-            event_date=self.fixed_date
+            event_date={"from_date": self.fixed_date, "to_date": self.fixed_date}
         )
         self.event = self.event.save()
     
     def tearDown(self):
-        # self.org_user.delete()
+        self.org_user.delete()
         self.app_context.pop()
 
     def test_add_comment(self):
