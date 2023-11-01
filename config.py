@@ -7,7 +7,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
     MONGODB_SETTINGS = {
         "host": f"mongodb+srv://{secret.MONGO_USERNAME}:{secret.MONGO_PASSWORD}@cluster0.9dnqbir.mongodb.net/?retryWrites=true&w=majority",
-        "alias": "core",
+        "alias": "default",
     }
   
     SECRET_KEY = secret.SECRET_KEY
@@ -42,7 +42,7 @@ class DevelopmentConfig(Config):
     MONGODB_SETTINGS = {
         'db': 'test',
         "host": f"mongodb+srv://{secret.MONGO_USERNAME}:{secret.MONGO_PASSWORD}@cluster0.9dnqbir.mongodb.net/?retryWrites=true&w=majority",
-        "alias": "core",
+        "alias": "default",
     }
 
 
@@ -51,7 +51,7 @@ class TestingConfig(Config):
     MONGODB_SETTINGS = {
         'db': 'test',
         "host": f"mongodb+srv://{secret.MONGO_USERNAME}:{secret.MONGO_PASSWORD}@cluster0.9dnqbir.mongodb.net/?retryWrites=true&w=majority",
-        "alias": "core",
+        "alias": "default",
     }
 
 class ProductionConfig(Config):
@@ -59,7 +59,7 @@ class ProductionConfig(Config):
     MONGODB_SETTINGS = {
         'db': 'prod',
         "host": f"mongodb+srv://{secret.MONGO_USERNAME}:{secret.MONGO_PASSWORD}@cluster0.9dnqbir.mongodb.net/?retryWrites=true&w=majority",
-        "alias": "core",
+        "alias": "default",
     }
 
 config = {
