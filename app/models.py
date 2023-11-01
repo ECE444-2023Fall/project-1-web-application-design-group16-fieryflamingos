@@ -211,6 +211,25 @@ class Event(Document):
     def save(self, *args, **kwargs):
         self.validate_date()
         return super().save()
+    
+    # get recommended events based on preferences
+    def get_recommended(self, preferences, select=4):
+        # make sure events are only within the next week
+        today = datetime.now()
+        
+        # get 4 events closest to today
+        recommended_events = Event.objects(targeted_preferences__in=preferences, event_date__from_date__gte=today).order_by("+event_date__from_date")[:select]
+        return recommended_events
+    
+    # get upcoming events
+    def get_upcoming(self, user_id, select=4):
+        today = datetime.now()
+
+        upcoming_events = Event.objects(attendees__author_id=user_id, event_date__from_date__gte=today).order_by("+event_date__from_date")[:select]
+        return upcoming_events
+
+    
+
 
 
 
