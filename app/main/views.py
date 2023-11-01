@@ -15,6 +15,7 @@ Data:
 @main.route('/', methods=['GET'])
 @login_required
 def index():
+
     user = current_user
     try:
         recommended_events = Event.get_recommended(user.preferences)
@@ -25,3 +26,25 @@ def index():
                                 upcoming_events=upcoming_events)
     except Exception as e:
         return render_template('index.html')
+
+    print("in index route...")
+    return render_template('index.html',
+                            current_time=datetime.utcnow())
+
+""" Basic Nav Bar Template"""
+@main.route('/base', methods=['GET'])
+def base():
+    return render_template('base.html')
+
+""" Event Details form"""
+
+
+""" Events detail route """
+
+
+
+""" Event listings route
+query parameters in the url """
+
+
+
