@@ -50,7 +50,7 @@ class User(UserMixin, DynamicDocument):
     def password(self, password):
         if password == None:
             return
-        regex_str="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&+=]).{8,25}$"
+        regex_str="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
         regex = re.compile(regex_str)
         match = regex.search(password)
         if match == None:
@@ -116,13 +116,6 @@ class OrganizationUser(User):
     #   organization - event creation allowed
     role = StringField(required=True, default="organization")
 
-    def delete(self):
-        # delete all events
-        events = Event.objects(organizer__author_id=self.id)
-        for event in events:
-            event.delete()
-        return super().delete()
-
     
 """ Location """
 class Location(EmbeddedDocument):
@@ -152,7 +145,6 @@ class Comment(Document):
         'db_alias': Config.MONGODB_SETTINGS['alias'],
         'collection': 'comments',
         'allow_inheritance': True,
-        'abstract': True
     }
 
    
@@ -219,7 +211,8 @@ class Event(Document):
         return super().save()
     
     # get recommended events based on preferences
-    def get_recommended(self, preferences, select=4):
+    @staticmethod
+    def get_recommended(preferences, select=4):
         # make sure events are only within the next week
         today = datetime.now()
         
@@ -228,7 +221,8 @@ class Event(Document):
         return recommended_events
     
     # get upcoming events
-    def get_upcoming(self, user_id, select=4):
+    @staticmethod
+    def get_upcoming(user_id, select=4):
         today = datetime.now()
 
         upcoming_events = Event.objects(attendees__author_id=user_id, event_date__from_date__gte=today).order_by("+event_date__from_date")[:select]

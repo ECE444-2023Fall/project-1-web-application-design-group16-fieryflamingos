@@ -14,21 +14,22 @@ class LoginForm(FlaskForm):
 
 
 class RegistrationForm(FlaskForm):
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('First Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
     Email()])
-    password = PasswordField('Password', validators=[
-    DataRequired(), EqualTo('password2', message='Passwords must match.'),  Regexp('^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&+=]).{8,25}$', 0,
-    """Password Requirements:\n  
-    \tlength: 8-25 characters\n 
-    \tAt least 1 uppercase letter\n 
-    \tAt least 1 lowercase letter\n 
-    \tAt least 1 number\n 
-    \tAt least 1 special character""")])
+    password = PasswordField('Password', validators=[Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"),
+        DataRequired(), EqualTo('password2', message='Passwords must match.')])
+    
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
+    
     submit = SubmitField('Register')
 
     def validate_email(self, field):
-        if RegularUser.objects(email=field.data).get():
-            raise ValidationError('Email already registered.')
+        try:
+            if RegularUser.objects(email=field.data).get():
+                return False
+        except:
+            return True
         
    

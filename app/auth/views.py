@@ -9,15 +9,19 @@ from .forms import LoginForm, RegistrationForm
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = RegularUser.objects(email=form.email.data).get()
-        if user is not None and user.verify_password(form.password.data):
-            login_user(user, form.remember_me.data)
-            next = request.args.get('next')
-            if next is None or not next.startswith('/'):
-                next = url_for('main.index')
-            return redirect(next)
-        flash('Invalid username or password.')
+        try:
+            user = RegularUser.objects(email=form.email.data).get()
+            if user is not None and user.verify_password(form.password.data):
+                login_user(user, form.remember_me.data)
+                next = request.args.get('next')
+                if next is None or not next.startswith('/'):
+                    next = url_for('main.index')
+                return redirect(next)
+            flash('Invalid username or password.')
+        except:
+            flash('Invalid username or password.')
     return render_template('auth/login.html', form=form)
+
 
 @auth.route('/logout')
 @login_required
@@ -31,11 +35,14 @@ def logout():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = RegularUser(first_name=form.first_name.data,
-                    last_name=form.last_name.data,
-                    email=form.email.data,
-                    password=form.password.data)
-        user.save()
-        flash('You can now login.')
-        return redirect(url_for('auth.login'))
+        try:
+            user = RegularUser(first_name=form.first_name.data,
+                        last_name=form.last_name.data,
+                        email=form.email.data,
+                        password=form.password.data)
+            user.save()
+            flash('You can now login.')
+            return redirect(url_for('auth.login'))
+        except:
+            pass
     return render_template('auth/register.html', form=form)
