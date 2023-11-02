@@ -37,6 +37,9 @@ def base():
     return render_template('base.html')
 
 """ Event Details form"""
+@main.route('/event', methods=['GET'])
+def events():
+    return render_template('events.html')
 
 
 """ Events detail route """

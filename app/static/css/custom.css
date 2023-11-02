@@ -14,9 +14,9 @@
 
 .occasional{
     font-family: Inter;
-    font-size: 22px;
+    font-size: 20px;
     font-style: bold;
-    font-weight: 700;
+    font-weight: 600;
     line-height: normal; 
     color: #25355A;
 }
@@ -31,7 +31,7 @@
 }
 
 .nav-link:hover{
- color: #25355A;
+    color: #25355A;
 }
 
 .nav-item{
