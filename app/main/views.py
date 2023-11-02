@@ -5,7 +5,7 @@ from . import main
 # from .forms import NameForm
 from .. import db
 from ..models import User, Event, Preference, Comment
-from .forms import EventForm, RSVPForm, CancelRSVPForm
+from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm
 from functools import wraps
 
 
@@ -145,8 +145,21 @@ def event_details(id):
 
 
 
-""" Event listings route
-query parameters in the url """
+""" Event listings route"""
+@main.route('/event/search', methods=['GET', 'POST'])
+@login_required
+def event_search():
+    form = EventSearchForm()
+    events = Event.search(page=0,items_per_page=10)
+    # check form
+    if form.validate_on_submit():
+        events = Event.search(search=form.search.data,
+                              from_date=form.from_date.data,
+                              to_date=form.to_date.data,
+                              preferences=form.targeted_preferences.data)
+    print(events)
+    return render_template('event_list.html', events=events, form=form)
+
 
 
 

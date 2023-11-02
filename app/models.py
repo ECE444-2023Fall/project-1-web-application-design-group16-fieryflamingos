@@ -278,7 +278,7 @@ class Event(Document):
         return Event.objects(id=event_id).update_one(pull__attendees__author_id=user_id)
 
     @staticmethod
-    def search(search, from_date, to_date, preferences, sort_by, sort_order=-1, page=0, items_per_page=10):
+    def search(search=None, from_date=None, to_date=None, preferences=None, sort_by=None, sort_order=-1, page=0, items_per_page=10):
         pipeline = []
         # append from_date if possible
         if from_date:
@@ -326,8 +326,13 @@ class Event(Document):
 
         # allow for paging
         start_idx = page * items_per_page
-        end_idx = (page + 1) * items_per_page
-        return Event.objects().aggregate(pipeline)[start_idx:end_idx]
+        pipeline.append({
+            "$skip": start_idx
+        })
+        pipeline.append({
+            "$limit": items_per_page
+        })
+        return list(Event.objects().aggregate(pipeline))
 
 
 
