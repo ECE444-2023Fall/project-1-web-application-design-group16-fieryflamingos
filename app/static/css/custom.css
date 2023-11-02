@@ -3,6 +3,7 @@
     font-family: 'Inter', sans-serif; 
     --UofT-Blue: #25355A;
     --Lighter-Blue: #64748B;
+    --Darker-Grey: #475569;
     --Light-Grey: #F1F5F9;
     --White: #FFFFFF;
     --Black: #000000;
@@ -90,27 +91,62 @@ hr {
     color: #000000;
     font-family: Inter;
     font-size: 40px;
-    font-weight: 400;
+    font-weight: 380;
     line-height: 125%;
 }
 
+.title{
+    color: black;
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.subtitle{
+    color: #000000;
+    font-size: 16px;
+    font-family: Inter;
+    font-weight: 400;
+}
+
+
 .label-bold{
-    color: #475569;
+    color: var(--Darker-Grey);
     font-family: Inter;
     font-size: 14px;
     font-weight: 450;
 }
 
 .label{
-    color: #475569;
+    color: var(--Darker-Grey);
     font-family: Inter;
     font-size: 14px;
     font-weight: 250;
 }
 
-.subtitle{
-    color: #000000;
-    font-size: 18px;
+.body-text{
+    color: var(--Darker-Grey);
     font-family: Inter;
-    font-weight: 400;
+    font-size: 14px;
+    font-weight: 250;
+}
+
+.button-main{
+    background-color: var(--UofT-Blue);
+    color: var(--White);
+    padding: 15px 40px;
+    text-align: center;
+    border: none;
+    font-size: 14px;
+    font-weight: 350;
+    font-family: Inter;
+}
+
+.button-main:hover{
+     background-color: #18223A;
+}
+
+.white-card-container{
+    background-color: white;
+    padding: 60px;
 }
