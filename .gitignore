@@ -6,3 +6,4 @@ secret.py
 *.db
 *.log
 *.pyc
+.DS_Store
