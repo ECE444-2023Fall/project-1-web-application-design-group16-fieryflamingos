@@ -12,6 +12,11 @@ def index():
     return render_template('index.html',
                             current_time=datetime.utcnow())
 
+""" Basic Nav Bar Template"""
+@main.route('/base', methods=['GET'])
+def base():
+    return render_template('base.html')
+
 """ Event Details form"""
 
 
