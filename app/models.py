@@ -8,7 +8,7 @@ ImageField, FileField
 # from flask_bcrypt import generate_password_hash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-
+from bson.objectid import ObjectId
 from config import Config
 
 from PIL import Image
@@ -312,9 +312,12 @@ class Event(Document):
 
         # append preferences if possible
         if preferences:
+            
             pipeline.append({
-                "preferences": {
-                    "$all": preferences
+                "$match": {
+                    "targeted_preferences": {
+                        "$all": [ObjectId(preference) for preference in preferences]
+                    }
                 }
             })
         if sort_by:
@@ -346,7 +349,11 @@ class Event(Document):
         }) 
         res = list(Event.objects().aggregate(pipeline))
         result_list = res[0]["paginated_results"]
-        count = res[0]["total_count"][0]["count"]
+        count = res[0]["total_count"]
+        if count:
+            count = count[0]["count"]
+        else:
+            count = 0
         return result_list, count
 
 

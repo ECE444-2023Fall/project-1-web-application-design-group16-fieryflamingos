@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectMultipleField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectMultipleField, SelectField, HiddenField
 from wtforms.fields import DateTimeLocalField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo, Optional
 from wtforms import ValidationError
@@ -43,6 +43,7 @@ class CancelRSVPForm(FlaskForm):
 class EventSearchForm(FlaskForm):
     search = StringField("Search", render_kw={"placeholder": "Event title, location, or organizer..."})
 
+
     targeted_preferences = SelectMultipleField("Preferences", choices=Preference.get_preferences_as_tuple())
     from_date = DateTimeLocalField("Start Date", format="%Y-%m-%dT%H:%M", validators=[Optional()])
     to_date = DateTimeLocalField("End Date", format="%Y-%m-%dT%H:%M", validators=[Optional()])
@@ -50,6 +51,9 @@ class EventSearchForm(FlaskForm):
     items_per_page = SelectField("Events Per Page", choices=[(10,10), (25,25), (50,50)])
 
     submit = SubmitField("Search")
+
+    next_page = SubmitField("Next")
+    prev_page = SubmitField("Back")
 
 
 

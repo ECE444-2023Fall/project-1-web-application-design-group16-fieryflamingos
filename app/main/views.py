@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, flash
+from flask import render_template, session, redirect, url_for, flash, request
 from flask_login import current_user, login_required
 from . import main
 # from .forms import NameForm
@@ -7,6 +7,8 @@ from .. import db
 from ..models import User, Event, Preference, Comment
 from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm
 from functools import wraps
+
+from math import ceil
 
 
 """ org_user_required
@@ -150,15 +152,66 @@ def event_details(id):
 @login_required
 def event_search():
     form = EventSearchForm()
-    events, count = Event.search(page=0,items_per_page=10)
+   
+    #   get session if it exists
+    page = session.get('search_page')
+    search = session.get('search_search')
+    from_date = session.get('search_from_date')
+    to_date = session.get('search_to_date')
+    preferences = session.get('search_preferences')
+    items_per_page = session.get('search_items_per_page')
+    max_pages = session.get('search_max_pages')
+
+    # set page to 0 if not in session
+    if not page:
+        page = 0
+        session['search_page'] = 0
+    if not items_per_page:
+        items_per_page = 10
+        session['search_items_per_page'] = 10
+
     # check form
     if form.validate_on_submit():
-        events, count = Event.search(search=form.search.data,
-                              from_date=form.from_date.data,
-                              to_date=form.to_date.data,
-                              preferences=form.targeted_preferences.data)
-    print(count)
-    return render_template('event_list.html', events=events, form=form)
+        if form.submit.data:
+            # update session
+            session['search_search'] = form.search.data
+            session['search_from_date'] = form.from_date.data
+            session['search_to_date'] = form.to_date.data
+            session['search_preferences'] = form.targeted_preferences.data
+            session['search_items_per_page'] = form.items_per_page.data
+            session['search_page'] = 0
+
+            # update variables
+            page = 0
+            search = form.search.data
+            from_date = form.from_date.data
+            to_date = form.to_date.data
+            preferences = form.targeted_preferences.data
+            items_per_page = int(form.items_per_page.data)
+
+        # go to next page
+        elif form.next_page.data and page+1 < max_pages:
+            page += 1
+            session['search_page'] = page
+
+        # go to prev page
+        elif form.prev_page.data and page > 0:
+            page -= 1
+            session['search_page'] = page
+
+        
+    # perform the search
+    events, count = Event.search(search=search,
+        from_date=from_date,
+        to_date=to_date,
+        preferences=preferences,
+        page=page,
+        items_per_page=items_per_page)
+    
+    max_pages = ceil(count/items_per_page)
+    session['search_max_pages'] = max_pages
+
+    return render_template('event_list.html', events=events, form=form, page=page, max_pages=max_pages)
 
 
 
