@@ -140,6 +140,7 @@ hr {
     font-size: 14px;
     font-weight: 350;
     font-family: Inter;
+    border-radius: 4px;
 }
 
 .button-main:hover{
