@@ -213,7 +213,7 @@ class Event(Document):
     description = StringField(required=True, max_length=1000)
 
     """ List of attendees, should be RegularUser objects """
-    attendees = EmbeddedDocumentListField(UserInfo, required=True, default=[])
+    attendees = EmbeddedDocumentListField(UserInfo, default=[])
 
     poster = FileField()
 
@@ -268,6 +268,15 @@ class Event(Document):
             return event
         except:
             return None
+
+    @staticmethod  
+    def add_attendee(event_id, user_id, user_name):
+        return Event.objects(id=event_id).update_one(push__attendees={"author_id": user_id, "name": user_name})
+
+    @staticmethod
+    def remove_attendee(event_id, user_id):
+        return Event.objects(id=event_id).update_one(pull__attendees__author_id=user_id)
+
 
 
     
