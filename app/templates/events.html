@@ -1,84 +1,53 @@
-<html lang="en">
-    <head>
-        <!-- Some Basic View Stuff -->
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width initial-scale=1" />
-
-        <!-- Browser tab stuff (favicon and browser title)-->
-        <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
-        <title>Occasional | {% block title %} {% endblock %}</title>
-
-        <!-- Stylesheets linked -->
-        <link rel="stylesheet" href="/static/css/custom.css" />
-        <link rel="stylesheet" href= 
-"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-          integrity= 
-"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-          crossorigin="anonymous" /> 
-        <link rel="preconnect" href="https://rsms.me/">
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    </head>
-</html>
-
-<body>
-    <!-- Nav bar code -->
-    <nav class="navbar navbar-expand-sm bg-white"> 
-        <div class="navbar-brand occasional">
-            <img src="/static/img/OC_Variant3.png" width="35" height="35" class="d-inline-block align-bottom" alt="">
-            <div class="occasional d-inline-block">OCCASIONAL</div>
+{% extends 'base.html' %}
+{% block title %} Event Detail {% endblock %}
+{% block content %}
+    <div class="events-title" style="display: flex; margin-top: 7%; margin-right: 10%; margin-left: 10%;">
+        <div style="flex: 40%">
+            <div class="main-title" style="margin-bottom: 40px;" >
+                Michael Garron Hospital - Student Open House
+            </div>
+            <div class="time-label" style="margin-bottom: 8px;">
+                <span class="label-bold">
+                    Date & Time:
+                </span>
+                <span class="label">
+                    Wednesday October 4, 2023 12:00PM - 1:30PM
+                </span>
+            </div>
+            <div class="org-label" style="margin-bottom: 8px;">
+                <span class="label-bold">
+                    Organizer: 
+                </span>
+                <span class="label">
+                    Career Centre Staff, Career Centre
+                </span>
+            </div>
+            <button style="margin-top: 15%";>
+                Register
+            </button>
         </div> 
+        <div style="flex: 5%;"></div>
+        <div style="flex: 20%; margin-top: 15px;">
+            <div class="subtitle" style="margin-bottom: 14px";>
+                Location
+            </div>
+            <div class="address-label" style="margin-bottom: 8px;">
+                <span class="label-bold">
+                    Address: 
+                </span>
+                <span class="label">
+                    155 College St Room 500, Toronto, ON M5T 3M7
+                </span>
+            </div>
+            <div class="room-label" style="margin-bottom: 10px;">
+                <span class="label-bold">
+                    Room:  
+                </span>
+                <span class="label">
+                    DL220
+                </span>
+            </div>
+        </div>
 
-        <button class="navbar-toggler" type="button" 
-                data-toggle="collapse"
-                data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false" 
-                aria-label="Toggle navigation"> 
-            <span class="navbar-toggler-icon"></span> 
-        </button> 
-  
-        <div class="collapse navbar-collapse" 
-                id="navbarSupportedContent"> 
-            <ul class="navbar-nav justify-content-center"> 
-                <li class="nav-item "> 
-                    <a class="nav-link" 
-                        href="#"> 
-                        DASHBOARD  
-                    </a> 
-                </li> 
-                <li class="nav-item"> 
-                    <a class="nav-link" 
-                        href="#"> 
-                        DISCOVER 
-                    </a> 
-                </li> 
-                <li class="nav-item"> 
-                    <a class="nav-link"
-                        href="#"> 
-                        PROFILE 
-                    </a> 
-                </li>
-                <li class="nav-item"> 
-                    <a class="nav-link"
-                        href="#"> 
-                        CALENDAR
-                    </a> 
-                </li>  
-            </ul> 
-        </div> 
-    </nav> 
-    <div class="content">
-        Michael Garron Hospital - Student Open House
     </div>
-    <div class="content">
-        Michael Garron Hospital - Student Open House
-    </div>
-    <div class="content">
-        Michael Garron Hospital - Student Open House
-    </div>
-    <div class="content">
-        Michael Garron Hospital - Student Open House
-    </div>
-
-</body>
-</html>
+{% endblock %}
