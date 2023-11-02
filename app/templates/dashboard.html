@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %} Dashboard {% endblock %}
+{% block content %}
+    <div class="card">
+        <div class = "container-fluid rec-sec">
+            <div class= "row">
+                <div class = "col"></div>
+                    <div class = "recommended col-8">RECOMMENDED FOR YOU
+                        <hr class="underline">
+                    </div>       
+                <div class= "col"></div>
+            </div>
+            <div class = "cards">
+                <div class="row">
+                    <div class = "col s3">
+                        <div class="card medium recommended_card"></div>
+                    </div>
+                    <div class = "col s3">
+                        <div class="card medium recommended_card"></div>  
+                    </div>
+                    <div class = "col s3">
+                        <div class="card medium recommended_card"></div>
+                    </div>
+                    <div class = "col s3">
+                        <div class="card medium recommended_card"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
