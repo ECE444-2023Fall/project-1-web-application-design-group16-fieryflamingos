@@ -277,6 +277,58 @@ class Event(Document):
     def remove_attendee(event_id, user_id):
         return Event.objects(id=event_id).update_one(pull__attendees__author_id=user_id)
 
+    @staticmethod
+    def search(search, from_date, to_date, preferences, sort_by, sort_order=-1, page=0, items_per_page=10):
+        pipeline = []
+        # append from_date if possible
+        if from_date:
+            pipeline.append({
+                "event_date.from_date": {
+                    "$lte": from_date
+                }
+            })
+
+        # append to_date if possible
+        if to_date:
+            pipeline.append({
+                "event_date.to_date": {
+                    "$gte": to_date
+                }
+            })
+
+        # append text search if possible
+        if search:
+            pipeline.append( {
+                "$search": {
+                    "index": "event_search",
+                    "text": {
+                        "query": search,
+                        "path": {
+                            "wildcard": "*"
+                        }
+                    }
+                }
+            })
+
+        # append preferences if possible
+        if preferences:
+            pipeline.append({
+                "preferences": {
+                    "$all": preferences
+                }
+            })
+        if sort_by:
+            pipeline.append({
+                "$sort": {
+                    sort_by: sort_order
+                }
+            })
+
+        # allow for paging
+        start_idx = page * items_per_page
+        end_idx = (page + 1) * items_per_page
+        return Event.objects().aggregate(pipeline)[start_idx:end_idx]
+
 
 
     
