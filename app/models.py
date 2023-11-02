@@ -30,6 +30,7 @@ class Preference(Document):
     def get_preferences():
         return Preference.objects()
     
+
     # return list of (id, preference)
     @staticmethod
     def get_preferences_as_tuple():
@@ -39,7 +40,15 @@ class Preference(Document):
             tup = (str(preference.id), preference.preference)
             tuple_preferences.append(tup)
         return tuple_preferences
+    
 
+    @staticmethod
+    def get_preference_by_id(id):
+        try:
+            preference = Preference.objects(id=id).get()
+            return preference
+        except:
+            return None
 
 """ Generic User object (abstract) """
 class User(UserMixin, DynamicDocument):
@@ -116,7 +125,7 @@ class User(UserMixin, DynamicDocument):
 class RegularUser(User):
     first_name = StringField(required=True, regex="^[a-zA-Z \-]+$", max_length=20)
     last_name = StringField(required=True, regex="^[a-zA-Z \-]+$", max_length=20)
-    preferences = ListField(required=True, default=[])
+    preferences = ListField(field=ObjectIdField(),required=True, default=[])
 
     """ List of events that the user has registered.
      Includes past and future events """
@@ -196,7 +205,7 @@ class Event(Document):
     event_date = EmbeddedDocumentField(EventDate)
     location = EmbeddedDocumentField(Location)
     title = StringField(required=True)
-    targeted_preferences = ListField(StringField(), required=True, default=[])
+    targeted_preferences = ListField(ObjectIdField(), required=True, default=[])
     organizer = EmbeddedDocumentField(UserInfo)
     description = StringField(required=True, max_length=1000)
 
