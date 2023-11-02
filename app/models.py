@@ -160,6 +160,14 @@ class UserInfo(EmbeddedDocument):
     name = StringField()
 
 
+""" Replies to the events, 
+    don't have a rating """
+class Reply(EmbeddedDocument):
+    # reply to either an EventComment or another reply
+    content = StringField(required=True, max_length=1000)
+    author = EmbeddedDocumentField(UserInfo)
+
+
 """ Comments """
 class Comment(Document):
     creation_date = DateTimeField(required=True, default=datetime.now())
@@ -171,25 +179,20 @@ class Comment(Document):
    
     likes = IntField(min_value=0, default=0)
 
+    rating = IntField(min_value=1, max_value=5)
+
+    replies = EmbeddedDocumentListField(Reply)
+
     meta = {
         'db_alias': Config.MONGODB_SETTINGS['alias'],
         'collection': 'comments',
-        'allow_inheritance': True,
     }
 
-   
-
-
-""" Comment for the actual event"""
-class EventComment(Comment):
-    rating = IntField(min_value=1, max_value=5)
+    @staticmethod
+    def get_comments_by_event_id(event_id):
+        return Comment.objects(event_id=event_id)
     
 
-""" Replies to the events, 
-    don't have a rating """
-class Reply(Comment):
-    # reply to either an EventComment or another reply
-    reply_to_id = ObjectIdField(required=True)
 
 
 class EventDate(EmbeddedDocument):
