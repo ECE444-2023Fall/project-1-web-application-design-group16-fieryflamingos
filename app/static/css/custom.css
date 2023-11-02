@@ -67,22 +67,36 @@
     font-style: normal;
     font-weight: 400;
     background-color: var(--Light-Grey);
-    margin-top: 20px;
-    border-bottom: 2px;
-    border-color: #000000;
+    margin-top: 70px;
+    margin-bottom: 0px;
+    line-height: 30px;
 }
 
-.col-9{
+.col-8{
     background-color: var(--Light-Grey);
+    margin-bottom: 0px;
 }
 
 hr {
-    display: block;
-    height: 5px;
+    height: 2px;
     border: 2px solid var(--UofT-Blue);
     background-color: var(--UofT-Blue);
     text-align: left;
     margin-left: 0;
-    margin-top: 20px;
+    margin-top: 5px;
     width: 450px;
+}
+
+.recommended_card{
+    margin-top: 60px;
+    height: 350px;
+    margin-right: -5px;
+    margin-left: -5px;
+}
+
+.cards{
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+
 }
