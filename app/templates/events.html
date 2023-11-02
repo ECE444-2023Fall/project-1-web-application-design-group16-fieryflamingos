@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %} Event Detail {% endblock %}
+{% block content %}
+    <div class="events-title" style="display: flex; margin-top: 7%; margin-right: 10%; margin-left: 10%; margin-bottom: 5%;">
+        <div style="flex: 50%">
+            <div class="main-title" style="margin-bottom: 40px;">
+                Michael Garron Hospital - Student Open House
+            </div>
+            <div class="time-label" style="margin-bottom: 8px;">
+                <span class="label-bold">
+                    Date & Time:
+                </span>
+                <span class="label">
+                    Wednesday, October 4, 2023, 12:00 PM - 1:30 PM
+                </span>
+            </div>
+            <div class="org-label" style="margin-bottom: 8px;">
+                <span class="label-bold">
+                    Organizer:
+                </span>
+                <span class="label">
+                    Career Centre Staff, Career Centre
+                </span>
+            </div>
+            <button class="button-main" style="margin-top: 15%;">
+                Register
+            </button>
+        </div>        
+        <div style="flex: 17%;"></div>
+        <div style="flex: 33%; margin-top: 15px;">
+            <div class="subtitle" style="margin-bottom: 14px";>
+                Location
+            </div>
+            <div class="address-label" style="margin-bottom: 8px;">
+                <span class="label-bold">
+                    Address: 
+                </span>
+                <span class="label">
+                    155 College St Room 500, Toronto, ON M5T 3M7
+                </span>
+            </div>
+            <div class="room-label" style="margin-bottom: 10px;">
+                <span class="label-bold">
+                    Room:  
+                </span>
+                <span class="label">
+                    DL220
+                </span>
+            </div>
+            <iframe
+                width=80%
+                height=200px
+                style="border:0"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps/embed/v1/place?key=API_KEY
+                    &q=Space+Needle,Seattle+WA">
+            </iframe>
+        </div>
+    </div>
+
+
+    <div class="event-details" style="background-color: #F1F5F9;">
+        <div style="margin-left: 10%; margin-right: 12%; padding-top: 40px; padding-bottom: 80px;">
+            <div class="title" style="margin-bottom: 40px; margin-top: 10px;">
+                Event Details
+            </div>
+            <div style="display: flex;">
+                <div class="white-card-container" style="flex: 60%;">
+                    <div class="subtitle" style="margin-bottom: 28px;">
+                        Description
+                    </div>
+                    <hr style="margin-bottom: 28px; width: auto;">
+                    <p class="body-text">
+                        Michael Garron Hospital is hosting a Student Open House for nursing, allied health and 
+                        medical radiation technology students on Wednesday, October 4. All nursing, allied health and 
+                        medical radiation technology (MRT) students are welcome to attend! Join us to learn about working 
+                        at MGH and visit the Ken and Marilyn Thomson Patient Care Centre (Thomson Centre), one of Ontario's newest hospital facilities. 
+                        The Thomson Centre opened in early 2023 and provides eight floors of modern and bright care spaces. 
+                        <br>
+                        <br>
+                        Learn what staff like best about working at MGH · 
+                        Learn how MGH supports staff in all stages of their career development Please see the attached event flyer that can be shared with your networks. Event Details Location: Michael Garron Hospital, 
+                        T1 Auditorium (located in the new Ken and Marilyn Thomson Patient Care Centre) Address: 825 Coxwell Avenue - The closest entrance to the auditorium is the Sammon Entrance. Date and time: Wednesday, October 4, 2023, 12 p.m. to 1:30 p.m. Registration: Visit tehn.ca/StudentOpenHouse. In the meantime, we encourage you to discover why working at MGH isn't one thing, it's everything. Learn more about MGH's nursing careers or allied health and MRT careers. If you have any questions about this event, please email hr@tehn.ca. 
+                    </p>
+                </div>
+                <div style="flex: 8%;"></div>
+                <div class="white-card-container" style="flex:32%">
+                    <div class="subtitle">
+                        Related Interests
+                    </div>
+                    <hr style="width: auto;">
+                </div>
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
