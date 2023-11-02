@@ -21,6 +21,27 @@ from . import login_manager
 def load_user(user_id):
     return User.objects(id=user_id).get()
 
+""" Prefence object """
+class Preference(Document):
+    preference = StringField(required=True)
+    events_with_preference = IntField(required=True, default=0)
+
+    @staticmethod
+    def get_preferences():
+        return Preference.objects()
+    
+    # return list of (id, preference)
+    @staticmethod
+    def get_preferences_as_tuple():
+        preferences = Preference.objects()
+        tuple_preferences = []
+        for preference in preferences:
+            tup = (str(preference.id), preference.preference)
+            tuple_preferences.append(tup)
+        return tuple_preferences
+
+
+""" Generic User object (abstract) """
 class User(UserMixin, DynamicDocument):
     creation_date = DateTimeField(default=datetime.now)
 
@@ -227,6 +248,15 @@ class Event(Document):
 
         upcoming_events = Event.objects(attendees__author_id=user_id, event_date__from_date__gte=today).order_by("+event_date__from_date")[:select]
         return upcoming_events
+    
+    @staticmethod
+    def get_by_id(id):
+        try:
+            event = Event.objects(id=id).get()
+            return event
+        except:
+            return None
+
 
     
 
