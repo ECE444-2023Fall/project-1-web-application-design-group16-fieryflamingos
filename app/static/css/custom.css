@@ -1,8 +1,21 @@
 
-:root { font-family: 'Inter', sans-serif; }
-@supports (font-variation-settings: normal) {
-  :root { font-family: 'Inter var', sans-serif; }
+:root { 
+    font-family: 'Inter', sans-serif; 
+    --UofT-Blue: #25355A;
+    --Lighter-Blue: #64748B;
+    --Light-Grey: #F1F5F9;
+    --White: #FFFFFF;
+    --Black: #000000;
+    --Bold-font-weight: 700;
+    --Medium-font-weight: 400;
+    --Light-font-weight: 300;
+    --underline-padding: 
 }
+@supports (font-variation-settings: normal) {
+  :root { 
+    font-family: 'Inter var', sans-serif; 
+  }
+
 
 .navbar{
     margin-top: 20px;
@@ -14,11 +27,12 @@
 
 .occasional{
     font-family: Inter;
-    font-size: 20px;
+    font-size: 22px;
     font-style: bold;
-    font-weight: 600;
+    font-weight: 700;
     line-height: normal; 
-    color: #25355A;
+
+    color: var(--UofT-Blue);
 }
 
 .nav-link{
@@ -31,7 +45,7 @@
 }
 
 .nav-link:hover{
-    color: #25355A;
+ color: var(--UofT-Blue);
 }
 
 .nav-item{
@@ -39,3 +53,36 @@
     padding-left: 30px;
 }
 
+
+.rec-sec{
+    height: 636px;
+    flex-shrink: 0;
+    background-color: var(--Light-Grey); 
+}
+
+.recommended{
+    color: #000000;
+    font-family: Inter;
+    font-size: 35px;
+    font-style: normal;
+    font-weight: 400;
+    background-color: var(--Light-Grey);
+    margin-top: 20px;
+    border-bottom: 2px;
+    border-color: #000000;
+}
+
+.col-9{
+    background-color: var(--Light-Grey);
+}
+
+hr {
+    display: block;
+    height: 5px;
+    border: 2px solid var(--UofT-Blue);
+    background-color: var(--UofT-Blue);
+    text-align: left;
+    margin-left: 0;
+    margin-top: 20px;
+    width: 450px;
+}
