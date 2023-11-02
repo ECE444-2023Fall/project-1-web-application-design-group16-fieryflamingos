@@ -2,32 +2,32 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
-from ..models import RegularUser, OrganizationUser
+from ..models import RegularUser, OrganizationUser, User
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Length(1, 64),
-    Email()])
+    username = StringField('Username', validators=[DataRequired(), Length(1, 64)])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Log In')
 
 
 # check if email already taken
-def validate_email(form,field):
+def validate_username(form,field):
     try:
-        RegularUser.objects(email=field.data).get()
+        User.get_user_by_username(field.data)
 
         # if we get to here, means that email is not unique
-        raise ValidationError(f'Email already taken.')
+        raise ValidationError(f'Username already taken.')
     except:
         pass
 
 
 class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
-    last_name = StringField('First Name', validators=[DataRequired(), Regexp("^[a-zA-Z \-]+$", message="Not a valid name.")])
+    last_name = StringField('Last Name', validators=[DataRequired(), Regexp("^[a-zA-Z \-]+$", message="Not a valid name.")])
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
-        Email(), validate_email])
+        Email()])
+    username = StringField('User Name', validators=[DataRequired(), Length(1,64), validate_username])
     password = PasswordField('Password', validators=[Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", message="Invalid Password"),
         DataRequired(), EqualTo('password2', message='Passwords must match.')])
     
@@ -36,21 +36,12 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
 
-# check if email already taken
-def validate_email(form,field):
-    try:
-        OrganizationUser.objects(email=field.data).get()
-        
-        # if we get to here, means that email is not unique
-        raise ValidationError(f'Email already taken.')
-    except:
-        pass
-
 
 class RegistrationOrganizationForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
+    name = StringField('Organization Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
-        Email(), validate_email])
+        Email()])
+    username = StringField('User Name', validators=[DataRequired(), Length(1,64), validate_username])
     password = PasswordField('Password', validators=[Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", message="Invalid Password"),
         DataRequired(), EqualTo('password2', message='Passwords must match.')])
     

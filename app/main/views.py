@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, flash, request
+from flask import render_template, session, redirect, url_for, flash, abort
 from flask_login import current_user, login_required
 from . import main
 # from .forms import NameForm
@@ -17,7 +17,7 @@ def org_user_required(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
         if not current_user.role == "organization":
-            return redirect(url_for('errors.401'))
+            abort(403)
 
         return func(*args, **kwargs)
 
@@ -62,17 +62,7 @@ DATA:
 @org_user_required
 def event_form():
     form = EventForm()
-    print("INSIDE HERE")
-    print("from_date: ", form.from_date.data)
-    print("to_date: ", form.to_date.data)
     if form.validate_on_submit():
-        print("place: ", form.location_place.data)
-        print("address: ", form.location_address.data)
-        print("room: ", form.location_room.data)
-        print("current_user: ", current_user.name)
-        print("title: ", form.title.data)
-        print("description: ", form.description.data)
-        print("preferences: ", form.targeted_preferences.data)
         try:
             event = Event(location={"place": form.location_place.data, "address": form.location_address.data, "room": form.location_room.data},
                         organizer={"author_id": current_user.id, "name": current_user.name},
@@ -215,4 +205,11 @@ def event_search():
 
 
 
+""" View Profile route
+ """
+@main.route('/profile', methods=['GET'])
+@login_required
+def get_profile():
+
+    return render_template('profile.html', user=current_user)
 

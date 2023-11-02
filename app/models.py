@@ -19,7 +19,7 @@ from . import login_manager
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.objects(id=user_id).get()
+    return User.get_user_by_id(user_id)
 
 """ Prefence object """
 class Preference(Document):
@@ -54,7 +54,7 @@ class Preference(Document):
 class User(UserMixin, DynamicDocument):
     creation_date = DateTimeField(default=datetime.now)
 
-    email = EmailField(unique=True, required=True, max_length=50)
+    email = EmailField(required=True, max_length=50)
     
     # length: 8-25 characters
     # At least 1 uppercase letter
@@ -65,6 +65,7 @@ class User(UserMixin, DynamicDocument):
 
     profile_image = ImageField(size=(400,400, False), thumbnail_size=(150,150,False))
 
+    username = StringField(unique=True, required=True)
 
     meta = {
         'db_alias': Config.MONGODB_SETTINGS['alias'],
@@ -119,6 +120,23 @@ class User(UserMixin, DynamicDocument):
         if email_valid == False:
             raise Exception(f"'{email_domain_part}' not a valid domain (email validation failed)")
         return email_valid
+    
+    @staticmethod
+    def get_user_by_username(username):
+        try:
+            user = User.objects(username=username).get()
+            return user
+        except:
+            return None
+    
+    @staticmethod 
+    def get_user_by_id(user_id):
+        try:
+            user = User.objects(id=user_id).exclude("password_hash").get()
+            return user
+        except:
+            return None
+
     
 
 """ Regular User """
