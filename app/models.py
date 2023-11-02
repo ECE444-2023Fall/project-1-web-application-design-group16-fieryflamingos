@@ -232,7 +232,7 @@ class Event(Document):
     def validate_date(self):
         # check to make sure date from is before date to
         if self.event_date.to_date:
-            if self.event_date.from_date < self.event_date.to_date:
+            if self.event_date.from_date > self.event_date.to_date:
                 raise Exception(f"To date: '{self.event_date.to_date}' is earlier than From Date: '{self.event_date.from_date}'")
 
     def validate(self, *args, **kwargs):
@@ -278,7 +278,7 @@ class Event(Document):
         return Event.objects(id=event_id).update_one(pull__attendees__author_id=user_id)
 
     @staticmethod
-    def search(search=None, from_date=None, to_date=None, preferences=None, sort_by=None, sort_order=-1, page=0, items_per_page=10):
+    def search(search=None, from_date=None, to_date=None, preferences=None, sort_by="event_date.from_date", sort_order=1, page=0, items_per_page=10):
         pipeline = []
         # append from_date if possible
         if from_date:
@@ -326,13 +326,28 @@ class Event(Document):
 
         # allow for paging
         start_idx = page * items_per_page
+        paginated_results = [{
+                "$skip": start_idx
+            },
+            {
+                "$limit": items_per_page
+            }
+        ]
+
         pipeline.append({
-            "$skip": start_idx
-        })
-        pipeline.append({
-            "$limit": items_per_page
-        })
-        return list(Event.objects().aggregate(pipeline))
+            "$facet": {
+                "paginated_results": paginated_results,
+                "total_count": [
+                    {
+                        "$count": 'count'
+                    }
+                ]
+            }
+        }) 
+        res = list(Event.objects().aggregate(pipeline))
+        result_list = res[0]["paginated_results"]
+        count = res[0]["total_count"][0]["count"]
+        return result_list, count
 
 
 

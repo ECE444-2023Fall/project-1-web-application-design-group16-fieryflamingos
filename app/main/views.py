@@ -150,14 +150,14 @@ def event_details(id):
 @login_required
 def event_search():
     form = EventSearchForm()
-    events = Event.search(page=0,items_per_page=10)
+    events, count = Event.search(page=0,items_per_page=10)
     # check form
     if form.validate_on_submit():
-        events = Event.search(search=form.search.data,
+        events, count = Event.search(search=form.search.data,
                               from_date=form.from_date.data,
                               to_date=form.to_date.data,
                               preferences=form.targeted_preferences.data)
-    print(events)
+    print(count)
     return render_template('event_list.html', events=events, form=form)
 
 
