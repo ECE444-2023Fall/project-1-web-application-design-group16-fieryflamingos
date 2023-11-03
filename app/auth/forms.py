@@ -22,7 +22,7 @@ def validate_username(form,field):
         pass
 
 
-class RegistrationForm(FlaskForm):
+class RegistrationRegularForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
     last_name = StringField('Last Name', validators=[DataRequired(), Regexp("^[a-zA-Z \-]+$", message="Not a valid name.")])
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),

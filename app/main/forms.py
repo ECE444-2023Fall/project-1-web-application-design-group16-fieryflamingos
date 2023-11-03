@@ -48,7 +48,7 @@ class EventSearchForm(FlaskForm):
     from_date = DateTimeLocalField("Start Date", format="%Y-%m-%dT%H:%M", validators=[Optional()])
     to_date = DateTimeLocalField("End Date", format="%Y-%m-%dT%H:%M", validators=[Optional()])
 
-    items_per_page = SelectField("Events Per Page", choices=[(10,10), (25,25), (50,50)])
+    items_per_page = SelectField("Events Per Page", choices=[(10,10), (20,20), (30,30)])
 
     submit = SubmitField("Search")
 
@@ -58,5 +58,25 @@ class EventSearchForm(FlaskForm):
 
 
 """ Update profile form """
+class UpdateRegularUserForm(FlaskForm):
+    first_name = StringField('First Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
+    last_name = StringField('Last Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
+    
+    preferences = SelectMultipleField("Preferences", choices=Preference.get_preferences_as_tuple())
 
+    submit = SubmitField("Update")
+
+
+""" Update profile form """
+class UpdateOrganizationUserForm(FlaskForm):
+    name = StringField('Last Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
+    
+    submit = SubmitField("Update")
+
+    
+""" Comment form """
+class CommentForm(FlaskForm):
+    content = StringField("Comment", validators=[DataRequired(), Length(0, 1000, message="Length must be less than 1000 characters.")])
+
+    rating = SelectField("Rating (1-5)", choices=[(1,1), (2,2), (3,3), (4,4), (5,5)], validators=[DataRequired()])
 
