@@ -74,4 +74,9 @@ class UpdateOrganizationUserForm(FlaskForm):
     submit = SubmitField("Update")
 
     
+""" Comment form """
+class CommentForm(FlaskForm):
+    content = StringField("Comment", validators=[DataRequired(), Length(0, 1000, message="Length must be less than 1000 characters.")])
+
+    rating = SelectField("Rating (1-5)", choices=[(1,1), (2,2), (3,3), (4,4), (5,5)], validators=[DataRequired()])
 

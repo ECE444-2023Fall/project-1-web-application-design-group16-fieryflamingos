@@ -5,7 +5,7 @@ from . import main
 # from .forms import NameForm
 from .. import db
 from ..models import User, RegularUser, OrganizationUser, Event, Preference, Comment
-from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm
+from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm, CommentForm
 from functools import wraps
 
 from math import ceil
@@ -142,61 +142,24 @@ DATA:
     - comments: Comment[]
     - user_is_attendee: boolean
     - form: RSVPForm | CancelRSVPForm
+    - comment_form: CommentForm
+This function handles the GET and POST requests for the event details page.
+It requires the user to be logged in and takes the event id as an argument.
+It renders the event details template with the following information:
+- event: the Event object with the given id
+- user_is_attendee: a boolean value indicating if the current user is attending the event
+- comments: a list of Comment objects for the event
+- form: either an RSVPForm or a CancelRSVPForm depending on the user's status
+- comment_form: a CommentForm for the user to submit a comment and rating
+If the event id is invalid, it renders the event not found template.
+If the form or comment_form is submitted and validated, it updates the database accordingly and redirects to the same page.
+
 
 """
 @main.route('/event/<id>', methods=['GET', 'POST'])
 @login_required
 def event_details(id):
-    """
-    This function renders the event details page 
-    for the logged-in user and handles the RSVP 
-    or cancel RSVP actions.
 
-    Parameters:
-    id: The id of the event to be displayed.
-
-    Returns:
-    A rendered template of event_details.html with 
-    the event data, the RSVP or cancel RSVP form, 
-    and the comments, or a redirection to the same 
-    page if the form is successfully submitted, or 
-    a rendered template of event_not_found.html if 
-    the event is not valid.
-
-    Description:
-    The function first gets the event document by 
-    the id parameter and checks if it is valid. If 
-    not, it returns the event_not_found.html template. 
-    If the event is valid, it creates an instance of 
-    the RSVPForm class, which is a custom form for 
-    RSVPing to the event. Then, it checks if the user 
-    is already an attendee of the event by looping 
-    through the attendees list of the event. If the 
-    user is an attendee, it changes the form to an 
-    instance of the CancelRSVPForm class, which is a 
-    custom form for canceling the RSVP. Next, it gets 
-    the preferences data for the event by looping 
-    through the targeted preferences list of the event
-    and calling the get_preference_by_id function for 
-    each preference id. It also gets the comments data 
-    for the event by calling the get_comments_by_event_id 
-    function with the event id. Then, it validates the form 
-    on submit, which means the user has clicked the RSVP or 
-    cancel RSVP button. If the form is validated, it checks 
-    the type of the form. If the form is an RSVPForm, it adds 
-    the user to the attendees list of the event and adds the 
-    event to the events list of the user. It also changes the 
-    user_is_attendee variable to True and the form to a CancelRSVPForm. 
-    If the form is a CancelRSVPForm, it removes the user from the 
-    attendees list of the event and removes the event from the 
-    events list of the user. It also changes the user_is_attendee 
-    variable to False and the form to an RSVPForm. After 
-    updating the database, it redirects the user to the same 
-    event details page. If the form is not validated, it passes 
-    the event, the user_is_attendee, the comments, and the form 
-    as arguments to the render_template function, which returns 
-    the event_details.html template with the data.
-    """
     # get event
     event = Event.get_by_id(id=id)
 
@@ -206,6 +169,8 @@ def event_details(id):
 
     # create RSVP form
     form = RSVPForm()
+
+    comment_form = CommentForm()
 
     # check if user already is RSVP'ed, if so, change RSVPForm to CancelRSVPForm
     user_is_attendee = False
@@ -219,8 +184,7 @@ def event_details(id):
     for pref_id in event.targeted_preferences:
         preferences.append(Preference.get_preference_by_id(pref_id))
 
-    # get comments for the event
-    comments = Comment.get_comments_by_event_id(id)
+    
 
     # VALIDATE FORMS
     if form.validate_on_submit():
@@ -241,7 +205,21 @@ def event_details(id):
             form = RSVPForm()
         return redirect(url_for("main.event_details", id=id))
 
-    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, comments=comments, form=form)
+    if comment_form.validate_on_submit():
+        name = ""
+        if current_user.role == "regular":
+            name = f"{current_user.first_name} {current_user.last_name}"
+        else:
+            name = current_user.name
+        comment = Comment(event_id=id,
+            author={"author_id":  current_user.id, "name": name}, 
+            content=comment_form.content.data,
+            rating=comment_form.rating.data)
+        comment = comment.save()
+    
+    # get comments for the event
+    comments = Comment.get_comments_by_event_id(id)
+    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, comments=comments, form=form, comment_form=comment_form)
 
 
 """ Event Update form
