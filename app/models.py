@@ -183,7 +183,7 @@ class OrganizationUser(User):
     @staticmethod
     def get_by_id(id):
         try:
-            user = OrganizationUser.objects(id=id).get()
+            user = OrganizationUser.objects(id=id).exclude("password_hash").get()
             return user
         except:
             return None
