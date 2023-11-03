@@ -172,6 +172,14 @@ class OrganizationUser(User):
     #   organization - event creation allowed
     role = StringField(required=True, default="organization")
 
+    @staticmethod
+    def get_by_id(id):
+        try:
+            user = OrganizationUser.objects(id=id).get()
+            return user
+        except:
+            return None
+
     
 """ Location """
 class Location(EmbeddedDocument):

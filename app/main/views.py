@@ -282,7 +282,7 @@ def get_profile():
     user = current_user
 
     if user.role == "organization":
-        return redirect(url_for("main.get_profile_org"))
+        return redirect(url_for("main.get_profile_org", id=user.id))
     
     # get event summary
     future_events = Event.get_summary_from_list_future(user.registered_events)
@@ -292,21 +292,23 @@ def get_profile():
 
 
 """ View organization profile """
-@main.route('/profile-org', methods=['GET'])
+@main.route('/profile-org/<id>', methods=['GET'])
 @login_required
-def get_profile_org():
-    user = current_user
+def get_profile_org(id):
+    user = OrganizationUser.get_by_id(id)
 
-    if user.role == "organization":
-        return redirect(url_for("main.get_profile_org"))
+    if user == None:
+        return redirect(url_for("errors.404"))
     
+    if user.id == current_user.id:
+        current_user_is_specified = True
 
-     # get event summary
+    # get event summary
     future_events = Event.get_organization_events_future(user.id)
     past_events = Event.get_organization_events_past(user.id)
 
     # get events
-    return render_template('profile_org.html', user=current_user, future_events=future_events)
+    return render_template('profile_org.html', user=user, current_user_is_specified=current_user_is_specified, future_events=future_events, past_events=past_events)
 
 
 """ Edit profile route
