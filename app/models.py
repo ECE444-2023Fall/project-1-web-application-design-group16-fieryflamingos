@@ -301,7 +301,8 @@ class Event(Document):
 
     @staticmethod  
     def add_attendee(event_id, user_id, user_name):
-        return Event.objects(id=event_id).update_one(push__attendees={"author_id": user_id, "name": user_name})
+        attendee = UserInfo(author_id=user_id, name=user_name)
+        return Event.objects(id=event_id).update_one(push__attendees=attendee)
 
     @staticmethod
     def remove_attendee(event_id, user_id):

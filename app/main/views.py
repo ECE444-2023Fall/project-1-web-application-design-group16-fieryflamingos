@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from . import main
 # from .forms import NameForm
 from .. import db
-from ..models import User, Event, Preference, Comment
+from ..models import User, RegularUser, OrganizationUser, Event, Preference, Comment
 from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm
 from functools import wraps
 
@@ -142,6 +142,69 @@ def event_details(id):
     return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, comments=comments, form=form)
 
 
+""" Event Update form
+    - Allows org users to create events
+DATA: 
+    - form: EventForm
+"""
+@main.route('/event/update/<id>', methods=['GET', 'POST'])
+@login_required
+@org_user_required
+def event_form(id):
+    # get event
+    event = Event.get_by_id(id=id)
+
+    # Check if event is valid
+    if not event:
+        return redirect(url_for('errors.404'))
+    
+    # Check if org user is right one
+    if event.organizer.author_id != current_user.id:
+        return redirect(url_for("errors.403"))
+    
+    # Everything valid, set the form 
+    form = EventForm(location_place=event.location.place,
+                     locaton_address=event.location.address,
+                     location_room=event.location.room,
+                     from_date=event.event_date.from_date,
+                     to_date=event.event_date.to_date,
+                     description=event.description,
+                     title=event.title,
+                     targeted_preferences=event.targeted_preferences)
+    
+    if form.validate_on_submit():
+        try:
+         
+            updated_event = Event.objects(id=event.id).update_one(location__place=form.location_place.data,
+                                                                 location__address=form.location_address.data,
+                                                                 location__room=form.location_room.data,
+                                                                 event_date__from_date=form.from_date.data,
+                                                                 event_date__to_date=form.to_date.data,
+                                                                 title=form.title.data,
+                                                                 description=form.description.data,
+                                                                 targeted_preferences=form.targeted_preferences.data)
+
+            # update preferences
+            # convert old preferences to a list of strings
+            old_preferences = [str(x) for x in event.targeted_preferences]
+            # find newly added preferences
+            new_preferences = [x for x in form.targeted_preferences.data if x not in old_preferences]
+
+            # find removed preferences
+            removed_preferences = [x for x in old_preferences if x not in form.targeted_preferences.data]
+
+            # increase/decrease event count
+            for preference in new_preferences:
+                Preference.inc_event_count(preference)
+            for preference in removed_preferences:
+                Preference.inc_event_count(preference, inc=-1)
+
+            return redirect(url_for(f'main.event_details', id=str(event.id)))
+        except Exception as e:
+            print(e)
+            pass
+    return render_template('event_create.html', form=form)
+
 
 """ Event listings route"""
 @main.route('/event/search', methods=['GET', 'POST'])
@@ -263,7 +326,10 @@ def update_profile_regular():
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data
             user.preferences = form.preferences.data
-            user = user.update()
+            RegularUser.objects(id=user.id).update_one(first_name=form.first_name.data,
+                                                last_name=form.last_name.data,
+                                                preferences=form.preferences.data)
+            
             return redirect(url_for("main.get_profile"))
         except:
             flash("An error occurred while updating your profile")
@@ -283,7 +349,7 @@ def update_profile_organization():
     if form.validate_on_submit():
         try:
             user.name = form.name.data
-            user = user.update()
+            OrganizationUser.objects(id=user.id).update_one(name=form.name.data)
             return redirect(url_for("main.get_profile"))
         except:
             flash("An error occurred while updating your profile")
