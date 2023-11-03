@@ -162,6 +162,14 @@ class RegularUser(User):
     #   organization - event creation allowed
     role = StringField(required=True, default="regular")
 
+    @staticmethod
+    def add_event(user_id, event_id):
+        RegularUser.objects(id=user_id).update_one(add_to_set__registered_events=event_id)
+
+    @staticmethod
+    def remove_event(user_id, event_id):
+        RegularUser.objects(id=user_id).update_one(pull__registered_events=event_id)
+
 
 """ OrganizationUser """
 class OrganizationUser(User):

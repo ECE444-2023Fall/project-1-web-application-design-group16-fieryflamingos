@@ -102,7 +102,7 @@ def event_details(id):
 
     # Check if event is valid
     if not event:
-        return redirect(url_for('errors.404'))
+        return render_template('event_not_found.html')
 
     # create RSVP form
     form = RSVPForm()
@@ -130,13 +130,16 @@ def event_details(id):
                 name = f"{current_user.first_name} {current_user.last_name}"
             else:
                 name = current_user.name
-            event = event.add_attendee(event.id, current_user.id, name)
+            Event.add_attendee(event.id, current_user.id, name)
+            RegularUser.add_event(current_user.id, event.id)
             user_is_attendee = True
             form = CancelRSVPForm()
         elif isinstance(form, CancelRSVPForm):
-            event = event.remove_attendee(event.id, current_user.id)
+            Event.remove_attendee(event.id, current_user.id)
+            RegularUser.remove_event(current_user.id, event.id)
             user_is_attendee = False
             form = RSVPForm()
+        return redirect(url_for("main.event_details", id=id))
 
     
     return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, comments=comments, form=form)
@@ -205,6 +208,28 @@ def event_form(id):
             pass
     return render_template('event_create.html', form=form)
 
+
+""" Event delete route
+Deletes an event """
+@main.route('/event/delete/<id>', methods=['POST'])
+@login_required
+@org_user_required
+def event_delete(id):
+     # get event
+    event = Event.get_by_id(id=id)
+
+    # Check if event is valid
+    if not event:
+        return redirect(url_for('errors.404'))
+    
+    # Check if org user is right one
+    if event.organizer.author_id != current_user.id:
+        return redirect(url_for("errors.403"))
+    
+    # delete event
+    event.delete()
+
+    return redirect(url_for("main.get_profile_org", id=current_user.id))
 
 """ Event listings route"""
 @main.route('/event/search', methods=['GET', 'POST'])
@@ -339,7 +364,7 @@ def update_profile_regular():
 
 
 """ Edit organization profile route """
-@main.route("/profile/edit-org", methods=['GET', 'POST'])
+@main.route("/profile-org/edit", methods=['GET', 'POST'])
 @login_required
 def update_profile_organization():
     user = current_user
