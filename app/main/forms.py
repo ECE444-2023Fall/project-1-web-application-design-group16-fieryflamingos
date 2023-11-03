@@ -48,7 +48,7 @@ class EventSearchForm(FlaskForm):
     from_date = DateTimeLocalField("Start Date", format="%Y-%m-%dT%H:%M", validators=[Optional()])
     to_date = DateTimeLocalField("End Date", format="%Y-%m-%dT%H:%M", validators=[Optional()])
 
-    items_per_page = SelectField("Events Per Page", choices=[(10,10), (25,25), (50,50)])
+    items_per_page = SelectField("Events Per Page", choices=[(10,10), (20,20), (30,30)])
 
     submit = SubmitField("Search")
 
