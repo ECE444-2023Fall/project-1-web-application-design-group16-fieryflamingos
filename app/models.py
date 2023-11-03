@@ -21,6 +21,36 @@ from . import login_manager
 def load_user(user_id):
     return User.objects(id=user_id).get()
 
+""" Prefence object """
+class Preference(Document):
+    preference = StringField(required=True)
+    events_with_preference = IntField(required=True, default=0)
+
+    @staticmethod
+    def get_preferences():
+        return Preference.objects()
+    
+
+    # return list of (id, preference)
+    @staticmethod
+    def get_preferences_as_tuple():
+        preferences = Preference.objects()
+        tuple_preferences = []
+        for preference in preferences:
+            tup = (str(preference.id), preference.preference)
+            tuple_preferences.append(tup)
+        return tuple_preferences
+    
+
+    @staticmethod
+    def get_preference_by_id(id):
+        try:
+            preference = Preference.objects(id=id).get()
+            return preference
+        except:
+            return None
+
+""" Generic User object (abstract) """
 class User(UserMixin, DynamicDocument):
     creation_date = DateTimeField(default=datetime.now)
 
@@ -95,7 +125,7 @@ class User(UserMixin, DynamicDocument):
 class RegularUser(User):
     first_name = StringField(required=True, regex="^[a-zA-Z \-]+$", max_length=20)
     last_name = StringField(required=True, regex="^[a-zA-Z \-]+$", max_length=20)
-    preferences = ListField(required=True, default=[])
+    preferences = ListField(field=ObjectIdField(),required=True, default=[])
 
     """ List of events that the user has registered.
      Includes past and future events """
@@ -130,6 +160,14 @@ class UserInfo(EmbeddedDocument):
     name = StringField()
 
 
+""" Replies to the events, 
+    don't have a rating """
+class Reply(EmbeddedDocument):
+    # reply to either an EventComment or another reply
+    content = StringField(required=True, max_length=1000)
+    author = EmbeddedDocumentField(UserInfo)
+
+
 """ Comments """
 class Comment(Document):
     creation_date = DateTimeField(required=True, default=datetime.now())
@@ -141,25 +179,20 @@ class Comment(Document):
    
     likes = IntField(min_value=0, default=0)
 
+    rating = IntField(min_value=1, max_value=5)
+
+    replies = EmbeddedDocumentListField(Reply)
+
     meta = {
         'db_alias': Config.MONGODB_SETTINGS['alias'],
         'collection': 'comments',
-        'allow_inheritance': True,
     }
 
-   
-
-
-""" Comment for the actual event"""
-class EventComment(Comment):
-    rating = IntField(min_value=1, max_value=5)
+    @staticmethod
+    def get_comments_by_event_id(event_id):
+        return Comment.objects(event_id=event_id)
     
 
-""" Replies to the events, 
-    don't have a rating """
-class Reply(Comment):
-    # reply to either an EventComment or another reply
-    reply_to_id = ObjectIdField(required=True)
 
 
 class EventDate(EmbeddedDocument):
@@ -175,12 +208,12 @@ class Event(Document):
     event_date = EmbeddedDocumentField(EventDate)
     location = EmbeddedDocumentField(Location)
     title = StringField(required=True)
-    targeted_preferences = ListField(StringField(), required=True, default=[])
+    targeted_preferences = ListField(ObjectIdField(), required=True, default=[])
     organizer = EmbeddedDocumentField(UserInfo)
     description = StringField(required=True, max_length=1000)
 
     """ List of attendees, should be RegularUser objects """
-    attendees = EmbeddedDocumentListField(UserInfo, required=True, default=[])
+    attendees = EmbeddedDocumentListField(UserInfo, default=[])
 
     poster = FileField()
 
@@ -227,6 +260,24 @@ class Event(Document):
 
         upcoming_events = Event.objects(attendees__author_id=user_id, event_date__from_date__gte=today).order_by("+event_date__from_date")[:select]
         return upcoming_events
+    
+    @staticmethod
+    def get_by_id(id):
+        try:
+            event = Event.objects(id=id).get()
+            return event
+        except:
+            return None
+
+    @staticmethod  
+    def add_attendee(event_id, user_id, user_name):
+        return Event.objects(id=event_id).update_one(push__attendees={"author_id": user_id, "name": user_name})
+
+    @staticmethod
+    def remove_attendee(event_id, user_id):
+        return Event.objects(id=event_id).update_one(pull__attendees__author_id=user_id)
+
+
 
     
 
