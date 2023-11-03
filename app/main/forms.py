@@ -58,5 +58,11 @@ class EventSearchForm(FlaskForm):
 
 
 """ Update profile form """
+class UpdateRegularUserForm(FlaskForm):
+    first_name = StringField('First Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
+    last_name = StringField('Last Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
+    
+    preferences = SelectMultipleField("Preferences", choices=Preference.get_preferences_as_tuple())
 
+    
 

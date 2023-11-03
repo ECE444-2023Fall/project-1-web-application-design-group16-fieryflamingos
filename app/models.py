@@ -49,6 +49,14 @@ class Preference(Document):
             return preference
         except:
             return None
+        
+    @staticmethod
+    def inc_event_count(preference_id, inc=1):
+        try:
+            Preference.objects(id=preference_id).update_one(inc__events_with_preference=inc)
+        except:
+            pass
+    
 
 """ Generic User object (abstract) """
 class User(UserMixin, DynamicDocument):
@@ -268,7 +276,9 @@ class Event(Document):
         today = datetime.now()
         
         # get 4 events closest to today
-        recommended_events = Event.objects(targeted_preferences__in=preferences, event_date__from_date__gte=today).order_by("+event_date__from_date")[:select]
+        recommended_events = Event.objects(targeted_preferences__in=preferences, event_date__from_date__gte=today) \
+            .exclude("attendees", "description") \
+            .order_by("+event_date__from_date")[:select]
         return recommended_events
     
     # get upcoming events
@@ -276,7 +286,9 @@ class Event(Document):
     def get_upcoming(user_id, select=4):
         today = datetime.now()
 
-        upcoming_events = Event.objects(attendees__author_id=user_id, event_date__from_date__gte=today).order_by("+event_date__from_date")[:select]
+        upcoming_events = Event.objects(attendees__author_id=user_id, event_date__from_date__gte=today) \
+            .exclude("attendees", "description") \
+            .order_by("+event_date__from_date")[:select]
         return upcoming_events
     
     @staticmethod
@@ -354,6 +366,12 @@ class Event(Document):
                 "$limit": items_per_page
             }
         ]
+        pipeline.append({
+            "$project": {
+                "attendees": 0,
+                "description": 0
+            }
+        })
 
         pipeline.append({
             "$facet": {
@@ -375,7 +393,25 @@ class Event(Document):
         return result_list, count
 
 
-
+    @staticmethod
+    def get_summary_from_list_future(id_list):
+        today = datetime.now()
+        return Event.objects(id__in=id_list, event_date__from_date__gte=today).exclude("attendees", "description")
+    
+    @staticmethod
+    def get_summary_from_list_past(id_list):
+        today = datetime.now()
+        return Event.objects(id__in=id_list, event_date__from_date__lt=today).exclude("attendees", "description")
+    
+    @staticmethod
+    def get_organization_events_future(org_id):
+        today = datetime.now()
+        return Event.objects(organizer__author_id=org_id, event_date__from_date__lt=today).exclude("attendees", "description")
+    
+    @staticmethod
+    def get_organization_events_past(org_id):
+        today = datetime.now()
+        return Event.objects(organizer__author_id=org_id, event_date__from_date__lt=today).exclude("attendees", "description")
     
 
 

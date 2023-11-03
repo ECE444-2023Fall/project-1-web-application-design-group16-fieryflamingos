@@ -5,7 +5,7 @@ from . import main
 # from .forms import NameForm
 from .. import db
 from ..models import User, Event, Preference, Comment
-from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm
+from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm
 from functools import wraps
 
 from math import ceil
@@ -17,7 +17,7 @@ def org_user_required(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
         if not current_user.role == "organization":
-            abort(403)
+            redirect(url_for('errors.403'))
 
         return func(*args, **kwargs)
 
@@ -29,20 +29,22 @@ def org_user_required(func):
 Data: 
     Recommended Events
     Upcoming Events
+Organizations users get redirected to their profile page
 """
 @main.route('/', methods=['GET'])
 @login_required
 def index():
     user = current_user
-    try:
-        recommended_events = Event.get_recommended(user.preferences)
-        upcoming_events = Event.get_upcoming(user.id)
-        
-        return render_template('index.html',
-                                recommended_events=recommended_events,
-                                upcoming_events=upcoming_events)
-    except Exception as e:
-        return render_template('index.html')
+
+    if user.role == "organization":
+        return redirect(url_for("/profile-org"))
+
+    recommended_events = Event.get_recommended(user.preferences)
+    upcoming_events = Event.get_upcoming(user.id)
+    
+    return render_template('index.html',
+                            recommended_events=recommended_events,
+                            upcoming_events=upcoming_events)
 
  
 
@@ -72,6 +74,10 @@ def event_form():
                         targeted_preferences=form.targeted_preferences.data
             )
             event = event.save()
+
+            # update preferences
+            for preference in form.targeted_preferences.data:
+                Preference.inc_event_count(preference)
             return redirect(url_for(f'main.event_details', id=str(event.id)))
         except Exception as e:
             print(e)
@@ -210,6 +216,78 @@ def event_search():
 @main.route('/profile', methods=['GET'])
 @login_required
 def get_profile():
+    user = current_user
 
-    return render_template('profile.html', user=current_user)
+    if user.role == "organization":
+        return redirect(url_for("main.get_profile_org"))
+    
+    # get event summary
+    future_events = Event.get_summary_from_list_future(user.registered_events)
+    past_events = Event.get_summary_from_list_past(user.registered_events)
+
+    return render_template('profile.html', user=user, future_events=future_events, past_events=past_events)
+
+
+""" View organization profile """
+@main.route('/profile-org', methods=['GET'])
+@login_required
+def get_profile_org():
+    user = current_user
+
+    if user.role == "organization":
+        return redirect(url_for("main.get_profile_org"))
+    
+
+     # get event summary
+    future_events = Event.get_organization_events_future(user.id)
+    past_events = Event.get_organization_events_past(user.id)
+
+    # get events
+    return render_template('profile_org.html', user=current_user, future_events=future_events)
+
+
+""" Edit profile route
+Edit your own profile. this route is reserved for
+regular users """
+@main.route("/profile/edit", methods=['GET', 'POST'])
+@login_required
+def update_profile_regular():
+    user = current_user
+    if user.role == "organization":
+        return redirect(url_for("main.update_profile_organization"))
+
+    form = UpdateRegularUserForm(first_name=user.first_name, last_name=user.last_name,preferences=user.preferences)
+
+    if form.validate_on_submit():
+        try:
+            user.first_name = form.first_name.data
+            user.last_name = form.last_name.data
+            user.preferences = form.preferences.data
+            user = user.update()
+            return redirect(url_for("main.get_profile"))
+        except:
+            flash("An error occurred while updating your profile")
+    return render_template('update_profile.html', form=form, user=user)
+
+
+""" Edit organization profile route """
+@main.route("/profile/edit-org", methods=['GET', 'POST'])
+@login_required
+def update_profile_organization():
+    user = current_user
+    if user.role == "regular":
+        return redirect(url_for("main.update_profile_regular"))
+    
+    form = UpdateOrganizationUserForm(name=user.name)
+
+    if form.validate_on_submit():
+        try:
+            user.name = form.name.data
+            user = user.update()
+            return redirect(url_for("main.get_profile"))
+        except:
+            flash("An error occurred while updating your profile")
+
+    return render_template('update_profile_org.html', form=form, user=user)
+
 
