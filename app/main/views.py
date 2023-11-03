@@ -254,7 +254,7 @@ DATA:
 @main.route('/event/update/<id>', methods=['GET', 'POST'])
 @login_required
 @org_user_required
-def event_form(id):
+def event_update(id):
     """
     This function renders the event update form for the 
     logged-in organization user and handles the submission 

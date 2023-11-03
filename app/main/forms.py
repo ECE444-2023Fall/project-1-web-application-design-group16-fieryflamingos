@@ -64,5 +64,14 @@ class UpdateRegularUserForm(FlaskForm):
     
     preferences = SelectMultipleField("Preferences", choices=Preference.get_preferences_as_tuple())
 
+    submit = SubmitField("Update")
+
+
+""" Update profile form """
+class UpdateOrganizationUserForm(FlaskForm):
+    name = StringField('Last Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
+    
+    submit = SubmitField("Update")
+
     
 
