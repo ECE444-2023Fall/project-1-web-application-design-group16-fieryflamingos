@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_user, logout_user, login_required
 from . import auth
 from ..models import RegularUser, OrganizationUser, User
-from .forms import LoginForm, RegistrationForm, RegistrationOrganizationForm
+from .forms import LoginForm, RegistrationRegularForm, RegistrationOrganizationForm
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -33,7 +33,7 @@ def logout():
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register_regular():
-    form = RegistrationForm()
+    form = RegistrationRegularForm()
     if form.validate_on_submit():
         try:
             user = RegularUser(first_name=form.first_name.data,
