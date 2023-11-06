@@ -79,7 +79,7 @@
 }
 
 .medium{
-    height: 350px;
+    height: 370px;
     width: 250px;
     margin-top: 40px;
 }
@@ -133,6 +133,7 @@ hr.underline_title{
     text-align: left;
     margin-left: -5px;
     margin-top: 12px;
+    margin-bottom: 0px;
     width: 182px;
 }
 
@@ -144,6 +145,16 @@ hr.underline_white {
     margin-left: 0;
     margin-top: 20px;
     width: 448px;
+}
+
+hr.underline_upp {
+    height: 0.1px;
+    border: 0.9px solid var(--UofT-Blue);
+    font-weight: 100;
+    margin-left: 32px;
+    margin-top: 18px;
+    width: 900px;
+    margin-bottom: 0px;
 }
 
 .main-title{
@@ -277,11 +288,44 @@ hr.underline_white {
 }
 
 .recommended_title{
-    color: var(--UofT-Blue);
     margin-top: 42px;
-    margin-right: 36px;
-    margin-left: 36px;
-    font-size: 24px;
+    margin-right: 35px;
+    margin-left: 35px;
+    margin-bottom:0px;
+}
+
+.rec_info{
+    margin-top: 28px;
+    margin-right: 35px;
+    margin-left: 35px;
+    margin-bottom: 0px;
+}
+
+.upcoming_title{
+    margin-left: 32px;
+    margin-top: 46px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
+}
+
+.date_time_top{
+    margin-top: 42px;
+}
+.date_time_date{
+    color: #000000;
+    font-size: 16px;
+    font-family: Inter;
+    font-weight: 400;
+    text-align: right;
+}
+
+.date_time_time{
+    color: #000000;
+    font-size: 16px;
+    font-family: Inter;
+    font-weight: 100;
+    text-align: right;
 }
 
 .interest-tag{
