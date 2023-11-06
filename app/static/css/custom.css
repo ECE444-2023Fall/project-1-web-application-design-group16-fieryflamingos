@@ -1,24 +1,36 @@
-
-:root { font-family: 'Inter', sans-serif; }
+:root { 
+    font-family: 'Inter', sans-serif; 
+    --UofT-Blue: #25355A;
+    --Lighter-Blue: #64748B;
+    --Darker-Grey: #475569;
+    --Light-Grey: #F1F5F9;
+    --White: #FFFFFF;
+    --Black: #000000;
+    --Bold-font-weight: 700;
+    --Medium-font-weight: 400;
+    --Light-font-weight: 300;
+    --underline-padding: 
+}
 @supports (font-variation-settings: normal) {
-  :root { font-family: 'Inter var', sans-serif; }
+  :root { 
+    font-family: 'Inter var', sans-serif; 
+  }
 }
 
 .navbar{
-    margin-top: 20px;
-    margin-left: 40px;
-    margin-right: 100px;
-    margin-bottom: 60px;
+    margin-top: 18px;
+    margin-left: 1%;
+    margin-right: 14%;
+    margin-bottom: 5%;
 }
 
 
 .occasional{
     font-family: Inter;
     font-size: 20px;
-    font-style: bold;
     font-weight: 600;
     line-height: normal; 
-    color: #25355A;
+    color: var(--UofT-Blue);
 }
 
 .nav-link{
@@ -31,11 +43,329 @@
 }
 
 .nav-link:hover{
-    color: #25355A;
+ color: var(--UofT-Blue);
 }
 
 .nav-item{
-    padding-right: 30px;
-    padding-left: 30px;
+    padding-right: 8%;
+    padding-left: 8%;
 }
 
+.rec-sec{
+    margin: 0 12%;
+    height: 600px;
+    background-color: var(--Light-Grey); 
+    min-width: 1000px;
+}
+
+.lower-sec{
+    margin: 0 auto;
+    height: 1300px;
+}
+
+.upp-sec{
+    margin: 90px 12%;
+    background-color: var(--UofT-Blue); 
+    height: 1100px;
+}
+.cards{
+    margin-left: 12%;
+    margin-right: 12%;
+}
+
+.s3{
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+.medium{
+    height: 370px;
+    width: 250px;
+    margin-top: 40px;
+}
+
+.recommended{
+    color: #000000;
+    font-family: Inter;
+    font-size: 35px;
+    font-style: normal;
+    font-weight: 400;
+    background-color: var(--Light-Grey);
+    margin-top: 70px;
+    margin-bottom: 0px;
+    line-height: 30px;
+}
+
+.upcoming{
+    color: var(--Light-Grey);
+    font-family: Inter;
+    font-size: 35px;
+    font-style: normal;
+    font-weight: 400;
+    margin-top: 70px;
+    margin-bottom: 40px;
+    margin-left: 20px;
+    line-height: 30px;
+}
+
+.card.upcoming_card{
+    margin-right: auto;
+    margin-left: auto;
+    height: 192px;
+    border-radius: 15px;
+    margin-bottom: 36px;
+}
+
+hr.underline_blue {
+    height: 0.1px;
+    border: 1px solid var(--UofT-Blue);
+    font-weight: 100;
+    text-align: left;
+    margin-left: 0;
+    margin-top: 20px;
+    width: 440px;
+}
+
+hr.underline_title{
+    height: 0.1px;
+    border: 1px solid var(--UofT-Blue);
+    font-weight: 100;
+    text-align: left;
+    margin-left: -5px;
+    margin-top: 12px;
+    margin-bottom: 0px;
+    width: 182px;
+}
+
+hr.underline_white {
+    height: 0.1px;
+    border: 1px solid var(--Light-Grey);
+    font-weight: 100;
+    text-align: left;
+    margin-left: 0;
+    margin-top: 20px;
+    width: 448px;
+}
+
+hr.underline_upp {
+    height: 0.1px;
+    border: 0.9px solid var(--UofT-Blue);
+    font-weight: 100;
+    margin-left: 32px;
+    margin-top: 18px;
+    width: 900px;
+    margin-bottom: 0px;
+}
+
+.main-title{
+    color: #000000;
+    font-family: Inter;
+    font-size: 40px;
+    font-weight: 380;
+    line-height: 125%;
+}
+
+.title{
+    color: black;
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.subtitle{
+    color: #000000;
+    font-size: 16px;
+    font-family: Inter;
+    font-weight: 400;
+}
+
+
+.label-bold{
+    color: var(--Darker-Grey);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 450;
+}
+
+.label{
+    color: var(--Darker-Grey);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 250;
+}
+
+.body-text{
+    color: var(--Darker-Grey);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 250;
+}
+
+.button-main{
+    background-color: var(--UofT-Blue);
+    color: var(--White);
+    padding: 15px 40px;
+    text-align: center;
+    border: none;
+    font-size: 14px;
+    font-weight: 350;
+    font-family: Inter;
+    border-radius: 4px;
+}
+
+.button-main:hover{
+     background-color: #18223A;
+}
+
+.white-card-container{
+    background-color: white;
+    padding: 60px;
+}
+
+.main-title{
+    color: #000000;
+    font-family: Inter;
+    font-size: 40px;
+    font-weight: 380;
+    line-height: 125%;
+}
+
+.title{
+    color: black;
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.subtitle{
+    color: #000000;
+    font-size: 16px;
+    font-family: Inter;
+    font-weight: 400;
+}
+
+
+.label-bold{
+    color: var(--Darker-Grey);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 450;
+}
+
+.label{
+    color: var(--Darker-Grey);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 250;
+}
+
+.body-text{
+    color: var(--Darker-Grey);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 250;
+}
+
+.button-main{
+    background-color: var(--UofT-Blue);
+    color: var(--White);
+    padding: 15px 40px;
+    text-align: center;
+    border: none;
+    font-size: 14px;
+    font-weight: 350;
+    font-family: Inter;
+    border-radius: 4px;
+}
+
+.button-main:hover{
+     background-color: #18223A;
+}
+
+.white-card-container{
+    background-color: white;
+    padding: 60px;
+}
+
+.recommended_title{
+    margin-top: 42px;
+    margin-right: 35px;
+    margin-left: 35px;
+    margin-bottom:0px;
+}
+
+.rec_info{
+    margin-top: 28px;
+    margin-right: 35px;
+    margin-left: 35px;
+    margin-bottom: 0px;
+}
+
+.upcoming_title{
+    margin-left: 32px;
+    margin-top: 46px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
+}
+
+.date_time_top{
+    margin-top: 42px;
+}
+.date_time_date{
+    color: #000000;
+    font-size: 16px;
+    font-family: Inter;
+    font-weight: 400;
+    text-align: right;
+}
+
+.date_time_time{
+    color: #000000;
+    font-size: 16px;
+    font-family: Inter;
+    font-weight: 100;
+    text-align: right;
+}
+
+.interest-tag{
+    background-color: #E5E7EB;
+    color: #111827;
+    padding: 4px 8px;
+    text-align: center;
+    border: none;
+    font-size: 12px;
+    font-weight: 350;
+    font-family: Inter;
+    border-radius: 5px;  
+    margin-right: 10px; 
+    margin-bottom: 10px;
+    display: flexbox;
+    align-items: center;
+}
+
+.tag-number{
+    background-color: #D9D9D9;
+    color: #000000;
+    padding: 4px 4px;
+    text-align: center;
+    border: none;
+    font-size: 8px;
+    font-weight: 800;
+    font-family: Inter;
+    border-radius: 5px;  
+    margin-left: 6px; 
+    display: inline-block;
+}
+
+.interest-tag:hover{
+    background-color: #9ca3af;
+    color: #000000;
+}
+
+@media (max-width: 1466px) {
+    .rec-sec {
+      height: 1000px;
+    }
+  }
+  

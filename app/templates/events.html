@@ -1,84 +1,167 @@
-<html lang="en">
-    <head>
-        <!-- Some Basic View Stuff -->
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width initial-scale=1" />
-
-        <!-- Browser tab stuff (favicon and browser title)-->
-        <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
-        <title>Occasional | {% block title %} {% endblock %}</title>
-
-        <!-- Stylesheets linked -->
-        <link rel="stylesheet" href="/static/css/custom.css" />
-        <link rel="stylesheet" href= 
-"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-          integrity= 
-"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-          crossorigin="anonymous" /> 
-        <link rel="preconnect" href="https://rsms.me/">
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    </head>
-</html>
-
-<body>
-    <!-- Nav bar code -->
-    <nav class="navbar navbar-expand-sm bg-white"> 
-        <div class="navbar-brand occasional">
-            <img src="/static/img/OC_Variant3.png" width="35" height="35" class="d-inline-block align-bottom" alt="">
-            <div class="occasional d-inline-block">OCCASIONAL</div>
-        </div> 
-
-        <button class="navbar-toggler" type="button" 
-                data-toggle="collapse"
-                data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false" 
-                aria-label="Toggle navigation"> 
-            <span class="navbar-toggler-icon"></span> 
-        </button> 
-  
-        <div class="collapse navbar-collapse" 
-                id="navbarSupportedContent"> 
-            <ul class="navbar-nav justify-content-center"> 
-                <li class="nav-item "> 
-                    <a class="nav-link" 
-                        href="#"> 
-                        DASHBOARD  
-                    </a> 
-                </li> 
-                <li class="nav-item"> 
-                    <a class="nav-link" 
-                        href="#"> 
-                        DISCOVER 
-                    </a> 
-                </li> 
-                <li class="nav-item"> 
-                    <a class="nav-link"
-                        href="#"> 
-                        PROFILE 
-                    </a> 
-                </li>
-                <li class="nav-item"> 
-                    <a class="nav-link"
-                        href="#"> 
-                        CALENDAR
-                    </a> 
-                </li>  
-            </ul> 
-        </div> 
-    </nav> 
-    <div class="content">
-        Michael Garron Hospital - Student Open House
-    </div>
-    <div class="content">
-        Michael Garron Hospital - Student Open House
-    </div>
-    <div class="content">
-        Michael Garron Hospital - Student Open House
-    </div>
-    <div class="content">
-        Michael Garron Hospital - Student Open House
+{% extends 'base.html' %}
+{% block title %} Event Detail {% endblock %}
+{% block content %}
+    <div class="events-title" style="display: flex; margin-top: 6%; margin-right: 10%; margin-left: 10%; margin-bottom: 5%;">
+        <div style="flex: 50%">
+            <div class="main-title" style="margin-bottom: 40px;">
+                Michael Garron Hospital - Student Open House
+            </div>
+            <div class="time-label" style="margin-bottom: 8px;">
+                <span class="label-bold">
+                    Date & Time:
+                </span>
+                <span class="label">
+                    Wednesday, October 4, 2023, 12:00 PM - 1:30 PM
+                </span>
+            </div>
+            <div class="org-label" style="margin-bottom: 8px;">
+                <span class="label-bold">
+                    Organizer:
+                </span>
+                <span class="label">
+                    Career Centre Staff, Career Centre
+                </span>
+            </div>
+            <button class="button-main" style="margin-top: 15%;">
+                Register
+            </button>
+        </div>        
+        <div style="flex: 17%;"></div>
+        <div style="flex: 33%; margin-top: 15px;">
+            <div class="subtitle" style="margin-bottom: 14px";>
+                Location
+            </div>
+            <div class="address-label" style="margin-bottom: 8px;">
+                <span class="label-bold">
+                    Address: 
+                </span>
+                <span class="label">
+                    155 College St Room 500, Toronto, ON M5T 3M7
+                </span>
+            </div>
+            <div class="room-label" style="margin-bottom: 10px;">
+                <span class="label-bold">
+                    Room:  
+                </span>
+                <span class="label">
+                    DL220
+                </span>
+            </div>
+            <iframe
+                width=80%
+                height=200px
+                style="border: 0; margin-top: 16px;"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps/embed/v1/place?key=API_KEY
+                    &q=Space+Needle,Seattle+WA">
+            </iframe>
+        </div>
     </div>
 
-</body>
-</html>
+
+    <div class="event-details" style="background-color: #F1F5F9;">
+        <div style="margin-left: 10%; margin-right: 12%; padding-top: 40px; padding-bottom: 80px;">
+            <div class="title" style="margin-bottom: 40px; margin-top: 10px;">
+                Event Details
+            </div>
+            <div style="display: flex;">
+                <div class="white-card-container" style="flex: 60%;">
+                    <div class="subtitle" style="margin-bottom: 28px;">
+                        Description
+                    </div>
+                    <hr style="margin-bottom: 28px; width: auto;">
+                    <p class="body-text">
+                        Michael Garron Hospital is hosting a Student Open House for nursing, allied health and 
+                        medical radiation technology students on Wednesday, October 4. All nursing, allied health and 
+                        medical radiation technology (MRT) students are welcome to attend! Join us to learn about working 
+                        at MGH and visit the Ken and Marilyn Thomson Patient Care Centre (Thomson Centre), one of Ontario's newest hospital facilities. 
+                        The Thomson Centre opened in early 2023 and provides eight floors of modern and bright care spaces. 
+                        <br>
+                        <br>
+                        Learn what staff like best about working at MGH · 
+                        Learn how MGH supports staff in all stages of their career development Please see the attached event flyer that can be shared with your networks. Event Details Location: Michael Garron Hospital, 
+                        T1 Auditorium (located in the new Ken and Marilyn Thomson Patient Care Centre) Address: 825 Coxwell Avenue - The closest entrance to the auditorium is the Sammon Entrance. Date and time: Wednesday, October 4, 2023, 12 p.m. to 1:30 p.m. Registration: Visit tehn.ca/StudentOpenHouse. In the meantime, we encourage you to discover why working at MGH isn't one thing, it's everything. Learn more about MGH's nursing careers or allied health and MRT careers. If you have any questions about this event, please email hr@tehn.ca. 
+                    </p>
+                </div>
+                <div style="flex: 8%;"></div>
+                <div class="white-card-container" style="flex: 32%; height: 400px;">
+                    <div class="subtitle">
+                        Related Interests
+                    </div>
+                    <hr style="width: auto;">
+                    <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
+                        <button class="interest-tag">
+                            Health Science
+                            <div class="tag-number">
+                                23
+                            </div>
+                        </button>
+                        <button class="interest-tag">
+                            Nurs
+                            <div class="tag-number">
+                                125
+                            </div>
+                        </button>
+                        <button class="interest-tag">
+                            Random
+                            <div class="tag-number">
+                                125
+                            </div>
+                        </button>
+                        <button class="interest-tag">
+                            Nursing
+                            <div class="tag-number">
+                                125
+                            </div>
+                        </button>
+                    </div> 
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+
+    <div class="add-comments" style="margin-top: 40px; margin-right: 10%; margin-left: 10%; margin-bottom: 40px;">
+        <div class="title" style="margin-bottom: 20px;">
+            Add A Comment
+        </div>
+
+        <form class>
+            <input type="text" name="fname" style="width: 100%; height: 15%; margin-bottom: 20px;">
+        </form>
+
+        <button class="button-main">
+            Comment
+        </button>
+    </div>
+    
+    <div class="event-comments" style="background-color: #F1F5F9;">
+        <div style="margin-left: 10%; margin-right: 12%; padding-top: 40px; padding-bottom: 80px;">
+            <div class="title" style="margin-bottom: 40px; margin-top: 10px;">
+                Comments
+            </div>
+            <div class="white-card-container" style="flex: 60%; align-items: center;">
+                <div class="subtitle" style="margin-bottom: 28px;">
+                    John Doe
+                </div>
+                <hr style="margin-bottom: 28px; width: 50%;">
+                <p class="body-text">
+                    Michael Garron Hospital is hosting a Student Open House for nursing, allied health and 
+                    medical radiation technology students on Wednesday, October 4. All nursing, allied health and 
+                    medical radiation technology (MRT) students are welcome to attend! Join us to learn about working 
+                    at MGH and visit the Ken and Marilyn Thomson Patient Care Centre (Thomson Centre), one of Ontario's newest hospital facilities. 
+                    The Thomson Centre opened in early 2023 and provides eight floors of modern and bright care spaces. 
+                    <br>
+                    <br>
+                    Learn what staff like best about working at MGH · 
+                    Learn how MGH supports staff in all stages of their career development Please see the attached event flyer that can be shared with your networks. Event Details Location: Michael Garron Hospital, 
+                    T1 Auditorium (located in the new Ken and Marilyn Thomson Patient Care Centre) Address: 825 Coxwell Avenue - The closest entrance to the auditorium is the Sammon Entrance. Date and time: Wednesday, October 4, 2023, 12 p.m. to 1:30 p.m. Registration: Visit tehn.ca/StudentOpenHouse. In the meantime, we encourage you to discover why working at MGH isn't one thing, it's everything. Learn more about MGH's nursing careers or allied health and MRT careers. If you have any questions about this event, please email hr@tehn.ca. 
+                </p>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
