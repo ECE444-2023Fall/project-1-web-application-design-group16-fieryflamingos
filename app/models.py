@@ -8,7 +8,7 @@ ImageField, FileField
 # from flask_bcrypt import generate_password_hash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-
+from bson.objectid import ObjectId
 from config import Config
 
 from PIL import Image
@@ -19,7 +19,7 @@ from . import login_manager
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.objects(id=user_id).get()
+    return User.get_user_by_id(user_id)
 
 """ Prefence object """
 class Preference(Document):
@@ -49,12 +49,20 @@ class Preference(Document):
             return preference
         except:
             return None
+        
+    @staticmethod
+    def inc_event_count(preference_id, inc=1):
+        try:
+            Preference.objects(id=preference_id).update_one(inc__events_with_preference=inc)
+        except:
+            pass
+    
 
 """ Generic User object (abstract) """
 class User(UserMixin, DynamicDocument):
     creation_date = DateTimeField(default=datetime.now)
 
-    email = EmailField(unique=True, required=True, max_length=50)
+    email = EmailField(required=True, max_length=50)
     
     # length: 8-25 characters
     # At least 1 uppercase letter
@@ -65,6 +73,7 @@ class User(UserMixin, DynamicDocument):
 
     profile_image = ImageField(size=(400,400, False), thumbnail_size=(150,150,False))
 
+    username = StringField(unique=True, required=True)
 
     meta = {
         'db_alias': Config.MONGODB_SETTINGS['alias'],
@@ -120,6 +129,23 @@ class User(UserMixin, DynamicDocument):
             raise Exception(f"'{email_domain_part}' not a valid domain (email validation failed)")
         return email_valid
     
+    @staticmethod
+    def get_user_by_username(username):
+        try:
+            user = User.objects(username=username).get()
+            return user
+        except:
+            return None
+    
+    @staticmethod 
+    def get_user_by_id(user_id):
+        try:
+            user = User.objects(id=user_id).exclude("password_hash").get()
+            return user
+        except:
+            return None
+
+    
 
 """ Regular User """
 class RegularUser(User):
@@ -136,6 +162,14 @@ class RegularUser(User):
     #   organization - event creation allowed
     role = StringField(required=True, default="regular")
 
+    @staticmethod
+    def add_event(user_id, event_id):
+        RegularUser.objects(id=user_id).update_one(add_to_set__registered_events=event_id)
+
+    @staticmethod
+    def remove_event(user_id, event_id):
+        RegularUser.objects(id=user_id).update_one(pull__registered_events=event_id)
+
 
 """ OrganizationUser """
 class OrganizationUser(User):
@@ -145,6 +179,14 @@ class OrganizationUser(User):
     #   regular - no event creation allowed
     #   organization - event creation allowed
     role = StringField(required=True, default="organization")
+
+    @staticmethod
+    def get_by_id(id):
+        try:
+            user = OrganizationUser.objects(id=id).exclude("password_hash").get()
+            return user
+        except:
+            return None
 
     
 """ Location """
@@ -190,7 +232,7 @@ class Comment(Document):
 
     @staticmethod
     def get_comments_by_event_id(event_id):
-        return Comment.objects(event_id=event_id)
+        return Comment.objects(event_id=event_id).order_by("+creation_date")
     
 
 
@@ -232,7 +274,7 @@ class Event(Document):
     def validate_date(self):
         # check to make sure date from is before date to
         if self.event_date.to_date:
-            if self.event_date.from_date < self.event_date.to_date:
+            if self.event_date.from_date > self.event_date.to_date:
                 raise Exception(f"To date: '{self.event_date.to_date}' is earlier than From Date: '{self.event_date.from_date}'")
 
     def validate(self, *args, **kwargs):
@@ -250,7 +292,9 @@ class Event(Document):
         today = datetime.now()
         
         # get 4 events closest to today
-        recommended_events = Event.objects(targeted_preferences__in=preferences, event_date__from_date__gte=today).order_by("+event_date__from_date")[:select]
+        recommended_events = Event.objects(targeted_preferences__in=preferences, event_date__from_date__gte=today) \
+            .exclude("attendees", "description") \
+            .order_by("+event_date__from_date")[:select]
         return recommended_events
     
     # get upcoming events
@@ -258,7 +302,9 @@ class Event(Document):
     def get_upcoming(user_id, select=4):
         today = datetime.now()
 
-        upcoming_events = Event.objects(attendees__author_id=user_id, event_date__from_date__gte=today).order_by("+event_date__from_date")[:select]
+        upcoming_events = Event.objects(attendees__author_id=user_id, event_date__from_date__gte=today) \
+            .exclude("attendees", "description") \
+            .order_by("+event_date__from_date")[:select]
         return upcoming_events
     
     @staticmethod
@@ -271,14 +317,118 @@ class Event(Document):
 
     @staticmethod  
     def add_attendee(event_id, user_id, user_name):
-        return Event.objects(id=event_id).update_one(push__attendees={"author_id": user_id, "name": user_name})
+        attendee = UserInfo(author_id=user_id, name=user_name)
+        return Event.objects(id=event_id).update_one(push__attendees=attendee)
 
     @staticmethod
     def remove_attendee(event_id, user_id):
         return Event.objects(id=event_id).update_one(pull__attendees__author_id=user_id)
 
+    @staticmethod
+    def search(search=None, from_date=None, to_date=None, preferences=None, sort_by="event_date.from_date", sort_order=1, page=0, items_per_page=10):
+        pipeline = []
+        # append from_date if possible
+        if from_date:
+            pipeline.append({
+                "event_date.from_date": {
+                    "$lte": from_date
+                }
+            })
+
+        # append to_date if possible
+        if to_date:
+            pipeline.append({
+                "event_date.to_date": {
+                    "$gte": to_date
+                }
+            })
+
+        # append text search if possible
+        if search:
+            pipeline.append( {
+                "$search": {
+                    "index": "event_search",
+                    "text": {
+                        "query": search,
+                        "path": {
+                            "wildcard": "*"
+                        }
+                    }
+                }
+            })
+
+        # append preferences if possible
+        if preferences:
+            
+            pipeline.append({
+                "$match": {
+                    "targeted_preferences": {
+                        "$all": [ObjectId(preference) for preference in preferences]
+                    }
+                }
+            })
+        if sort_by:
+            pipeline.append({
+                "$sort": {
+                    sort_by: sort_order
+                }
+            })
+
+        # allow for paging
+        start_idx = page * items_per_page
+        paginated_results = [{
+                "$skip": start_idx
+            },
+            {
+                "$limit": items_per_page
+            }
+        ]
+        pipeline.append({
+            "$project": {
+                "attendees": 0,
+                "description": 0
+            }
+        })
+
+        pipeline.append({
+            "$facet": {
+                "paginated_results": paginated_results,
+                "total_count": [
+                    {
+                        "$count": 'count'
+                    }
+                ]
+            }
+        }) 
+        res = list(Event.objects().aggregate(pipeline))
+        result_list = res[0]["paginated_results"]
+        count = res[0]["total_count"]
+        if count:
+            count = count[0]["count"]
+        else:
+            count = 0
+        return result_list, count
 
 
+    @staticmethod
+    def get_summary_from_list_future(id_list):
+        today = datetime.now()
+        return Event.objects(id__in=id_list, event_date__from_date__gte=today).exclude("attendees", "description")
+    
+    @staticmethod
+    def get_summary_from_list_past(id_list):
+        today = datetime.now()
+        return Event.objects(id__in=id_list, event_date__from_date__lt=today).exclude("attendees", "description")
+    
+    @staticmethod
+    def get_organization_events_future(org_id):
+        today = datetime.now()
+        return Event.objects(organizer__author_id=org_id, event_date__from_date__lt=today).exclude("attendees", "description")
+    
+    @staticmethod
+    def get_organization_events_past(org_id):
+        today = datetime.now()
+        return Event.objects(organizer__author_id=org_id, event_date__from_date__lt=today).exclude("attendees", "description")
     
 
 

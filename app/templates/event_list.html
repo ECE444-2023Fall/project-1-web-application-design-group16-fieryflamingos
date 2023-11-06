@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Occasional | Event Details</title>
+    <title>Occasional | Create Event</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -22,7 +22,7 @@
       </div>
       {% endfor %}
 
-      <h3>Details</h3>
+      <h3>Search</h3>
 
       {% if error %}
       <p class="alert alert-danger col-sm-4" role="danger">
@@ -30,6 +30,10 @@
       </p>
       {% endif %}
 
+      {{ wtf.quick_form(form) }}
+      <div>
+       
+          {% for event in events %}
               <div>
                   <h2>{{event.title}}</h2> 
                   <h3>{{event.organizer.name}}</h3>
@@ -37,6 +41,8 @@
                   <p>{{event.description}}</p> 
   
               </div>
+          {% endfor %}
+      </div>
     </div>
   </body>
 </html>
