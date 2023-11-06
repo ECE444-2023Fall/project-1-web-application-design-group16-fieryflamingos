@@ -19,7 +19,7 @@ def org_user_required(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
         if not current_user.role == "organization":
-            redirect(url_for('errors.403'))
+            return render_template("errors/403.html")
 
         return func(*args, **kwargs)
 
@@ -278,11 +278,11 @@ def event_update(id):
 
     # Check if event is valid
     if not event:
-        return redirect(url_for('errors.404'))
+        return render_template("errors/404.html")
 
     # Check if org user is right one
     if event.organizer.author_id != current_user.id:
-        return redirect(url_for("errors.403"))
+        return render_template("errors/403.html")
 
     # Everything valid, set the form
     form = EventForm(location_place=event.location.place,
@@ -366,11 +366,11 @@ def event_delete(id):
 
     # Check if event is valid
     if not event:
-        return redirect(url_for('errors.404'))
+        return render_template("errors/404.html")
 
     # Check if org user is right one
     if event.organizer.author_id != current_user.id:
-        return redirect(url_for("errors.403"))
+        return render_template("errors/403.html")
 
     # delete event
     event.delete()
@@ -564,7 +564,7 @@ def get_profile_org(id):
     user = OrganizationUser.get_by_id(id)
 
     if user == None:
-        return redirect(url_for("errors.404"))
+        return render_template("errors/404.html")
 
     if user.id == current_user.id:
         current_user_is_specified = True
