@@ -42,8 +42,10 @@ def events():
     return render_template('events.html')
 
 
-""" Events detail route """
-
+""" Events creation route """
+@main.route('/event_create', methods=['GET'])
+def event_creation():
+    return render_template('create_event.html')
 
 
 """ Event listings route
@@ -54,6 +56,8 @@ query parameters in the url """
 @main.route('/dashboard/<user_id>', methods=['GET'])
 def dashboard(user_id):
     return render_template('dashboard.html', user=user_id)
+
+
 
 
 
