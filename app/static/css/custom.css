@@ -30,7 +30,6 @@
     font-size: 20px;
     font-weight: 600;
     line-height: normal; 
-
     color: var(--UofT-Blue);
 }
 
@@ -52,11 +51,37 @@
     padding-left: 8%;
 }
 
-
 .rec-sec{
-    height: 636px;
-    flex-shrink: 0;
+    margin: 0 12%;
+    height: 600px;
     background-color: var(--Light-Grey); 
+    min-width: 1000px;
+}
+
+.lower-sec{
+    margin: 0 auto;
+    height: 1300px;
+}
+
+.upp-sec{
+    margin: 90px 12%;
+    background-color: var(--UofT-Blue); 
+    height: 1100px;
+}
+.cards{
+    margin-left: 12%;
+    margin-right: 12%;
+}
+
+.s3{
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+.medium{
+    height: 350px;
+    width: 250px;
+    margin-top: 40px;
 }
 
 .recommended{
@@ -71,35 +96,54 @@
     line-height: 30px;
 }
 
-.col-8{
-    background-color: var(--Light-Grey);
-    margin-bottom: 0px;
+.upcoming{
+    color: var(--Light-Grey);
+    font-family: Inter;
+    font-size: 35px;
+    font-style: normal;
+    font-weight: 400;
+    margin-top: 70px;
+    margin-bottom: 40px;
+    margin-left: 20px;
+    line-height: 30px;
 }
 
-hr {
-    height: 2px;
-    border: 2px solid var(--UofT-Blue);
-    background-color: var(--UofT-Blue);
+.card.upcoming_card{
+    margin-right: auto;
+    margin-left: auto;
+    height: 192px;
+    border-radius: 15px;
+    margin-bottom: 36px;
+}
+
+hr.underline_blue {
+    height: 0.1px;
+    border: 1px solid var(--UofT-Blue);
+    font-weight: 100;
     text-align: left;
     margin-left: 0;
-    margin-top: 5px;
-    width: 450px;
-}
-
-.recommended_card{
-    margin-top: 60px;
-    height: 350px;
-    margin-right: -5px;
-    margin-left: -5px;
-}
-
-.cards{
-    width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-
     margin-top: 20px;
-    width: 450px;
+    width: 440px;
+}
+
+hr.underline_title{
+    height: 0.1px;
+    border: 1px solid var(--UofT-Blue);
+    font-weight: 100;
+    text-align: left;
+    margin-left: -5px;
+    margin-top: 12px;
+    width: 182px;
+}
+
+hr.underline_white {
+    height: 0.1px;
+    border: 1px solid var(--Light-Grey);
+    font-weight: 100;
+    text-align: left;
+    margin-left: 0;
+    margin-top: 20px;
+    width: 448px;
 }
 
 .main-title{
@@ -230,6 +274,14 @@ hr {
 .white-card-container{
     background-color: white;
     padding: 60px;
+}
+
+.recommended_title{
+    color: var(--UofT-Blue);
+    margin-top: 42px;
+    margin-right: 36px;
+    margin-left: 36px;
+    font-size: 24px;
 }
 
 .interest-tag{
@@ -263,3 +315,10 @@ hr {
     background-color: #9ca3af;
     color: #000000;
 }
+
+@media (max-width: 1466px) {
+    .rec-sec {
+      height: 1000px;
+    }
+  }
+  
