@@ -682,8 +682,6 @@ def update_profile_organization():
     if user.role == "regular":
         return redirect(url_for("main.update_profile_regular"))
 
-    form = UpdateOrganizationUserForm(name=user.name)
-
     if form.validate_on_submit():
         try:
             user.name = form.name.data
