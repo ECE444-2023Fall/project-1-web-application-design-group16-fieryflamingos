@@ -402,6 +402,9 @@ class Event(Document):
         }) 
         res = list(Event.objects().aggregate(pipeline))
         result_list = res[0]["paginated_results"]
+        for result in result_list:
+            if (str(result["_id"])):
+                result["link"] = '/event/' + str(result["_id"])
         count = res[0]["total_count"]
         if count:
             count = count[0]["count"]
