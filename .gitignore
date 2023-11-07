@@ -8,3 +8,5 @@ secret.py
 *.pyc
 
 python_test.py
+
+.idea
