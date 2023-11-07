@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, flash, abort
+from flask import render_template, session, redirect, url_for, flash, abort, request
 from flask_login import current_user, login_required
 from . import main
 # from .forms import NameForm
@@ -175,7 +175,7 @@ def event_details(id):
     # check if user already is RSVP'ed, if so, change RSVPForm to CancelRSVPForm
     user_is_attendee = False
     for attendee in event.attendees:
-        if attendee.id == current_user.id:
+        if attendee.author_id == current_user.id:
             user_is_attendee = True
             form = CancelRSVPForm()
 
@@ -184,10 +184,9 @@ def event_details(id):
     for pref_id in event.targeted_preferences:
         preferences.append(Preference.get_preference_by_id(pref_id))
 
-    
 
     # VALIDATE FORMS
-    if form.validate_on_submit():
+    if request.args.get("submit"):
         if isinstance(form, RSVPForm):
             name = ""
             if current_user.role == "regular":
@@ -219,7 +218,7 @@ def event_details(id):
     
     # get comments for the event
     comments = Comment.get_comments_by_event_id(id)
-    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, comments=comments, form=form, comment_form=comment_form)
+    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form)
 
 
 """ Event Update form

@@ -1,4 +1,3 @@
-{% import "bootstrap/wtf.html" as wtf %}
 {% extends 'base.html' %}
 {% block title %} Event Detail {% endblock %}
 {% block content %}
@@ -34,9 +33,9 @@
 					{{event.organizer.name}}
 				</span>
 			</div>
-			<button class="button-main" style="margin-top: 20%;">
-				Register
-			</button>
+			<form action="" mthod="post">
+				{{form.submit(class="button-main", style="margin-top: 20%;")}}
+			</form>
 		</div>
 		<div style="flex: 17%;"></div>
 		<div style="flex: 33%; margin-top: 15px;">
@@ -89,36 +88,14 @@
                     <hr style="width: auto;">
                     <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
 						{% for interest in targeted_preferences %}
-						<div>
-							{{interest.preference}}
-							{{interest.events_with_preference}}
-						</div>
+                        <button class="interest-tag">
+                            {{interest.preference}}
+                            <div class="tag-number">
+                                {{interest.events_with_preference}}
+                            </div>
+                        </button>
 						{% endfor %}
 
-                        <button class="interest-tag">
-                            Health Science
-                            <div class="tag-number">
-                                23
-                            </div>
-                        </button>
-                        <button class="interest-tag">
-                            Nurs
-                            <div class="tag-number">
-                                125
-                            </div>
-                        </button>
-                        <button class="interest-tag">
-                            Random
-                            <div class="tag-number">
-                                125
-                            </div>
-                        </button>
-                        <button class="interest-tag">
-                            Nursing
-                            <div class="tag-number">
-                                125
-                            </div>
-                        </button>
                     </div> 
                 </div>
             </div>
