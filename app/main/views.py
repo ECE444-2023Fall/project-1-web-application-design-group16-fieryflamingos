@@ -183,7 +183,8 @@ def event_details(id):
     preferences = []
     for pref_id in event.targeted_preferences:
         preferences.append(Preference.get_preference_by_id(pref_id))
-
+    
+    preference_names = [preference.preference for preference in preferences]
 
     # VALIDATE FORMS
     if request.args.get("submit"):
@@ -442,7 +443,7 @@ def event_search():
     else:
         items_per_page = 10
 
-    if preferences:
+    if preferences and prf:
         preferences = preferences.split("__")
     
     form = EventSearchForm(search=search,
@@ -472,7 +473,7 @@ def event_search():
             search=search, 
             start_date=start_date, 
             end_date=end_date, 
-            preferences="__".join(preferences), 
+            preferences= "__".join(preferences) if preferences else "", 
             items_per_page=items_per_page,
             page=page))
         
@@ -695,6 +696,7 @@ def update_profile_organization():
     function, which returns the update_profile_org.html template with 
     the data.
     """
+    form = UpdateOrganizationUserForm()
     user = current_user
     if user.role == "regular":
         return redirect(url_for("main.update_profile_regular"))
