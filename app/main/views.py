@@ -443,7 +443,7 @@ def event_search():
     else:
         items_per_page = 10
 
-    if preferences and prf:
+    if preferences:
         preferences = preferences.split("__")
     
     form = EventSearchForm(search=search,
