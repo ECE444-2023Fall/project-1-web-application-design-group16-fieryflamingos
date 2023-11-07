@@ -386,7 +386,6 @@ class Event(Document):
         pipeline.append({
             "$project": {
                 "attendees": 0,
-                "description": 0
             }
         })
 
