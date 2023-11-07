@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectMultipleField, SelectField, HiddenField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectMultipleField, SelectField, HiddenField, DateField
 from wtforms.fields import DateTimeLocalField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo, Optional
 from wtforms import ValidationError
@@ -45,8 +45,8 @@ class EventSearchForm(FlaskForm):
 
 
     targeted_preferences = SelectMultipleField("Preferences", choices=Preference.get_preferences_as_tuple())
-    from_date = DateTimeLocalField("Start Date", format="%Y-%m-%dT%H:%M", validators=[Optional()])
-    to_date = DateTimeLocalField("End Date", format="%Y-%m-%dT%H:%M", validators=[Optional()])
+    start_date = DateField("Start Date", format="%Y-%m-%d", validators=[Optional()])
+    end_date = DateField("End Date", format="%Y-%m-%d", validators=[Optional()])
 
     items_per_page = SelectField("Events Per Page", choices=[(10,10), (20,20), (30,30)])
 

@@ -397,11 +397,11 @@ def event_search():
     Description:
     The function first creates an instance of the EventSearchForm 
     class, which is a custom form for searching events by keywords, 
-    date range, and preferences. Then, it tries to get the session 
+    date range, and preferences. Then, it tries to get the argument 
     variables for the search parameters, such as page, search, 
     from_date, to_date, preferences, items_per_page, and max_pages. 
     These variables are used to store the user's search input and 
-    the pagination state. If the session variables are not set, 
+    the pagination state. If the argument variables are not set, 
     it assigns some default values to them. Next, it validates the 
     form on submit, which means the user has filled in the form 
     fields and clicked the submit, next page, or prev page buttons. 
@@ -420,66 +420,84 @@ def event_search():
     which returns the event_list.html template with the data.
 
     """
-    form = EventSearchForm()
-
     #   get session if it exists
-    page = session.get('search_page')
-    search = session.get('search_search')
-    from_date = session.get('search_from_date')
-    to_date = session.get('search_to_date')
-    preferences = session.get('search_preferences')
-    items_per_page = session.get('search_items_per_page')
-    max_pages = session.get('search_max_pages')
+    page = request.args.get('page')
+    search = request.args.get('search')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    preferences = request.args.get('preferences')
+    items_per_page = request.args.get('items_per_page')
 
-    # set page to 0 if not in session
-    if not page:
+
+    # set page to 0 if not in args
+    if page != None:
+        page = int(page)
+    else:
         page = 0
-        session['search_page'] = 0
-    if not items_per_page:
+    if page < 0:
+        page = 0
+
+    if items_per_page != None:
+        items_per_page = int(items_per_page)
+    else:
         items_per_page = 10
-        session['search_items_per_page'] = 10
+
+    if preferences:
+        preferences = preferences.split("__")
+    
+    form = EventSearchForm(search=search,
+        targeted_preferences=preferences,
+        items_per_page=items_per_page)
+   
 
     # check form
     if form.validate_on_submit():
         if form.submit.data:
-            # update session
-            session['search_search'] = form.search.data
-            session['search_from_date'] = form.from_date.data
-            session['search_to_date'] = form.to_date.data
-            session['search_preferences'] = form.targeted_preferences.data
-            session['search_items_per_page'] = form.items_per_page.data
-            session['search_page'] = 0
-
             # update variables
             page = 0
             search = form.search.data
-            from_date = form.from_date.data
-            to_date = form.to_date.data
+            start_date = form.start_date.data
+            end_date = form.end_date.data
             preferences = form.targeted_preferences.data
             items_per_page = int(form.items_per_page.data)
 
         # go to next page
-        elif form.next_page.data and page+1 < max_pages:
+        elif form.next_page.data:
             page += 1
-            session['search_page'] = page
-
         # go to prev page
         elif form.prev_page.data and page > 0:
             page -= 1
-            session['search_page'] = page
-
+      
+        return redirect(url_for("main.event_search", 
+            search=search, 
+            start_date=start_date, 
+            end_date=end_date, 
+            preferences="__".join(preferences), 
+            items_per_page=items_per_page,
+            page=page))
+        
+    else:
+        if start_date:
+            form.start_date.data = datetime.strptime(start_date, "%Y-%m-%d").date()
+        if end_date:
+            form.end_date.data = datetime.strptime(end_date, "%Y-%m-%d").date()
     # perform the search
     events, count = Event.search(search=search,
-                                 from_date=from_date,
-                                 to_date=to_date,
+                                 start_date=start_date,
+                                 end_date=end_date,
                                  preferences=preferences,
                                  page=page,
                                  items_per_page=items_per_page)
 
     max_pages = ceil(count/items_per_page)
-    session['search_max_pages'] = max_pages
 
-    return render_template('event_list.html', events=events, form=form, page=page, max_pages=max_pages)
+    show_prev_button = True
+    show_next_button = False
+    if page <= 0:
+        show_prev_button = False
+    if page >= max_pages-1:
+        show_next_button = False
+    return render_template(f'event_list.html', events=events, form=form, page=page, max_pages=max_pages, show_next_button=show_next_button, show_prev_button=show_prev_button)
 
 
 """ View Profile route
