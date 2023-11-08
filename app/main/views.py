@@ -10,6 +10,19 @@ from functools import wraps
 
 from math import ceil
 
+class rec_up_event():
+    def __init__ (self, event):
+        self.weekday: event.event_date.from_date.strftime('%A')
+        self.month: event.event_date.from_date.strftine('%B')
+        self.date: event.event_date.from_date.date
+        self.start_time: event.event_date.from_date.time
+        self.end_time: event.event_date.to_date.time
+        self.title: event.title
+        self.location: event.location
+        self.organizer: event.organizer
+        self.preferences: event.preferences
+        self.link: event.link
+        
 
 """ org_user_required
 Decorator that checks if user is an organization """
@@ -65,13 +78,11 @@ def index():
     recommended_events = Event.get_recommended(user.preferences)
     upcoming_events = Event.get_upcoming(user.id)
 
-    up_events = [ob.to_mongo() for ob in upcoming_events]
-    for event in up_events:
-        print(event)
+    print(type(recommended_events))
 
     return render_template('dashboard.html',
                            recommended_events=recommended_events,
-                           upcoming_events=upcoming_events)
+                           upcoming_events=upcoming_events)     
 
 """ Event Details form
     - Allows org users to create events
