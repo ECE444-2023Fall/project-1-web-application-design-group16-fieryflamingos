@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="../static/css/styles.css" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <h1>OCCASIONAL</h1>
+</head>
+<script src="script.js"></script>
+<script src="script2.js"></script>
+<body>
+<h4>Already have an account?</h4>
+<div class="signin">
+   <h5><a style="text-decoration:none" href="signIn.html">Sign In</a></h5>
+</div>
+<div class="boxOrg">
+    <h2>Create an Occasional Account</h2>
+    <h3>One account to share your organization's story.</h3>
+<form name="register">
+<table>
+<tr>
+    <td>
+        <div class="input-container">
+        <input type="text" name="orgname" placeholder="Organization Name" required>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <div class="input-container"></div>
+        <input type="email" name="uoftemail" placeholder="UofT Email Address" required>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <div class="input-container"></div>
+        <input type="text" name="username" placeholder="Username" required>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <div class="input-container"></div>
+        <input type="password" name="password" id="password" placeholder="Password" required>
+        <i id="visibilityBtn" ><span class="material-icons">visibility</span></i>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <div class="input-container"></div>
+        <input type="password" name="confirmpassword" id="confirmpassword" placeholder="Confirm Password" required>
+        <i><span class="material-icons">visibility</span></i>
+        </div>
+    </td>
+</tr>
+</table>
+<input type="submit" onclick="return identicalFields();" value="Create Occasional Account">
+</form>
+<h6>Want to register as a user? <a id="nonbutton" style="text-decoration:none" href="registerUser.html">Click here.</a></h6>
+</div>
+</body>
+</html>
