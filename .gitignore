@@ -6,5 +6,5 @@ secret.py
 *.db
 *.log
 *.pyc
-
+root.sst
 python_test.py
