@@ -363,6 +363,11 @@ hr.underline_upp {
     color: #000000;
 }
 
+.interest-tag.selected{
+    background-color: #969ca5;
+    color: #000000;
+}
+
 @media (max-width: 1466px) {
     .rec-sec {
       height: 1000px;

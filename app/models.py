@@ -37,7 +37,7 @@ class Preference(Document):
         preferences = Preference.objects()
         tuple_preferences = []
         for preference in preferences:
-            tup = (str(preference.id), preference.preference)
+            tup = (preference.preference, str(preference.id), preference.events_with_preference)
             tuple_preferences.append(tup)
         return tuple_preferences
     

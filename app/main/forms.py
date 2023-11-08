@@ -1,10 +1,107 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectMultipleField, SelectField, HiddenField, DateField
+from wtforms import Field, StringField, PasswordField, BooleanField, SubmitField, SelectMultipleField, SelectField, HiddenField, DateField
 from wtforms.fields import DateTimeLocalField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo, Optional
+from wtforms.widgets import html_params
 from wtforms import ValidationError
-
+from markupsafe import Markup
 from ..models import Preference
+
+
+class TagWidget(object):
+    """
+    A widget that renders a list of tags as clickable buttons.
+    Each tag has a display label and a value associated.
+    The user can click on each tag to select it, and click on it again to unselect it.
+    The selected tags are stored in a hidden field as a comma-separated list of values.
+    """
+
+    def __call__(self, field, **kwargs):
+        # Get the list of tags from the field choices
+        tags = field.choices
+        # Get the list of selected values from the field data
+        selected = field.data or []
+        # Initialize an empty list to store the HTML output
+        html = []
+        # Loop through each tag
+        for tag in tags:
+            # Get the label and value of the tag
+            label, value, num_events = tag
+            # Check if the tag is selected
+            is_selected = value in selected
+            # Generate the HTML attributes for the tag button
+            tag_attrs = html_params(
+                type="button",
+                name=field.name,
+                value=value,
+                class_="interest-tag" + (" selected" if is_selected else ""),
+                onclick="toggleTag(this)"
+            )
+            # Generate the HTML code for the tag button
+            tag_html = f'<button {tag_attrs}>{label}  <div class="tag-number">{num_events}</div></button>'
+            # Append the tag button to the HTML output
+            html.append(tag_html)
+        # Generate the HTML attributes for the hidden field
+        hidden_attrs = html_params(
+            type="hidden",
+            id=field.id,
+            name=field.name,
+            value=" ".join(selected)
+        )
+        # Generate the HTML code for the hidden field
+        hidden_html = f'<input {hidden_attrs}>'
+        # Append the hidden field to the HTML output
+        html.append(hidden_html)
+        # Generate the HTML code for the script that handles the tag selection logic
+        script_html = """
+        <script>
+        function toggleTag(button) {
+            button.classList.toggle("selected");
+            let hiddenInput = document.getElementById(button.name);
+            if (hiddenInput.value.includes(button.value)) {
+                hiddenInput.value = hiddenInput.value.replace(button.value, "").trim();
+            }
+            else  {
+                hiddenInput.value = `${hiddenInput.value} ${button.value}`.trim();
+            }
+        }
+        </script>
+        """
+        # Append the script to the HTML output
+        html.append(script_html)
+        # Return the HTML output as a string
+        return Markup("".join(html))
+
+class TagField(Field):
+    """
+    A custom field that uses the TagWidget to render a list of tags.
+    The data of this field is a list of values of the selected tags.
+    """
+
+    widget = TagWidget()
+
+    def __init__(self, label=None, validators=None, choices=None, **kwargs):
+        # Initialize the field with the given label, validators, and keyword arguments
+        super(TagField, self).__init__(label, validators, **kwargs)
+        # Set the choices attribute to the given choices or an empty list
+        self.choices = choices or []
+
+
+    def process_formdata(self, valuelist):
+        # Process the form data by splitting the comma-separated string into a list
+        if valuelist:
+            self.data = valuelist[0].split(" ")
+        else:
+            self.data = []
+
+    def pre_validate(self, form):
+        # Validate the field data by checking if all the values are in the choices
+        if self.data:
+            for value in self.data:
+                if not value:
+                    self.data = []
+                elif not any(value == choice[1] for choice in self.choices):
+                    raise ValueError(self.gettext("Invalid tag value: {}".format(value)))
 
 
 """ Events creation form """
@@ -44,7 +141,8 @@ class EventSearchForm(FlaskForm):
     search = StringField("Search", render_kw={"placeholder": "Event title, location, or organizer..."})
 
 
-    targeted_preferences = SelectMultipleField("Preferences", choices=Preference.get_preferences_as_tuple())
+    # targeted_preferences = SelectMultipleField("Preferences", choices=Preference.get_preferences_as_tuple())
+    preferences = TagField("Preferences", choices=Preference.get_preferences_as_tuple())
     start_date = DateField("Start Date", format="%Y-%m-%d", validators=[Optional()])
     end_date = DateField("End Date", format="%Y-%m-%d", validators=[Optional()])
 
