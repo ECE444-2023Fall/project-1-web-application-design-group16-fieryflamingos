@@ -65,10 +65,13 @@ def index():
     recommended_events = Event.get_recommended(user.preferences)
     upcoming_events = Event.get_upcoming(user.id)
 
-    return render_template('index.html',
+    up_events = [ob.to_mongo() for ob in upcoming_events]
+    for event in up_events:
+        print(event)
+
+    return render_template('dashboard.html',
                            recommended_events=recommended_events,
                            upcoming_events=upcoming_events)
-
 
 """ Event Details form
     - Allows org users to create events
