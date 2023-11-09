@@ -276,6 +276,7 @@ hr.underline_upp {
     font-weight: 350;
     font-family: Inter;
     border-radius: 4px;
+    cursor: pointer;
 }
 
 .button-main:hover{

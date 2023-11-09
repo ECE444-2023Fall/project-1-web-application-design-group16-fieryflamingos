@@ -150,9 +150,6 @@ class EventSearchForm(FlaskForm):
 
     submit = SubmitField("Search")
 
-    next_page = SubmitField("Next")
-    prev_page = SubmitField("Back")
-
 
 
 """ Update profile form """

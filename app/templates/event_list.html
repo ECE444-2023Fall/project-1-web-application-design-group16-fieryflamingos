@@ -60,25 +60,38 @@
 				{{ form.preferences() }}
 			</div>
 		
-			<div style="margin-bottom: 40px; margin-top: 40px; display: flex;">
+			<div style="margin-bottom: 10px; margin-top: 10px; display: flex; justify-content:space-between; align-items:flex-end;">
 				<div style="margin-right: 40px;">
 					{{ form.submit(class="button-main") }}
 				</div>
-				<div>
-					{{ form.prev_page(class="button-main") }}
-					{{ form.next_page(class="button-main") }}
-				</div>
+				<span>{{count}} results found.</span>
 			</div>
+			
 		</form>
 		
 		
 	</div>
 
 
-	<div style="background-color: #F1F5F9; padding-bottom: 60px;">
+	<div id="filtered-events" style="background-color: #F1F5F9; padding-bottom: 60px;">
 		<div style="margin-left: 10%; margin-right: 10%;">
-			<div class="main-title" style="margin-bottom: 40px; padding-top: 40px; font-size: 30px;">
-				Filtered Events
+			<div style="display: flex; justify-content:space-between; align-items:center; margin-bottom: 40px; padding-top: 40px; ">
+				<div class="main-title" style="font-size: 30px;">
+					Filtered Events
+				</div>
+				<div style="display:flex; justify-content:space-between; align-items:center;">
+					<div style="display:flex; align-items:center;">Page {{page + 1}} of {{max_pages}}</div>
+				</div>
+				<div style="display:flex; justify-content:center; align-items:center; gap:1rem">
+					{% if show_prev_button %}
+					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(-1)">Back</div>
+					{% endif %}
+					{% if show_next_button %}
+					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(1)">Next</div>
+					{% endif %}
+				</div>
+				
+
 			</div>
 			{% for event in events %}
 				<a href="{{event.link}}" style="text-decoration: none">
@@ -118,12 +131,37 @@
 					</div>
 				</a>			
 			{% endfor %}
+			<div style="margin-bottom: 40px; margin-top: 40px; display: flex; justify-content:space-between;">
+				<div class="main-title" style="visibility: hidden;font-size: 30px;">
+					Filtered Events
+				</div>
+				<div style="display:flex; justify-content:space-between; align-items:center;">
+					<div style="display:flex; align-items:center;">Page {{page + 1}} of {{max_pages}}</div>
+				</div>
+				<div style="display:flex; justify-content:center; align-items:center; gap:1rem">
+					{% if show_prev_button %}
+					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(-1)">Back</div>
+					{% endif %}
+					{% if show_next_button %}
+					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(1)">Next</div>
+					{% endif %}
+				</div>
+			</div>
+			
 		</div>
 	</div>
 
-	<div>
-		
-	</div>
+	
+	<script>
+		function switchPage(nextOrPrev) {
+			const urlParams = new URLSearchParams(window.location.search);
+			let page = "{{page}}";
+			let pageAsNumber = Number(page);
+			urlParams.set('page', `${pageAsNumber+nextOrPrev}`);
+			let url = `${window.location.pathname}?${urlParams}#filtered-events`;
+			window.location = url;
+		}
+	</script>
 </body>
 
 </html>
