@@ -276,6 +276,7 @@ hr.underline_upp {
     font-weight: 350;
     font-family: Inter;
     border-radius: 4px;
+    cursor: pointer;
 }
 
 .button-main:hover{
@@ -360,6 +361,11 @@ hr.underline_upp {
 
 .interest-tag:hover{
     background-color: #9ca3af;
+    color: #000000;
+}
+
+.interest-tag.selected{
+    background-color: #969ca5;
     color: #000000;
 }
 
