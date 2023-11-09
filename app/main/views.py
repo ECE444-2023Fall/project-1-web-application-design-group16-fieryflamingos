@@ -407,43 +407,7 @@ def event_delete(id):
 @main.route('/event/search', methods=['GET', 'POST'])
 @login_required
 def event_search():
-    """
-    This function renders the event search page for the 
-    logged-in user and handles the search form and pagination.
 
-    Parameters:
-    None
-
-    Returns:
-    A rendered template of event_list.html with the search 
-    form, the search results, and the pagination.
-
-    Description:
-    The function first creates an instance of the EventSearchForm 
-    class, which is a custom form for searching events by keywords, 
-    date range, and preferences. Then, it tries to get the argument 
-    variables for the search parameters, such as page, search, 
-    from_date, to_date, preferences, items_per_page, and max_pages. 
-    These variables are used to store the user's search input and 
-    the pagination state. If the argument variables are not set, 
-    it assigns some default values to them. Next, it validates the 
-    form on submit, which means the user has filled in the form 
-    fields and clicked the submit, next page, or prev page buttons. 
-    If the form is validated, it checks which button was clicked. 
-    If the submit button was clicked, it updates the session variables 
-    with the new form data and resets the page to 0. If the next page 
-    button was clicked and the page is not the last one, it increments 
-    the page by 1 and updates the session variable. If the prev page 
-    button was clicked and the page is not the first one, it decrements 
-    the page by 1 and updates the session variable. Then, it calls the 
-    search method of the Event class with the search parameters and gets 
-    the events and the count of the matching events. It also calculates 
-    the max_pages by dividing the count by the items_per_page and updates 
-    the session variable. Finally, it passes the events, the form, the page, 
-    and the max_pages as arguments to the render_template function, 
-    which returns the event_list.html template with the data.
-
-    """
     #   get session if it exists
     page = request.args.get('page')
     search = request.args.get('search')
@@ -470,10 +434,9 @@ def event_search():
         preferences = preferences.split("__")
     
     form = EventSearchForm(search=search,
-        targeted_preferences=preferences,
+        preferences=preferences,
         items_per_page=items_per_page)
    
-
     # check form
     if form.validate_on_submit():
         if form.submit.data:
@@ -482,23 +445,19 @@ def event_search():
             search = form.search.data
             start_date = form.start_date.data
             end_date = form.end_date.data
-            preferences = form.targeted_preferences.data
+            preferences = form.preferences.data
             items_per_page = int(form.items_per_page.data)
 
-        # go to next page
-        elif form.next_page.data:
-            page += 1
-        # go to prev page
-        elif form.prev_page.data and page > 0:
-            page -= 1
-      
+        if not preferences: 
+            preferences = []
         return redirect(url_for("main.event_search", 
             search=search, 
             start_date=start_date, 
             end_date=end_date, 
             preferences= "__".join(preferences) if preferences else "", 
             items_per_page=items_per_page,
-            page=page))
+            page=page,
+            _anchor='filtered-events'))
         
     else:
         if start_date:
@@ -516,12 +475,12 @@ def event_search():
     max_pages = ceil(count/items_per_page)
 
     show_prev_button = True
-    show_next_button = False
+    show_next_button = True
     if page <= 0:
         show_prev_button = False
     if page >= max_pages-1:
         show_next_button = False
-    return render_template(f'event_list.html', events=events, form=form, page=page, max_pages=max_pages, show_next_button=show_next_button, show_prev_button=show_prev_button)
+    return render_template(f'event_list.html', events=events, form=form, page=page, max_pages=max_pages, count=count, show_next_button=show_next_button, show_prev_button=show_prev_button)
 
 
 """ View Profile route
