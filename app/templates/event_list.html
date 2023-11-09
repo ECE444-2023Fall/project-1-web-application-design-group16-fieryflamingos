@@ -79,6 +79,7 @@
 				<div class="main-title" style="font-size: 30px;">
 					Filtered Events
 				</div>
+				{% if count > 0 %}
 				<div style="display:flex; justify-content:space-between; align-items:center;">
 					<div style="display:flex; align-items:center;">Page {{page + 1}} of {{max_pages}}</div>
 				</div>
@@ -90,6 +91,7 @@
 					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(1)">Next</div>
 					{% endif %}
 				</div>
+				{% endif %}
 				
 
 			</div>
@@ -135,9 +137,11 @@
 				<div class="main-title" style="visibility: hidden;font-size: 30px;">
 					Filtered Events
 				</div>
+				{% if count > 0 %}
 				<div style="display:flex; justify-content:space-between; align-items:center;">
 					<div style="display:flex; align-items:center;">Page {{page + 1}} of {{max_pages}}</div>
 				</div>
+
 				<div style="display:flex; justify-content:center; align-items:center; gap:1rem">
 					{% if show_prev_button %}
 					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(-1)">Back</div>
@@ -146,6 +150,7 @@
 					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(1)">Next</div>
 					{% endif %}
 				</div>
+				{% endif %}
 			</div>
 			
 		</div>

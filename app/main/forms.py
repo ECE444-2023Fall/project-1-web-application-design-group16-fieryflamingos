@@ -173,5 +173,11 @@ class UpdateOrganizationUserForm(FlaskForm):
 class CommentForm(FlaskForm):
     content = StringField("Comment", validators=[DataRequired(), Length(0, 1000, message="Length must be less than 1000 characters.")])
 
-    rating = SelectField("Rating (1-5)", choices=[(1,1), (2,2), (3,3), (4,4), (5,5)], validators=[DataRequired()])
+    rating = SelectField("Rating (1-5)", choices=[(1,1), (2,2), (3,3), (4,4), (5,5)])
 
+
+""" Reply form """
+class ReplyForm(FlaskForm):
+    reply_to = HiddenField()
+
+    reply = StringField("Reply", validators=[DataRequired(), Length(0, 1000, message="Length must be less than 1000 characters.")])
