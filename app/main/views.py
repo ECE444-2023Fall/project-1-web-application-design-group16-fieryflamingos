@@ -424,13 +424,6 @@ def event_search():
             preferences = form.preferences.data
             items_per_page = int(form.items_per_page.data)
 
-        # go to next page
-        elif form.next_page.data:
-            page += 1
-        # go to prev page
-        elif form.prev_page.data and page > 0:
-            page -= 1
-
         if not preferences: 
             preferences = []
         return redirect(url_for("main.event_search", 
