@@ -12,16 +12,15 @@ from math import ceil
 
 class rec_up_event():
     def __init__ (self, event):
-        self.weekday: event.event_date.from_date.strftime('%A')
-        self.month: event.event_date.from_date.strftine('%B')
-        self.date: event.event_date.from_date.date
-        self.start_time: event.event_date.from_date.time
-        self.end_time: event.event_date.to_date.time
-        self.title: event.title
-        self.location: event.location
-        self.organizer: event.organizer
-        self.preferences: event.preferences
-        self.link: event.link
+        self.weekday = event.event_date.from_date.strftime('%A')
+        self.date = event.event_date.from_date.strftime('%b %d, %Y')
+        self.start_time = event.event_date.from_date.strftime('%I:%M %p')
+        self.end_time = event.event_date.to_date.strftime('%I:%M %p')
+        self.title = event.title
+        self.location = event.location
+        self.organizer = event.organizer
+        self.preferences = event.targeted_preferences
+        #self.link = event.link
         
 
 """ org_user_required
@@ -78,11 +77,20 @@ def index():
     recommended_events = Event.get_recommended(user.preferences)
     upcoming_events = Event.get_upcoming(user.id)
 
-    print(type(recommended_events))
+    rec_events = []
+    up_events = []
+
+    for i in range(len(recommended_events)):
+        rec_events.append(rec_up_event(recommended_events.__getitem__(i)))
+    
+    for i in range(len(upcoming_events)):
+        if(i<4):
+            print(upcoming_events.__getitem__(i).event_date.from_date.time())
+            up_events.append(rec_up_event(upcoming_events.__getitem__(i)))
 
     return render_template('dashboard.html',
-                           recommended_events=recommended_events,
-                           upcoming_events=upcoming_events)     
+                           recommended_events=rec_events,
+                           upcoming_events=up_events)     
 
 """ Event Details form
     - Allows org users to create events
@@ -307,6 +315,7 @@ def event_update(id):
         description=event.description,
         title=event.title,
         targeted_preferences=event.targeted_preferences)
+    
 
     if form.validate_on_submit():
         try:
