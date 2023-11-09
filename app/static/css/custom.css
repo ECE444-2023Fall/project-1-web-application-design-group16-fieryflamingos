@@ -3,7 +3,9 @@
     --UofT-Blue: #25355A;
     --Lighter-Blue: #64748B;
     --Darker-Grey: #475569;
+    --Grey: #E2E8F0;
     --Light-Grey: #F1F5F9;
+    --Mint: #A7F3D0;
     --White: #FFFFFF;
     --Black: #000000;
     --Bold-font-weight: 700;
@@ -109,6 +111,7 @@
 }
 
 .card.upcoming_card{
+    color: var(--White);
     margin-right: auto;
     margin-left: auto;
     height: 192px;
@@ -153,7 +156,7 @@ hr.underline_upp {
     font-weight: 100;
     margin-left: 32px;
     margin-top: 18px;
-    width: 900px;
+    width: 100%;
     margin-bottom: 0px;
 }
 
@@ -293,11 +296,27 @@ hr.underline_upp {
     margin-right: 35px;
     margin-left: 35px;
     margin-bottom:0px;
-}
+    max-width: 180px;
+    max-height: 110px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* number of lines to show */
+            line-clamp: 3;
+    -webkit-box-orient: vertical;
+ }
+
 
 .rec_info{
     margin-top: 28px;
     margin-right: 35px;
+    margin-left: 35px;
+    margin-bottom: 0px;
+}
+
+.up_info{
+    margin-top: 28px;
+    margin-right: 5px;
     margin-left: 35px;
     margin-bottom: 0px;
 }
@@ -312,6 +331,9 @@ hr.underline_upp {
 
 .date_time_top{
     margin-top: 42px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
 }
 .date_time_date{
     color: #000000;
@@ -319,6 +341,9 @@ hr.underline_upp {
     font-family: Inter;
     font-weight: 400;
     text-align: right;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
 }
 
 .date_time_time{
@@ -327,6 +352,9 @@ hr.underline_upp {
     font-family: Inter;
     font-weight: 100;
     text-align: right;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
 }
 
 .interest-tag{
@@ -364,14 +392,36 @@ hr.underline_upp {
     color: #000000;
 }
 
+
 .interest-tag.selected{
     background-color: #969ca5;
     color: #000000;
 }
 
 @media (max-width: 1466px) {
+
+.card.medium:hover{
+    background-color: var(--Mint);
+    transition: 0.5s;
+    height: 390px;
+}
+
+.card.medium:hover .card_hover{
+    opacity: 1;
+    transition: opacity 0.8s;
+}
+
+.card.medium:hover .card_normal{
+    opacity: 0;
+}
+
+.upcoming_card:hover   {
+    background-color: var(--Grey);
+}
+
+@media (max-width: 1430px) {
+
     .rec-sec {
       height: 1000px;
     }
   }
-  

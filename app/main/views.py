@@ -65,10 +65,13 @@ def index():
     recommended_events = Event.get_recommended(user.preferences)
     upcoming_events = Event.get_upcoming(user.id)
 
-    return render_template('index.html',
+    up_events = [ob.to_mongo() for ob in upcoming_events]
+    for event in up_events:
+        print(event)
+
+    return render_template('dashboard.html',
                            recommended_events=recommended_events,
                            upcoming_events=upcoming_events)
-
 
 """ Event Details form
     - Allows org users to create events
@@ -183,7 +186,8 @@ def event_details(id):
     preferences = []
     for pref_id in event.targeted_preferences:
         preferences.append(Preference.get_preference_by_id(pref_id))
-
+    
+    preference_names = [preference.preference for preference in preferences]
 
     # VALIDATE FORMS
     if request.args.get("submit"):
@@ -430,7 +434,7 @@ def event_search():
             search=search, 
             start_date=start_date, 
             end_date=end_date, 
-            preferences="__".join(preferences), 
+            preferences= "__".join(preferences) if preferences else "", 
             items_per_page=items_per_page,
             page=page,
             _anchor='filtered-events'))
@@ -654,6 +658,7 @@ def update_profile_organization():
     function, which returns the update_profile_org.html template with 
     the data.
     """
+    form = UpdateOrganizationUserForm()
     user = current_user
     if user.role == "regular":
         return redirect(url_for("main.update_profile_regular"))

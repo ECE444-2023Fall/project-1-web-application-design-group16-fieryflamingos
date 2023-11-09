@@ -78,7 +78,8 @@ class User(UserMixin, DynamicDocument):
     meta = {
         'db_alias': Config.MONGODB_SETTINGS['alias'],
         'collection': 'users',
-        'allow_inheritance': True
+        'allow_inheritance': True,
+        "auto_create_index": False
     }
 
     @property
@@ -179,6 +180,7 @@ class OrganizationUser(User):
     #   regular - no event creation allowed
     #   organization - event creation allowed
     role = StringField(required=True, default="organization")
+
 
     @staticmethod
     def get_by_id(id):
