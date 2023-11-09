@@ -430,14 +430,17 @@ def event_search():
         # go to prev page
         elif form.prev_page.data and page > 0:
             page -= 1
-      
+
+        if not preferences: 
+            preferences = []
         return redirect(url_for("main.event_search", 
             search=search, 
             start_date=start_date, 
             end_date=end_date, 
             preferences="__".join(preferences), 
             items_per_page=items_per_page,
-            page=page))
+            page=page,
+            _anchor='filtered-events'))
         
     else:
         if start_date:
@@ -455,12 +458,12 @@ def event_search():
     max_pages = ceil(count/items_per_page)
 
     show_prev_button = True
-    show_next_button = False
+    show_next_button = True
     if page <= 0:
         show_prev_button = False
     if page >= max_pages-1:
         show_next_button = False
-    return render_template(f'event_list.html', events=events, form=form, page=page, max_pages=max_pages, show_next_button=show_next_button, show_prev_button=show_prev_button)
+    return render_template(f'event_list.html', events=events, form=form, page=page, max_pages=max_pages, count=count, show_next_button=show_next_button, show_prev_button=show_prev_button)
 
 
 """ View Profile route
