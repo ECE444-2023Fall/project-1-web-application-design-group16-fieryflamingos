@@ -33,9 +33,13 @@
 					{{event.organizer.name}}
 				</span>
 			</div>
-			<form action="" mthod="post">
-				{{form.submit(class="button-main", style="margin-top: 20%;")}}
-			</form>
+			<div style="display:flex; gap:1rem; margin-top: 20%;">
+				<form action="" method="POST">
+					{{ form.hidden_tag()}}
+					{{form.submit(class="button-main")}}
+				</form>
+				<a class="button-main no-color" style="text-decoration:none; height:100%;" href="/event/ics/{{event.id}}">Download ICS</a>
+			</div>
 		</div>
 		<div style="flex: 17%;"></div>
 		<div style="flex: 33%; margin-top: 15px;">
