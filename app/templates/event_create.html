@@ -1,5 +1,6 @@
 {% import "bootstrap/wtf.html" as wtf %}
-
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -12,9 +13,6 @@
   </head>
   <body>
     <div class="container">
-      <br /><br />
-      <h1>Occasional</h1>
-      <br /><br />
 
       {% for message in get_flashed_messages() %}
       <div class="flash alert alert-success col-sm-4" role="success">
@@ -30,11 +28,70 @@
       </p>
       {% endif %}
 
-      {{ wtf.quick_form(form) }}
+      <form action="" mthod="post">
+        <div class="label-bold" style="margin-bottom: 10px;">
+          Event Title
+        </div>
+        {{ form.title(class="search-form", style="width: 100%") }}
+      
+        <div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
+          <div class="label-bold" style="width: 50%;">
+            Start Date
+          </div>
+          <div class="label-bold" style="width: 50%;">
+            End Date
+          </div>
+        </div>
+      
+        <div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
+          <div style="width: 50%;">
+            {{ form.from_date(class="search-form", style="width: 90%") }}
+          </div>
+          <div style="width: 50%;">
+            {{ form.to_date(class="search-form", style="width: 100%") }}
+          </div>
+        </div>
+
+        <div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
+          <div class="label-bold" style="width: 50%;">
+            Location
+          </div>
+          <div class="label-bold" style="width: 50%;">
+            Room
+          </div>
+        </div>
+      
+        <div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
+          <div style="width: 50%;">
+            {{ form.location_address(class="search-form", style="width: 90%") }}
+          </div>
+          <div style="width: 50%;">
+            {{ form.location_room(class="search-form", style="width: 100%") }}
+          </div>
+        </div>
+      
+        <div class="label-bold" style="margin-top: 10px; margin-bottom: 10px;">
+          Interests
+        </div>
+        <div>
+          {{ form.targeted_preferences(class="search-form", style="width: 100%; height: 20%") }}
+        </div>
+
+        <div class="label-bold" style="margin-top: 10px; margin-bottom: 10px;">
+          Description
+        </div>
+        <div>
+          {{ form.description(class="search-form", style="width: 100%; height: 20%") }}
+        </div>
+
+        <div style="margin-bottom: 40px; margin-top: 40px; display: flex;">
+          <div style="margin-right: 40px;">
+            {{ form.submit(class="button-main") }}
+          </div>
+        </div>
+      </form>
     </div>
-    <script
-      type="text/javascript"
-      src="{{url_for('static', filename='main.js') }}"
-    ></script>
+
   </body>
 </html>
+{% endblock %}
