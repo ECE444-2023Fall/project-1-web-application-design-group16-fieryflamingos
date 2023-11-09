@@ -22,7 +22,7 @@
 					Date & Time:
 				</span>
 				<span class="label">
-					{{event.event_date.from_date}}
+					{{ event.event_date.from_date.strftime('%b %d, %Y %I:%M') }} - {{ event.event_date.to_date.strftime('%I:%M %p').lstrip('0')|upper }}
 				</span>
 			</div>
 			<div class="org-label" style="margin-bottom: 8px;">
