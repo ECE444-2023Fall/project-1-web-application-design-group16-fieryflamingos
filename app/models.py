@@ -392,9 +392,7 @@ class Event(Document):
             }
         ]
         pipeline.append({
-            "$project": {
-                "attendees": 0,
-            }
+            "$unset": [ 'attendees', 'description', 'targeted_preferences']
         })
 
         pipeline.append({

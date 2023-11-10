@@ -509,6 +509,7 @@ def event_search():
         show_prev_button = False
     if page >= max_pages-1:
         show_next_button = False
+    print("EVENTS: ", events)
     return render_template(f'event_list.html', events=events, form=form, page=page, max_pages=max_pages, count=count, show_next_button=show_next_button, show_prev_button=show_prev_button)
 
 
