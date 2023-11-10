@@ -18,8 +18,8 @@
 	</div>
 	{% endfor %}
 
-	<div style="margin-left: 10%; margin-right: 10%;">
-		<div class="main-title" style="margin-bottom: 40px; font-size: 30px;">
+	<div style="margin-left: 10%; margin-right: 10%; margin-bottom: 40px;">
+		<div class="main-title" style="margin-bottom: 30px; font-size: 30px;">
 			Filter Parameters
 		</div>
 
@@ -59,39 +59,30 @@
 			<div style="display: flex; flex-wrap: wrap; flex-direction: row; justify-content: flex-start;">
 				{{ form.preferences() }}
 			</div>
+
+			<div class="label-bold" style="margin-bottom: 10px;">
+				Items per page
+			</div>
+			{{ form.items_per_page(class="search-form", style="width: 100%") }}
 		
-			<div style="margin-bottom: 10px; margin-top: 10px; display: flex; justify-content:space-between; align-items:flex-end;">
-				<div style="margin-right: 40px;">
+			<div style="margin-bottom: 30px; margin-top: 30px; display: flex; justify-content: flex-start;">
+				<div>
 					{{ form.submit(class="button-main") }}
 				</div>
-				<span>{{count}} results found.</span>
 			</div>
-			
 		</form>
-		
-		
 	</div>
 
 
 	<div id="filtered-events" style="background-color: #F1F5F9; padding-bottom: 60px;">
 		<div style="margin-left: 10%; margin-right: 10%;">
-			<div style="display: flex; justify-content:space-between; align-items:center; margin-bottom: 40px; padding-top: 40px; ">
+			<div style="display: flex; justify-content:space-between; align-items:center; margin-bottom: 10px; padding-top: 40px; ">
 				<div class="main-title" style="font-size: 30px;">
 					Filtered Events
 				</div>
-				<div style="display:flex; justify-content:space-between; align-items:center;">
-					<div style="display:flex; align-items:center;">Page {{page + 1}} of {{max_pages}}</div>
-				</div>
-				<div style="display:flex; justify-content:center; align-items:center; gap:1rem">
-					{% if show_prev_button %}
-					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(-1)">Back</div>
-					{% endif %}
-					{% if show_next_button %}
-					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(1)">Next</div>
-					{% endif %}
-				</div>
-				
-
+			</div>
+			<div class="body-text" style="margin-bottom: 40px;">
+				<span>{{count}} events found</span>
 			</div>
 			{% for event in events %}
 				<a href="{{event.link}}" style="text-decoration: none">
@@ -131,21 +122,20 @@
 					</div>
 				</a>			
 			{% endfor %}
-			<div style="margin-bottom: 40px; margin-top: 40px; display: flex; justify-content:space-between;">
-				<div class="main-title" style="visibility: hidden;font-size: 30px;">
-					Filtered Events
+			<div style="margin-bottom: 20px; margin-top: 40px; display: flex; justify-content:center;">
+				{% if show_prev_button %}
+					<div tabindex="0" class="turn-page" style="height:100%" onclick="switchPage(-1)">&larr;</div>
+				{% endif %}
+				<div class="label-bold">
+					Page {{page + 1}} of {{max_pages}}
 				</div>
-				<div style="display:flex; justify-content:space-between; align-items:center;">
-					<div style="display:flex; align-items:center;">Page {{page + 1}} of {{max_pages}}</div>
-				</div>
-				<div style="display:flex; justify-content:center; align-items:center; gap:1rem">
-					{% if show_prev_button %}
-					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(-1)">Back</div>
-					{% endif %}
-					{% if show_next_button %}
-					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(1)">Next</div>
-					{% endif %}
-				</div>
+				{% if show_next_button %}
+					<div tabindex="0" class="turn-page" style="height:100%" onclick="switchPage(1)">&rarr;</div>
+				{% endif %}
+			</div>
+			<div style="display:flex; justify-content:center; align-items:center; gap:1rem">
+				
+				
 			</div>
 			
 		</div>
