@@ -64,15 +64,19 @@
 					{{event.organizer.name}}
 				</span>
 			</div>
+
 			{% if user_is_owner %}
-				<a class="button-main" href="/event/update/{{event.id}}" style="text-decoration: none">Edit</a>
+				<a class="button-main no-color" href="/event/update/{{event.id}}" style="text-decoration: none">Edit</a>
 
 			{% else %}
 				{% if registration_open %}
-				<form action="" method="POST">
-					{{form.hidden_tag()}}
-					{{form.submit(class="button-main", style="margin-top: 20%;")}}
-				</form>
+				<div style="display:flex; gap:1rem; margin-top: 20%;">
+					<form action="" method="POST">
+						{{ form.hidden_tag()}}
+						{{form.submit(class="button-main")}}
+					</form>
+					<a class="button-main no-color" style="text-decoration:none; height:100%;" href="/event/ics/{{event.id}}">Download ICS</a>
+				</div>
 				Registration open until: 
 					{% if event.registration_open_until %}
 						{{ event.registration_open_until.strftime('%b %d, %Y %I:%M') }}
@@ -81,10 +85,10 @@
 					{% endif %}
 				{% else %}
 					Registration closed.
+				
 				{% endif %}
 
 			{% endif %}
-
 		</div>
 		<div style="flex: 17%;"></div>
 		<div style="flex: 33%; margin-top: 15px;">

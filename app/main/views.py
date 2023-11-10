@@ -1,14 +1,19 @@
+from math import ceil
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, flash, abort, request
+from pytz import UTC
+
+from flask import render_template, session, redirect, url_for, flash, abort, request, make_response
 from flask_login import current_user, login_required
+from icalendar import Calendar
+from icalendar import Event as iEvent
+
 from . import main
-# from .forms import NameForm
 from .. import db
 from ..models import User, RegularUser, OrganizationUser, Event, Preference, Comment, Reply
 from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm, CommentForm, ReplyForm
 from functools import wraps
 
-from math import ceil
+
 
 class rec_up_event():
     def __init__ (self, event):
@@ -741,3 +746,48 @@ def update_profile_organization():
             flash("An error occurred while updating your profile")
 
     return render_template('update_profile_org.html', form=form, user=user)
+
+
+
+@main.route("/event/ics/<id>", methods=['GET'])
+@login_required
+def calendar(id):
+
+    # get event
+    event = Event.get_by_id(id=id)
+
+    # Check if event is valid
+    if not event:
+        return render_template('event_not_found.html')
+    
+    # Create a Calendar object
+    cal = Calendar()
+    cal.add("prodid", "-//My calendar product//mxm.dk//")
+    cal.add("version", "2.0")
+    cal.add("method", "PUBLISH")
+
+    # Create an Event object
+    ievent = iEvent()
+    ievent.add("summary", event.title)
+    ievent.add("description", event.description)
+    ievent.add("dtstart", event.event_date.from_date)
+    ievent.add("dtend", event.event_date.to_date)
+    # event.add("dtend", datetime(2023, 11, 9, 17, 0, 0, tzinfo=UTC))
+    ievent.add("dtstamp", datetime.now())
+    ievent.add("location", event.location.address)
+    ievent.add("uid", "20231109T160000Z-123456@mxm.dk")
+
+    # Add the Event object to the Calendar object
+    cal.add_component(ievent)
+
+    # Convert the Calendar object to a string
+    cal_str = cal.to_ical()
+
+    # Create a Flask response object
+    response = make_response(cal_str)
+    # Set the content type and disposition headers
+    response.headers["Content-Type"] = "text/calendar"
+    response.headers["Content-Disposition"] = f"attachment; filename={event.title}.ics"
+
+    # Return the response object
+    return response
