@@ -1,0 +1,32 @@
+:root { 
+    font-family: 'Inter', sans-serif; 
+    --UofT-Blue: #25355A;
+    --Lighter-Blue: #64748B;
+    --Darker-Grey: #475569;
+    --Light-Grey: #F1F5F9;
+    --White: #FFFFFF;
+    --Black: #000000;
+    --Bold-font-weight: 700;
+    --Medium-font-weight: 400;
+    --Light-font-weight: 300;
+    --underline-padding: 
+}
+
+.turn-page{
+    background-color: var(--UofT-Blue);
+    color: var(--White);
+    padding: 12px;
+    text-align: center;
+    border: none;
+    font-size: 14px;
+    font-weight: 350;
+    font-family: Inter;
+    border-radius: 4px;
+}
+
+.search-form{
+    padding: 8px;
+    font-size: 14px;
+    font-weight: 350;
+    font-family: Inter;
+}

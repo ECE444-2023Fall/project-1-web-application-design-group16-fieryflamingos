@@ -37,7 +37,7 @@ class Preference(Document):
         preferences = Preference.objects()
         tuple_preferences = []
         for preference in preferences:
-            tup = (str(preference.id), preference.preference)
+            tup = (preference.preference, str(preference.id), preference.events_with_preference)
             tuple_preferences.append(tup)
         return tuple_preferences
     
@@ -78,7 +78,8 @@ class User(UserMixin, DynamicDocument):
     meta = {
         'db_alias': Config.MONGODB_SETTINGS['alias'],
         'collection': 'users',
-        'allow_inheritance': True
+        'allow_inheritance': True,
+        "auto_create_index": False
     }
 
     @property
@@ -179,6 +180,7 @@ class OrganizationUser(User):
     #   regular - no event creation allowed
     #   organization - event creation allowed
     role = StringField(required=True, default="organization")
+
 
     @staticmethod
     def get_by_id(id):
@@ -325,23 +327,8 @@ class Event(Document):
         return Event.objects(id=event_id).update_one(pull__attendees__author_id=user_id)
 
     @staticmethod
-    def search(search=None, from_date=None, to_date=None, preferences=None, sort_by="event_date.from_date", sort_order=1, page=0, items_per_page=10):
+    def search(search=None, start_date=None, end_date=None, preferences=None, sort_by="event_date.from_date", sort_order=1, page=0, items_per_page=10):
         pipeline = []
-        # append from_date if possible
-        if from_date:
-            pipeline.append({
-                "event_date.from_date": {
-                    "$lte": from_date
-                }
-            })
-
-        # append to_date if possible
-        if to_date:
-            pipeline.append({
-                "event_date.to_date": {
-                    "$gte": to_date
-                }
-            })
 
         # append text search if possible
         if search:
@@ -353,6 +340,22 @@ class Event(Document):
                         "path": {
                             "wildcard": "*"
                         }
+                    }
+                }
+            })
+
+        # append from_date if possible
+        if start_date:
+            pipeline.append({ "$match": {
+                    'event_date.from_date': {
+                        '$gte': datetime.strptime(start_date, "%Y-%m-%d"),
+                    }
+                }
+            })
+        if end_date:
+            pipeline.append({ "$match": {
+                    'event_date.from_date': {
+                        '$lte': datetime.strptime(end_date, "%Y-%m-%d"),
                     }
                 }
             })
@@ -386,7 +389,6 @@ class Event(Document):
         pipeline.append({
             "$project": {
                 "attendees": 0,
-                "description": 0
             }
         })
 
@@ -402,6 +404,9 @@ class Event(Document):
         }) 
         res = list(Event.objects().aggregate(pipeline))
         result_list = res[0]["paginated_results"]
+        for result in result_list:
+            if (str(result["_id"])):
+                result["link"] = '/event/' + str(result["_id"])
         count = res[0]["total_count"]
         if count:
             count = count[0]["count"]

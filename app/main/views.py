@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, flash, abort
+from flask import render_template, session, redirect, url_for, flash, abort, request
 from flask_login import current_user, login_required
 from . import main
 # from .forms import NameForm
@@ -10,6 +10,18 @@ from functools import wraps
 
 from math import ceil
 
+class rec_up_event():
+    def __init__ (self, event):
+        self.weekday = event.event_date.from_date.strftime('%A')
+        self.date = event.event_date.from_date.strftime('%b %d, %Y')
+        self.start_time = event.event_date.from_date.strftime('%I:%M %p')
+        self.end_time = event.event_date.to_date.strftime('%I:%M %p')
+        self.title = event.title
+        self.location = event.location
+        self.organizer = event.organizer
+        self.preferences = event.targeted_preferences
+        #self.link = event.link
+        
 
 """ org_user_required
 Decorator that checks if user is an organization """
@@ -19,7 +31,7 @@ def org_user_required(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
         if not current_user.role == "organization":
-            redirect(url_for('errors.403'))
+            return render_template("errors/403.html")
 
         return func(*args, **kwargs)
 
@@ -65,10 +77,20 @@ def index():
     recommended_events = Event.get_recommended(user.preferences)
     upcoming_events = Event.get_upcoming(user.id)
 
-    return render_template('index.html',
-                           recommended_events=recommended_events,
-                           upcoming_events=upcoming_events)
+    rec_events = []
+    up_events = []
 
+    for i in range(len(recommended_events)):
+        rec_events.append(rec_up_event(recommended_events.__getitem__(i)))
+    
+    for i in range(len(upcoming_events)):
+        if(i<4):
+            print(upcoming_events.__getitem__(i).event_date.from_date.time())
+            up_events.append(rec_up_event(upcoming_events.__getitem__(i)))
+
+    return render_template('dashboard.html',
+                           recommended_events=rec_events,
+                           upcoming_events=up_events)     
 
 """ Event Details form
     - Allows org users to create events
@@ -175,7 +197,7 @@ def event_details(id):
     # check if user already is RSVP'ed, if so, change RSVPForm to CancelRSVPForm
     user_is_attendee = False
     for attendee in event.attendees:
-        if attendee.id == current_user.id:
+        if attendee.author_id == current_user.id:
             user_is_attendee = True
             form = CancelRSVPForm()
 
@@ -183,11 +205,11 @@ def event_details(id):
     preferences = []
     for pref_id in event.targeted_preferences:
         preferences.append(Preference.get_preference_by_id(pref_id))
-
     
+    preference_names = [preference.preference for preference in preferences]
 
     # VALIDATE FORMS
-    if form.validate_on_submit():
+    if request.args.get("submit"):
         if isinstance(form, RSVPForm):
             name = ""
             if current_user.role == "regular":
@@ -219,7 +241,7 @@ def event_details(id):
     
     # get comments for the event
     comments = Comment.get_comments_by_event_id(id)
-    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, comments=comments, form=form, comment_form=comment_form)
+    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form)
 
 
 """ Event Update form
@@ -278,11 +300,11 @@ def event_update(id):
 
     # Check if event is valid
     if not event:
-        return redirect(url_for('errors.404'))
+        return render_template("errors/404.html")
 
     # Check if org user is right one
     if event.organizer.author_id != current_user.id:
-        return redirect(url_for("errors.403"))
+        return render_template("errors/403.html")
 
     # Everything valid, set the form
     form = EventForm(location_place=event.location.place,
@@ -293,6 +315,7 @@ def event_update(id):
         description=event.description,
         title=event.title,
         targeted_preferences=event.targeted_preferences)
+    
 
     if form.validate_on_submit():
         try:
@@ -366,11 +389,11 @@ def event_delete(id):
 
     # Check if event is valid
     if not event:
-        return redirect(url_for('errors.404'))
+        return render_template("errors/404.html")
 
     # Check if org user is right one
     if event.organizer.author_id != current_user.id:
-        return redirect(url_for("errors.403"))
+        return render_template("errors/403.html")
 
     # delete event
     event.delete()
@@ -384,103 +407,80 @@ def event_delete(id):
 @main.route('/event/search', methods=['GET', 'POST'])
 @login_required
 def event_search():
-    """
-    This function renders the event search page for the 
-    logged-in user and handles the search form and pagination.
-
-    Parameters:
-    None
-
-    Returns:
-    A rendered template of event_list.html with the search 
-    form, the search results, and the pagination.
-
-    Description:
-    The function first creates an instance of the EventSearchForm 
-    class, which is a custom form for searching events by keywords, 
-    date range, and preferences. Then, it tries to get the session 
-    variables for the search parameters, such as page, search, 
-    from_date, to_date, preferences, items_per_page, and max_pages. 
-    These variables are used to store the user's search input and 
-    the pagination state. If the session variables are not set, 
-    it assigns some default values to them. Next, it validates the 
-    form on submit, which means the user has filled in the form 
-    fields and clicked the submit, next page, or prev page buttons. 
-    If the form is validated, it checks which button was clicked. 
-    If the submit button was clicked, it updates the session variables 
-    with the new form data and resets the page to 0. If the next page 
-    button was clicked and the page is not the last one, it increments 
-    the page by 1 and updates the session variable. If the prev page 
-    button was clicked and the page is not the first one, it decrements 
-    the page by 1 and updates the session variable. Then, it calls the 
-    search method of the Event class with the search parameters and gets 
-    the events and the count of the matching events. It also calculates 
-    the max_pages by dividing the count by the items_per_page and updates 
-    the session variable. Finally, it passes the events, the form, the page, 
-    and the max_pages as arguments to the render_template function, 
-    which returns the event_list.html template with the data.
-
-    """
-    form = EventSearchForm()
 
     #   get session if it exists
-    page = session.get('search_page')
-    search = session.get('search_search')
-    from_date = session.get('search_from_date')
-    to_date = session.get('search_to_date')
-    preferences = session.get('search_preferences')
-    items_per_page = session.get('search_items_per_page')
-    max_pages = session.get('search_max_pages')
+    page = request.args.get('page')
+    search = request.args.get('search')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    preferences = request.args.get('preferences')
+    items_per_page = request.args.get('items_per_page')
 
-    # set page to 0 if not in session
-    if not page:
+
+    # set page to 0 if not in args
+    if page != None:
+        page = int(page)
+    else:
         page = 0
-        session['search_page'] = 0
-    if not items_per_page:
-        items_per_page = 10
-        session['search_items_per_page'] = 10
+    if page < 0:
+        page = 0
 
+    if items_per_page != None:
+        items_per_page = int(items_per_page)
+    else:
+        items_per_page = 10
+
+    if preferences:
+        preferences = preferences.split("__")
+    
+    form = EventSearchForm(search=search,
+        preferences=preferences,
+        items_per_page=items_per_page)
+   
     # check form
     if form.validate_on_submit():
         if form.submit.data:
-            # update session
-            session['search_search'] = form.search.data
-            session['search_from_date'] = form.from_date.data
-            session['search_to_date'] = form.to_date.data
-            session['search_preferences'] = form.targeted_preferences.data
-            session['search_items_per_page'] = form.items_per_page.data
-            session['search_page'] = 0
-
             # update variables
             page = 0
             search = form.search.data
-            from_date = form.from_date.data
-            to_date = form.to_date.data
-            preferences = form.targeted_preferences.data
+            start_date = form.start_date.data
+            end_date = form.end_date.data
+            preferences = form.preferences.data
             items_per_page = int(form.items_per_page.data)
 
-        # go to next page
-        elif form.next_page.data and page+1 < max_pages:
-            page += 1
-            session['search_page'] = page
-
-        # go to prev page
-        elif form.prev_page.data and page > 0:
-            page -= 1
-            session['search_page'] = page
-
+        if not preferences: 
+            preferences = []
+        return redirect(url_for("main.event_search", 
+            search=search, 
+            start_date=start_date, 
+            end_date=end_date, 
+            preferences= "__".join(preferences) if preferences else "", 
+            items_per_page=items_per_page,
+            page=page,
+            _anchor='filtered-events'))
+        
+    else:
+        if start_date:
+            form.start_date.data = datetime.strptime(start_date, "%Y-%m-%d").date()
+        if end_date:
+            form.end_date.data = datetime.strptime(end_date, "%Y-%m-%d").date()
     # perform the search
     events, count = Event.search(search=search,
-                                 from_date=from_date,
-                                 to_date=to_date,
+                                 start_date=start_date,
+                                 end_date=end_date,
                                  preferences=preferences,
                                  page=page,
                                  items_per_page=items_per_page)
 
     max_pages = ceil(count/items_per_page)
-    session['search_max_pages'] = max_pages
 
-    return render_template('event_list.html', events=events, form=form, page=page, max_pages=max_pages)
+    show_prev_button = True
+    show_next_button = True
+    if page <= 0:
+        show_prev_button = False
+    if page >= max_pages-1:
+        show_next_button = False
+    return render_template(f'event_list.html', events=events, form=form, page=page, max_pages=max_pages, count=count, show_next_button=show_next_button, show_prev_button=show_prev_button)
 
 
 """ View Profile route
@@ -564,7 +564,7 @@ def get_profile_org(id):
     user = OrganizationUser.get_by_id(id)
 
     if user == None:
-        return redirect(url_for("errors.404"))
+        return render_template("errors/404.html")
 
     if user.id == current_user.id:
         current_user_is_specified = True
@@ -678,6 +678,7 @@ def update_profile_organization():
     function, which returns the update_profile_org.html template with 
     the data.
     """
+    form = UpdateOrganizationUserForm()
     user = current_user
     if user.role == "regular":
         return redirect(url_for("main.update_profile_regular"))
