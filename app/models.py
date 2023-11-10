@@ -228,6 +228,18 @@ class Comment(Document):
     @staticmethod
     def get_comments_by_event_id(event_id):
         return Comment.objects(event_id=event_id).order_by("+creation_date")
+
+    @staticmethod 
+    def get_comment_by_id(id):
+        try:
+            comment = Comment.objects(id=id).get()
+            return comment
+        except:
+            return None
+    
+    @staticmethod
+    def add_reply(event_id, reply):
+        Comment.objects(id=event_id).update_one(push__replies=reply)
     
 
 
