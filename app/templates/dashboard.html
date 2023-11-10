@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block title %} Dashboard {% endblock %}
 {% block content %}
-    <div class="card">
-        <div class = "container-fluid rec-sec">
+    <div class = "container-fluid" style="padding: 0px;">
+        <div class="rec-sec">
             <div class= "row">
                 <div class = "col"></div>
                     <div class = "recommended col-9">RECOMMENDED FOR YOU
@@ -27,9 +27,9 @@
                     </div>
                 </div>     
                 {% else %}
-                <div class="row">
+                <div class="row" style="justify-content: center;">
                     {% for event_dict in recommended_events %}
-				    <a href="/event/{{event_dict.event.id}}" style="text-decoration: none">
+                    <a href="/event/{{event_dict.event.id}}" style="text-decoration: none">
                     <div class = "col s3">
                         <div class="card medium">
                             <div class="title recommended_title">
@@ -102,26 +102,25 @@
             {% for event in upcoming_events %}
             <a href="/event/{{event.id}}" style="text-decoration: none">
                 <div class="row">
-                    <div class = "card upcoming_card col-11">
-
+                    <div class = "card upcoming_card col-11" style="justify-content: center;">
                         <div class="row">
-                            <div class="title upcoming_title col-8">
+                            <div class="title upcoming_title col-6">
                                 {{event.title}}
                             </div>
-                            <div class="col-3">
+                            <div class="col-5" style="justify-content:end; text-align: right;">
                                 <div class="row">
-                                    <div class="date_time_time col-5 date_time_top">
+                                    <div class="date_time_time col-6 date_time_top">
                                         {{event.event_date.from_date.strftime('%I:%M %p')}}
                                     </div>
-                                    <div class="date_time_date col-7 date_time_top">
+                                    <div class="date_time_date col-6 date_time_top">
                                         {{event.event_date.from_date.strftime('%A')}}
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="date_time_time col-5">
+                                    <div class="date_time_time col-6">
                                         {{event.event_date.to_date.strftime('%I:%M %p')}}
                                     </div>
-                                    <div class="date_time_date col-7">
+                                    <div class="date_time_date col-6">
                                         {{event.event_date.to_date.strftime('%b %d, %Y')}}
                                     </div>
                                 </div>
@@ -133,15 +132,16 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="up_info col-5" style="text-overflow: ellipsis; overflow: hidden;
+                            <div class="up_info col-6" style="text-overflow: ellipsis; overflow: hidden;
                             text-wrap: nowrap;">
                                 <span class="label-bold">Organizer: </span>
                                 <span class="label" >
                                 {{event.organizer.name}}
                                 </span>
                             </div>
-                            <div class="col-6" style="text-overflow: ellipsis; overflow: hidden;
-                            text-wrap: nowrap; margin-top: 28px; margin-bottom: 0px;">
+                            <div class="col-5" style="text-overflow: ellipsis; overflow: hidden;
+                            text-wrap: nowrap; margin-top: 28px; margin-bottom: 0px; margin-left: 2%;
+                            text-align: center;">
                                 <span class="label-bold">Location: </span>
                                 <span class="label" >
                                 {{event.location.address}}, {{event.location.room}}
