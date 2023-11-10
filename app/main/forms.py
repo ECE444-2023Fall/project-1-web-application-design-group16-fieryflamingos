@@ -171,14 +171,14 @@ class UpdateOrganizationUserForm(FlaskForm):
     
 """ Comment form """
 class CommentForm(FlaskForm):
-    content = StringField("Comment", render_kw={"placeholder":"Write a short review or ask a question"}, validators=[DataRequired(), Length(0, 10000, message="Length must be less than 10,000 characters.")])
+    content = StringField("Comment", widget=TextArea(), render_kw={"placeholder":"Write a short review or ask a question"}, validators=[DataRequired(), Length(0, 10000, message="Length must be less than 10,000 characters.")])
 
     rating = SelectField("Rating (1-5), or leave blank", choices=[(None, "---"), (1,1), (2,2), (3,3), (4,4), (5,5)], validators=[DataRequired()])
     submit = SubmitField("Comment")
 
 """ Reply Form """
 class ReplyForm(FlaskForm):
-    reply = StringField("Reply", render_kw={"placeholder":"Reply..."},)
+    reply = StringField("Reply", widget=TextArea(), render_kw={"placeholder":"Reply..."},)
     submit = SubmitField("Reply")
 
 

@@ -191,7 +191,7 @@ def event_details(id):
 
     # Check if event is valid
     if not event:
-        return render_template('event_not_found.html')
+        return render_template('errors/event_not_found.html')
 
     is_owner = False
     if str(event.organizer.author_id) == str(current_user.id):
@@ -224,10 +224,8 @@ def event_details(id):
     for pref_id in event.targeted_preferences:
         preferences.append(Preference.get_preference_by_id(pref_id))
     
-    preference_names = [preference.preference for preference in preferences]
-
     # VALIDATE FORMS
-    if request.args.get("submit"):
+    if form.validate_on_submit():
         if isinstance(form, RSVPForm):
             name = ""
             if current_user.role == "regular":
@@ -351,7 +349,7 @@ def event_update(id):
 
     # Check if event is valid
     if not event:
-        return render_template("errors/404.html")
+        return render_template("errors/event_not_found.html")
 
     # Check if org user is right one
     if event.organizer.author_id != current_user.id:
@@ -442,7 +440,7 @@ def event_delete(id):
 
     # Check if event is valid
     if not event:
-        return render_template("errors/404.html")
+        return render_template("errors/event_not_found.html")
 
     # Check if org user is right one
     if event.organizer.author_id != current_user.id:
@@ -617,7 +615,7 @@ def get_profile_org(id):
     user = OrganizationUser.get_by_id(id)
 
     if user == None:
-        return render_template("errors/404.html")
+        return render_template("errors/user_not_found.html")
 
     if user.id == current_user.id:
         current_user_is_specified = True
