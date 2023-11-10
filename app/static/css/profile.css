@@ -24,12 +24,17 @@
     margin-top: 56px;
     margin-left: 42px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
 }
 
 .profile_info{
-    margin-top: 20px;
+    margin-top: 0px;
     margin-left: 42px;
+}
+
+.name-and-button {
+    display: flex;
+    align-items: center;
 }
 
 hr.underline_name{
@@ -37,7 +42,7 @@ hr.underline_name{
     border: 1px solid var(--UofT-Blue);
     font-weight: 100;
     margin-top: 10px;
-    margin-left: 42px
+    width: 100%;
 }
 
 .edit-profile{
@@ -50,6 +55,10 @@ hr.underline_name{
   background-repeat: no-repeat;
 }
 
+.edit-profile:hover{
+  background-color: #18223A;
+}
+
 .label-container{
   display: flex;
   margin-left: 42px;
@@ -57,12 +66,31 @@ hr.underline_name{
   gap: 20px;
 }
 
-.interest-label{
-  display: inline-block;
-  width: 130px; /* Fixed width for each label */
-  height: 28px; /* Fixed height for each label */
-  line-height: 28px;
-  text-align: center;
-  background-color: #E5E7EB; /* Example background color */
-  border-radius: 5px;
+.upp-sec-profile{
+    margin: 90px 12%;
+    background-color: var(--UofT-Blue);
+}
+
+.card.upcoming_card_profile{
+    color: var(--White);
+    margin-right: auto;
+    margin-left: auto;
+    height: 100px;
+    border-radius: 15px;
+    margin-bottom: 36px;
+}
+
+.upcoming_title_profile{
+    margin-left: 32px;
+    margin-top: 32px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
+}
+
+.date_time_top_profile{
+    margin-top: 27px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
 }
