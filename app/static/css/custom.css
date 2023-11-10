@@ -220,6 +220,19 @@ hr.underline_upp {
      background-color: #18223A;
 }
 
+.arrow {
+    position:relative;
+}
+
+.arrow::before {
+    content: '\2193';
+    position:absolute;
+    top: 0;
+    bottom:0;
+    right:0;
+    left: 0;
+}
+
 .white-card-container{
     background-color: white;
     padding: 60px;

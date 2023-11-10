@@ -123,11 +123,11 @@
 		<div class="title" style="margin-bottom: 40px; margin-top: 10px;">
 			Leave a Review
 		</div>
-		<form method="POST" action="">
-			
+		<form method="POST" action="/event/{{event.id}}">
+			{{form.hidden_tag()}}
 			<div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
 				<div class="label-bold" style="width: 50%;">
-					Rating (1-5)
+					{{comment_form.rating.label}}
 				</div>
 			</div>
 		
@@ -138,13 +138,13 @@
 			</div>
 
 			<div class="label-bold" style="margin-bottom: 10px;">
-				Comment
+				{{comment_form.content.label}}
 			</div>
-			{{ comment_form.content(class="search-form", style="width: 100%; height: 8em; padding-bottom: 80px", placeholder="Write a short review") }}
+			{{ comment_form.content(class="search-form", maxlength=10000, style="width: 100%; height: 8em; padding-bottom: 80px") }}
 
 			<div style="margin-top: 40px; display: flex; justify-content:space-between; align-items:flex-end;">
 				<div style="margin-right: 40px;">
-					<button type="submit" class="button-main">Comment</button>
+					{{comment_form.submit(class="button-main")}}
 				</div>
 			</div>
 		</form>
@@ -159,32 +159,64 @@
 				Comments
 			</div>
 			{% for comment in comments %}
-				<div class="white-card-container" style="margin-bottom: 30px; padding: 40px;">
-					<div class="subtitle" >
-						{{comment.author.name}}
-					</div>
-					<div style="display: flex; width: 50%;">
-						<span class="label-bold" style="margin-right: 6px;">
-							Rating: 
-						</span>
-						<div class="star-container">
-							<!-- Loop through the rating and display filled stars -->
-							{% for i in range(comment.rating) %}
-								<span class="star">&#9733;</span>
-							{% endfor %}
+				<div class="white-card-container" style="margin-bottom: 30px; padding:0;">
+					<div id="{{comment.id}}" class="white-card-container" style="margin-bottom: 0px; ">
+						<div style="display:flex; justify-content:space-between">
+							<div class="subtitle" >
+								{{comment.author.name}}
+							</div>
 							
-							<!-- Loop through the remaining empty stars -->
-							{% for i in range(5 - comment.rating) %}
-								<span class="empty-star">&#9734;</span>
-								<!-- Use &#9734; for an empty star -->
-							{% endfor %}
+						</div>
+						{% if comment.rating %}
+						<div style="display: flex; width: 50%;">
+							<span class="label-bold" style="margin-right: 6px;">
+								Rating: 
+							</span>
+							<div class="star-container">
+								<!-- Loop through the rating and display filled stars -->
+								{% for i in range(comment.rating) %}
+									<span class="star">&#9733;</span>
+								{% endfor %}
+								
+								<!-- Loop through the remaining empty stars -->
+								{% for i in range(5 - comment.rating) %}
+									<span class="empty-star">&#9734;</span>
+									<!-- Use &#9734; for an empty star -->
+								{% endfor %}
+							</div>
+						</div>
+						{% endif %}
+						<hr style="margin-bottom: 20px; width: 50%;">
+						<div class="body-text">
+							{{comment.content}}
 						</div>
 					</div>
-					<hr style="margin-bottom: 20px; width: 50%;">
-					<div class="body-text">
-						{{comment.content}}
+					{% if comment.replies %}
+					
+					{% for reply in comment.replies %}
+					<hr style="margin-bottom: 20px; width: 100%;">
+					<div id="{{reply.id}}"  class="white-card-container" style="margin-bottom: 30px; ">
+						<div class="subtitle" >
+							{{reply.author.name}}
+						</div>
+						
+						<hr style="margin-bottom: 20px; width: 50%;">
+						<div class="body-text">
+							{{reply.content}}
+						</div>
 					</div>
+					{% endfor %}
+					{% endif %}
+
+					<form action="/event/{{event.id}}/comment/reply/{{comment.id}}" method="POST">
+						{{reply_form.hidden_tag()}}
+						<div style="display:flex;">
+							{{reply_form.reply(style="width: 75%", maxlength=10000)}}
+							{{reply_form.submit(id=comment.id, value="Reply", class="button-main", style="width:25%")}}
+						</div>
+					</form>
 				</div>
+
 			{% endfor %}
 		</div>	
 	</div>

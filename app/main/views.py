@@ -4,8 +4,8 @@ from flask_login import current_user, login_required
 from . import main
 # from .forms import NameForm
 from .. import db
-from ..models import User, RegularUser, OrganizationUser, Event, Preference, Comment
-from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm, CommentForm
+from ..models import User, RegularUser, OrganizationUser, Event, Preference, Comment, Reply
+from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm, CommentForm, ReplyForm
 from functools import wraps
 
 from math import ceil
@@ -233,15 +233,46 @@ def event_details(id):
             name = f"{current_user.first_name} {current_user.last_name}"
         else:
             name = current_user.name
-        comment = Comment(event_id=id,
+        if comment_form.rating.data:
+            comment = Comment(event_id=id,
             author={"author_id":  current_user.id, "name": name}, 
-            content=comment_form.content.data,
-            rating=comment_form.rating.data)
-        comment = comment.save()
+            content=comment_form.content.data)
+            comment = comment.save()
+        else:
+            comment = Comment(event_id=id,
+                author={"author_id":  current_user.id, "name": name}, 
+                content=comment_form.content.data,
+                rating=comment_form.rating.data)
+            comment = comment.save()
+        return redirect(url_for("main.event_details", id=event.id))
+        
     
     # get comments for the event
     comments = Comment.get_comments_by_event_id(id)
-    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form)
+    reply_form = ReplyForm()
+    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form, reply_form=reply_form)
+
+
+""" Reply to a comment """
+@main.route('/event/<event_id>/comment/reply/<comment_id>', methods=['POST'])
+@login_required
+def comment_reply(event_id, comment_id):
+    comment = Comment.get_comment_by_id(id=comment_id)
+    if not comment:
+        return redirect(url_for("main.event_details", id=event_id))
+    
+    form = ReplyForm()
+
+    if form.validate_on_submit():
+        name = ""
+        if current_user.role == "regular":
+            name = f"{current_user.first_name} {current_user.last_name}"
+        else:
+            name = current_user.name
+        reply = Reply(content=form.reply.data,
+                      author={"author_id": current_user.id, "name": name})
+        Comment.add_reply(comment_id, reply)
+    return redirect(url_for("main.event_details", id=event_id, _anchor=comment_id))
 
 
 """ Event Update form
