@@ -1,0 +1,28 @@
+.star-container {
+    display: inline-block;
+    font-size: 14px; /* Adjust the font size as needed */
+}
+
+.star-container .star {
+    color: #25355A; /* Change the color of filled stars */
+}
+
+.star-container .empty-star {
+    color: #ccc; /* Change the color of empty stars */
+}
+
+.reply {
+    background-color: #e2e8f0;
+    color: #262626;
+    padding: 10px 20px;
+    text-align: center;
+    border: none;
+    font-size: 14px;
+    font-weight: 350;
+    font-family: Inter;
+    border-radius: 4px;
+}
+
+.reply:hover{
+    background-color: #94a3b8;
+}
