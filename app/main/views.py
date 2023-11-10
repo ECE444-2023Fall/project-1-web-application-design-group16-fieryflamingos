@@ -186,7 +186,7 @@ def event_details(id):
 
     # Check if event is valid
     if not event:
-        return render_template('event_not_found.html')
+        return render_template('errors/event_not_found.html')
 
     is_owner = False
     if str(event.organizer.author_id) == str(current_user.id):
@@ -262,8 +262,6 @@ def event_details(id):
     
     # get comments for the event
     comments = Comment.get_comments_by_event_id(id)
-
-    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form)
 
     reply_form = ReplyForm()
     return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form, reply_form=reply_form)
@@ -348,7 +346,7 @@ def event_update(id):
 
     # Check if event is valid
     if not event:
-        return render_template("errors/404.html")
+        return render_template("errors/event_not_found.html")
 
     # Check if org user is right one
     if event.organizer.author_id != current_user.id:
@@ -439,7 +437,7 @@ def event_delete(id):
 
     # Check if event is valid
     if not event:
-        return render_template("errors/404.html")
+        return render_template("errors/event_not_found.html")
 
     # Check if org user is right one
     if event.organizer.author_id != current_user.id:
@@ -614,7 +612,7 @@ def get_profile_org(id):
     user = OrganizationUser.get_by_id(id)
 
     if user == None:
-        return render_template("errors/404.html")
+        return render_template("errors/user_not_found.html")
 
     if user.id == current_user.id:
         current_user_is_specified = True

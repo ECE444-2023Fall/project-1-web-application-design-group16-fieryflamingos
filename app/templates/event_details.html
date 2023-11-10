@@ -73,7 +73,16 @@
 					{{form.hidden_tag()}}
 					{{form.submit(class="button-main", style="margin-top: 20%;")}}
 				</form>
+				Registration open until: 
+					{% if event.registration_open_until %}
+						{{ event.registration_open_until.strftime('%b %d, %Y %I:%M') }}
+					{% else %}
+						{{ event.event_date.from_date.strftime('%b %d, %Y %I:%M') }}
+					{% endif %}
+				{% else %}
+					Registration closed.
 				{% endif %}
+
 			{% endif %}
 
 		</div>
