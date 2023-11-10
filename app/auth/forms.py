@@ -24,13 +24,13 @@ def validate_email(form, field):
 
 
 class RegistrationRegularForm(FlaskForm):
-    first_name = StringField('First Name', render_kw={"placeholder": "First Name..."}, validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
-    last_name = StringField('Last Name', render_kw={"placeholder": "Last Name..."}, validators=[DataRequired(), Regexp("^[a-zA-Z \-]+$", message="Not a valid name.")])
-    email = StringField('UofT Email', render_kw={"placeholder": "UofT Email (e.g., John.Doe@mail.utoronto.ca)"}, validators=[DataRequired(), Length(1, 64),
+    first_name = StringField('First Name', render_kw={"placeholder": "First Name"}, validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
+    last_name = StringField('Last Name', render_kw={"placeholder": "Last Name"}, validators=[DataRequired(), Regexp("^[a-zA-Z \-]+$", message="Not a valid name.")])
+    email = StringField('UofT Email', render_kw={"placeholder": "U of T Email (e.g., John.Doe@mail.utoronto.ca)"}, validators=[DataRequired(), Length(1, 64),
         Email(), validate_email])
-    username = StringField('Username', render_kw={"placeholder": "Username..."}, validators=[DataRequired(), Length(1,64), validate_username])
-    password = PasswordField('Password', render_kw={"placeholder": "Password..."}, validators=[Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", message="Invalid Password"),
-        DataRequired(), EqualTo('password2', message='Passwords must match.')])
+    username = StringField('Username', render_kw={"placeholder": "Username"}, validators=[DataRequired(), Length(1,64), validate_username])
+    password = PasswordField('Password', render_kw={"placeholder": "Password"}, validators=[Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", message="Invalid Password"),
+        DataRequired(), EqualTo('password2', message='Passwords must match')])
     
     password2 = PasswordField('Confirm password', render_kw={"placeholder": "Confirm Password..."}, validators=[DataRequired()])
     
@@ -40,12 +40,12 @@ class RegistrationRegularForm(FlaskForm):
 
 class RegistrationOrganizationForm(FlaskForm):
 
-    name = StringField('Organization Name', render_kw={"placeholder": "Organization Name..."}, validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
-    email = StringField('Email', render_kw={"placeholder": "UofT Email (e.g., John.Doe@mail.utoronto.ca)"}, validators=[DataRequired(), Length(1, 64),
+    name = StringField('Organization Name', render_kw={"placeholder": "Organization Name"}, validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
+    email = StringField('Email', render_kw={"placeholder": "Organization Email (e.g., skule.org@mail.utoronto.ca)"}, validators=[DataRequired(), Length(1, 64),
         Email(), validate_email])
-    username = StringField('Username', render_kw={"placeholder": "Username..."}, validators=[DataRequired(), Length(1,64), validate_username])
-    password = PasswordField('Password', render_kw={"placeholder": "Password..."}, validators=[Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", message="Invalid Password"),
-        DataRequired(), EqualTo('password2', message='Passwords must match.')])
+    username = StringField('Username', render_kw={"placeholder": "Username"}, validators=[DataRequired(), Length(1,64), validate_username])
+    password = PasswordField('Password', render_kw={"placeholder": "Password"}, validators=[Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", message="Invalid Password"),
+        DataRequired(), EqualTo('password2', message='Passwords must match')])
     
     password2 = PasswordField('Confirm password', render_kw={"placeholder": "Confirm Password..."}, validators=[DataRequired()])
     
