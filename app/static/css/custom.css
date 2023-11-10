@@ -53,6 +53,11 @@
     padding-left: 8%;
 }
 
+.error-message {
+    color: red;
+    font-weight: bold;
+}
+
 .rec-sec{
     margin: 0 12%;
     height: 600px;

@@ -1,67 +1,135 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link
+            href="../../static/css/styles.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../static/css/custom.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
+        <div class="header">
+            <h1>
+                <img
+                    src="../../static/img/OC_Variant3.png"
+                    alt="Occasional Logo"
+                />OCCASIONAL
+            </h1>
+        </div>
+    </head>
+    <script src="script.js"></script>
+    <script src="script2.js"></script>
 
-<head>
-    <link href="../../static/css/styles.css" rel="stylesheet" type="text/css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <div class="header">
-        <h1><img src="../../static/img/OC_Variant3.png" alt="Occasional Logo" />OCCASIONAL</h1>
-    </div>
-</head>
-<script src="script.js"></script>
-<script src="script2.js"></script>
-
-<body>
-    <h4>Already have an account?</h4>
-    <div class="signin">
-        <h5><a style="text-decoration:none" href="login.html">Sign In</a></h5>
-    </div>
-    <div class="boxOrg">
-        <h2>Create an Occasional Account</h2>
-        <h3>One account to share your organization's story.</h3>
-        <form name="register">
-            <table>
-                <tr>
-                    <td>
-                        <input type="text" name="orgname" placeholder="Organization Name" required>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="email" name="uoftemail" placeholder="UofT Email Address" required>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="text" name="username" placeholder="Username" required>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="password" name="password" id="password" placeholder="Password" required>
-                        <i class="material-icons" title="Password must contain the following:&#013;
+    <body>
+        <h4>Already have an account?</h4>
+        <div class="signin">
+            <h5>
+                <a style="text-decoration: none" href="/auth/login">Sign In</a>
+            </h5>
+        </div>
+        <div class="boxOrg">
+            <h2>Create an Occasional Account</h2>
+            <h3>One account to share your organization's story.</h3>
+            <form action="" method="POST">
+                {{form.hidden_tag()}}
+                <table>
+                    <tr>
+                        <td>{{form.name()}}</td>
+                        {% if form.name.errors %}
+                        <ul>
+                            {% for error in form.name.errors %}
+                            <ul class="error-message">
+                                {{ error }}
+                            </ul>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>{{form.email()}}</td>
+                        {% if form.email.errors %}
+                        <ul>
+                            {% for error in form.email.errors %}
+                            <ul class="error-message">
+                                {{ error }}
+                            </ul>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>{{form.username()}}</td>
+                        {% if form.username.errors %}
+                        <ul>
+                            {% for error in form.username.errors %}
+                            <ul class="error-message">
+                                {{ error }}
+                            </ul>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>
+                            {{form.password()}}
+                            <i
+                                class="material-icons"
+                                title="Password must contain the following:&#013;
         Minimum eight characters&#013;
         At least one uppercase letter&#013;
         At least one lowercase letter&#013;
         At least one number&#013;
-        At least one special character">info</i>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="password" name="confirmpassword" id="confirmpassword"
-                            placeholder="Confirm Password" required>
-                    </td>
-                </tr>
-            </table>
-            <input type="submit" onclick="return identicalFields();" value="Create Occasional Account">
-        </form>
-        <h6>Want to register as a user? <a id="nonbutton" style="text-decoration:none" href="register.html">Click
-                here.</a></h6>
-    </div>
-</body>
-
+        At least one special character"
+                                >info</i
+                            >
+                            {% if form.password.errors %}
+                            <ul>
+                                {% for error in form.password.errors %}
+                                <ul class="error-message">
+                                    {{ error }}
+                                </ul>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{form.password2()}}</td>
+                        {% if form.password2.errors %}
+                        <ul>
+                            {% for error in form.password2.errors %}
+                            <ul class="error-message">
+                                {{ error }}
+                            </ul>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </tr>
+                </table>
+                {{form.submit()}}
+            </form>
+            <h6>
+                Want to register as a user?
+                <a
+                    id="nonbutton"
+                    style="text-decoration: none"
+                    href="/auth/register"
+                    >Click here.</a
+                >
+            </h6>
+        </div>
+    </body>
 </html>
