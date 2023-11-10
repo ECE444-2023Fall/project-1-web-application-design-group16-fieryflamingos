@@ -212,7 +212,7 @@ class Comment(Document):
     update_date = DateTimeField()
     event_id = ObjectIdField(required=True)
     author = EmbeddedDocumentField(UserInfo)
-    content = StringField(required=True, max_length=1000)
+    content = StringField(required=True, max_length=10000)
    
     likes = IntField(min_value=0, default=0)
 
@@ -254,12 +254,13 @@ class Event(Document):
     creation_date = DateTimeField(default=datetime.now())
 
     update_date = DateTimeField()
+    registration_open_until = DateTimeField()
     event_date = EmbeddedDocumentField(EventDate)
     location = EmbeddedDocumentField(Location)
     title = StringField(required=True)
     targeted_preferences = ListField(ObjectIdField(), required=True, default=[])
     organizer = EmbeddedDocumentField(UserInfo)
-    description = StringField(required=True, max_length=1000)
+    description = StringField(required=True, max_length=10000)
 
     """ List of attendees, should be RegularUser objects """
     attendees = EmbeddedDocumentListField(UserInfo, default=[])
