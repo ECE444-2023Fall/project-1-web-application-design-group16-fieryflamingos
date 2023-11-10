@@ -224,10 +224,8 @@ def event_details(id):
     for pref_id in event.targeted_preferences:
         preferences.append(Preference.get_preference_by_id(pref_id))
     
-    preference_names = [preference.preference for preference in preferences]
-
     # VALIDATE FORMS
-    if request.args.get("submit"):
+    if form.validate_on_submit():
         if isinstance(form, RSVPForm):
             name = ""
             if current_user.role == "regular":

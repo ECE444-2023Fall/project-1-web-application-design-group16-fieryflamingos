@@ -70,18 +70,29 @@
 
 			{% else %}
 				{% if registration_open %}
-				<div style="display:flex; gap:1rem; margin-top: 20%;">
-					<form action="" method="POST">
-						{{ form.hidden_tag()}}
-						{{form.submit(class="button-main")}}
-					</form>
-					<a class="button-main no-color" style="text-decoration:none; height:100%;" href="/event/ics/{{event.id}}">Download ICS</a>
-				</div>
-				Registration open until: 
-					{% if event.registration_open_until %}
-						{{ event.registration_open_until.strftime('%b %d, %Y %I:%M') }}
+					<div style="display:flex; gap:1rem; margin-top: 20%;">
+						<form action="" method="POST">
+							{{ form.hidden_tag()}}
+							{% if user_is_attendee %}
+								{{form.submit(value="Cancel", style="background-color: red", class="button-main")}}
+							{% else %}
+								{{form.submit(value="RSVP", class="button-main")}}
+							{% endif %}
+						</form>
+						{% if user_is_attendee %}
+						<a class="button-main no-color" style="text-decoration:none; height:100%;" href="/event/ics/{{event.id}}">Export</a>
+						{% endif %}
+					</div>
+					{% if user_is_attendee %}
+						You are currently registered for this event.
 					{% else %}
-						{{ event.event_date.from_date.strftime('%b %d, %Y %I:%M') }}
+						Registration open until: 
+						{% if event.registration_open_until %}
+							{{ event.registration_open_until.strftime('%b %d, %Y %I:%M %p') }}
+						{% else %}
+							{{ event.event_date.from_date.strftime('%b %d, %Y %I:%M %p') }}
+						{% endif %}
+
 					{% endif %}
 				{% else %}
 					Registration closed.
@@ -171,7 +182,7 @@
 		
 			<div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
 				<div style="width: 50%;">
-					{{ comment_form.rating(class="search-form", style="width: 100%") }}
+					{{ comment_form.rating(class="search-form",rows=10, style="width: 100%") }}
 				</div>
 			</div>
 
@@ -249,7 +260,7 @@
 						<form action="/event/{{event.id}}/comment/reply/{{comment.id}}" method="POST" style="margin-bottom: 30px; margin-top: 30px;">
 							{{reply_form.hidden_tag()}}
 							<div style="display:flex;">
-								{{reply_form.reply(class="search-form", style="width: 90%; margin-right: 40px", maxlength=10000)}}
+								{{reply_form.reply(class="search-form", rows=1, style="width: 90%; margin-right: 40px", maxlength=10000)}}
 								{{reply_form.submit(id=comment.id, value="Reply", class="reply")}}
 							</div>
 						</form>
