@@ -138,11 +138,11 @@ class CancelRSVPForm(FlaskForm):
 
 """ Events creation form """
 class EventSearchForm(FlaskForm):
-    search = StringField("Search", render_kw={"placeholder": "Event title, location, or organizer..."})
+    search = StringField("Keyword Search", render_kw={"placeholder": "Event title, location, or organizer..."})
 
 
     # targeted_preferences = SelectMultipleField("Preferences", choices=Preference.get_preferences_as_tuple())
-    preferences = TagField("Preferences", choices=Preference.get_preferences_as_tuple())
+    preferences = TagField("Interests", choices=Preference.get_preferences_as_tuple())
     start_date = DateField("Start Date", format="%Y-%m-%d", validators=[Optional()])
     end_date = DateField("End Date", format="%Y-%m-%d", validators=[Optional()])
 

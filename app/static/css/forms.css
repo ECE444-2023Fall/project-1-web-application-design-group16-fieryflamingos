@@ -13,15 +13,14 @@
 }
 
 .turn-page{
-    background-color: var(--UofT-Blue);
-    color: var(--White);
-    padding: 12px;
-    text-align: center;
-    border: none;
-    font-size: 14px;
-    font-weight: 350;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 2px;
+    color: var(--Darker-Grey);
     font-family: Inter;
-    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 450;
+    cursor: pointer;
 }
 
 .search-form{
@@ -29,4 +28,5 @@
     font-size: 14px;
     font-weight: 350;
     font-family: Inter;
+    color: var(--Darker-Grey);
 }
