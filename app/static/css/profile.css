@@ -1,0 +1,68 @@
+.profile-sec{
+    margin: 0 12%;
+    height: 270px;
+    background-color: var(--Light-Grey);
+    min-width: 1000px;
+    display: flex
+}
+
+.profile-pic {
+  flex: 0 0 20%;
+  max-width: 20%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  margin: 35px 0;
+}
+
+.profile-content {
+  flex: 0 0 80%;
+  max-width: 80%;
+}
+
+.profile_title{
+    margin-top: 56px;
+    margin-left: 42px;
+    display: flex;
+    align-items: center;
+}
+
+.profile_info{
+    margin-top: 20px;
+    margin-left: 42px;
+}
+
+hr.underline_name{
+    height: 0.1px;
+    border: 1px solid var(--UofT-Blue);
+    font-weight: 100;
+    margin-top: 10px;
+    margin-left: 42px
+}
+
+.edit-profile{
+  margin-left: 16px;
+  width: 36px;
+  height: 36px;
+  background-color: #E2E8F0;
+  background-image: url('/static/img/edit_btn.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.label-container{
+  display: flex;
+  margin-left: 42px;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.interest-label{
+  display: inline-block;
+  width: 130px; /* Fixed width for each label */
+  height: 28px; /* Fixed height for each label */
+  line-height: 28px;
+  text-align: center;
+  background-color: #E5E7EB; /* Example background color */
+  border-radius: 5px;
+}

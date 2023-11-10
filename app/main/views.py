@@ -4,12 +4,24 @@ from flask_login import current_user, login_required
 from . import main
 # from .forms import NameForm
 from .. import db
-from ..models import User, RegularUser, OrganizationUser, Event, Preference, Comment
-from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm, CommentForm
+from ..models import User, RegularUser, OrganizationUser, Event, Preference, Comment, Reply
+from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm, CommentForm, ReplyForm
 from functools import wraps
 
 from math import ceil
 
+class rec_up_event():
+    def __init__ (self, event):
+        self.weekday = event.event_date.from_date.strftime('%A')
+        self.date = event.event_date.from_date.strftime('%b %d, %Y')
+        self.start_time = event.event_date.from_date.strftime('%I:%M %p')
+        self.end_time = event.event_date.to_date.strftime('%I:%M %p')
+        self.title = event.title
+        self.location = event.location
+        self.organizer = event.organizer
+        self.preferences = event.targeted_preferences
+        #self.link = event.link
+        
 
 """ org_user_required
 Decorator that checks if user is an organization """
@@ -64,14 +76,19 @@ def index():
 
     recommended_events = Event.get_recommended(user.preferences)
     upcoming_events = Event.get_upcoming(user.id)
-
-    up_events = [ob.to_mongo() for ob in upcoming_events]
-    for event in up_events:
-        print(event)
+    rec_events_dict_list = []
+    for event in recommended_events:
+        preferences = []
+        for pref_id in event.targeted_preferences:
+            preferences.append(Preference.get_preference_by_id(pref_id))
+        rec_events_dict_list.append({
+            "event": event,
+            "preferences": preferences
+        }) 
 
     return render_template('dashboard.html',
-                           recommended_events=recommended_events,
-                           upcoming_events=upcoming_events)
+                           recommended_events=rec_events_dict_list,
+                           upcoming_events=upcoming_events)     
 
 """ Event Details form
     - Allows org users to create events
@@ -229,15 +246,50 @@ def event_details(id):
             name = f"{current_user.first_name} {current_user.last_name}"
         else:
             name = current_user.name
-        comment = Comment(event_id=id,
+        if comment_form.rating.data:
+            comment = Comment(event_id=id,
             author={"author_id":  current_user.id, "name": name}, 
-            content=comment_form.content.data,
-            rating=comment_form.rating.data)
-        comment = comment.save()
+            content=comment_form.content.data)
+            comment = comment.save()
+        else:
+            comment = Comment(event_id=id,
+                author={"author_id":  current_user.id, "name": name}, 
+                content=comment_form.content.data,
+                rating=comment_form.rating.data)
+            comment = comment.save()
+        return redirect(url_for("main.event_details", id=event.id))
+        
     
     # get comments for the event
     comments = Comment.get_comments_by_event_id(id)
+
     return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form)
+
+    reply_form = ReplyForm()
+    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form, reply_form=reply_form)
+
+
+""" Reply to a comment """
+@main.route('/event/<event_id>/comment/reply/<comment_id>', methods=['POST'])
+@login_required
+def comment_reply(event_id, comment_id):
+    comment = Comment.get_comment_by_id(id=comment_id)
+    if not comment:
+        return redirect(url_for("main.event_details", id=event_id))
+    
+    form = ReplyForm()
+
+    if form.validate_on_submit():
+        name = ""
+        if current_user.role == "regular":
+            name = f"{current_user.first_name} {current_user.last_name}"
+        else:
+            name = current_user.name
+        reply = Reply(content=form.reply.data,
+                      author={"author_id": current_user.id, "name": name})
+        Comment.add_reply(comment_id, reply)
+    return redirect(url_for("main.event_details", id=event_id, _anchor=comment_id))
+
 
 
 """ Event Update form
@@ -308,9 +360,11 @@ def event_update(id):
         location_room=event.location.room,
         from_date=event.event_date.from_date,
         to_date=event.event_date.to_date,
+        registration_open_until=event.registration_open_until,
         description=event.description,
         title=event.title,
         targeted_preferences=[str(preference) for preference in event.targeted_preferences])
+
 
     if form.validate_on_submit():
         try:
