@@ -8,8 +8,10 @@ h1 {
     font-weight: 700;
     margin: auto;
     text-align: center;
+    display: flex;
+    align-items: center;
     position: relative;
-    top: 80px;
+    top: 75px;
 }
 
 h2 {
@@ -34,7 +36,7 @@ h4 {
     color: #475569;
     text-align: right;
     position: relative;
-    bottom: 62.5px;
+    bottom: 73px;
     right: 137px;
 }
 
@@ -56,13 +58,13 @@ h6 {
     bottom: 25px;
 }
 
-.box {
+.boxUser {
     background-color: white;
     width: 50em;
     height: 40em;
-    position: absolute;
-    left: 22%;
-    top: 20%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
     text-align: center;
 }
 
@@ -70,19 +72,19 @@ h6 {
     background-color: white;
     width: 50em;
     height: 35em;
-    position: absolute;
-    left: 22%;
-    top: 20%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
     text-align: center;
 }
 
 .boxSignin {
     background-color: white;
     width: 50em;
-    height: 25em;
-    position: absolute;
-    left: 22%;
-    top: 20%;
+    height: 20em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
     text-align: center;
 }
 
@@ -90,21 +92,22 @@ h6 {
     background-color: #25355A;
     width: 103px;
     height: 51px;
-    position: relative;
-    bottom: 123px;
-    left: 1300px;
+    position: absolute;
+    right: 28px;
+    top: 28px;
 }
 
 table {
     border-collapse: collapse;
     position: relative;
     margin: 0 auto;
-  }
-  
-  th, td {
+}
+
+th,
+td {
     padding: 11px;
-  }
-  
+}
+
 input {
     font-size: 1.17em;
     font-weight: 300;
@@ -132,29 +135,29 @@ input[type=submit] {
     border-radius: 0px;
 }
 
-select {
-    font-size: 1.17em;
-    font-weight: 300;
-    color: #94A3B8;
-    width: 484px;
-    height: 48px;
-    border-radius: 5px;
-    border-style: solid;
-    border-color: #25355A;
-    border-width: 2px;
-    box-shadow: none;
-    margin: 0 auto;
-    padding-left: 10px;
-}
-
-i {
-    cursor: pointer;
-}
-
 a {
     color: white;
 }
 
 #nonbutton {
     color: #475569;
+}
+
+.header img {
+    width: 70px;
+    height: 70px;
+    padding-right: 8px;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+
+.material-icons {
+    color: #94A3B8;
+    position: absolute;
+    right: 24px;
+    bottom: 93.5px;
 }
