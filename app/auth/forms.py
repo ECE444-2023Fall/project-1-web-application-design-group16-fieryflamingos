@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
 from ..models import RegularUser, OrganizationUser, User
+from ..util import validate_email as util_email_validate
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(1, 64)])
@@ -11,22 +12,22 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Log In')
 
 
-# check if email already taken
+# check if username already taken
 def validate_username(form,field):
-    try:
-        User.get_user_by_username(field.data)
-
-        # if we get to here, means that email is not unique
+    users = User.objects(username=field.data.strip())
+    if len(users) > 0:
         raise ValidationError(f'Username already taken.')
-    except:
-        pass
+
+# check if email is valid
+def validate_email(form, field):
+    util_email_validate(field.data.strip())
 
 
 class RegistrationRegularForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
     last_name = StringField('Last Name', validators=[DataRequired(), Regexp("^[a-zA-Z \-]+$", message="Not a valid name.")])
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
-        Email()])
+        Email(), validate_email])
     username = StringField('User Name', validators=[DataRequired(), Length(1,64), validate_username])
     password = PasswordField('Password', validators=[Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", message="Invalid Password"),
         DataRequired(), EqualTo('password2', message='Passwords must match.')])
@@ -40,7 +41,7 @@ class RegistrationRegularForm(FlaskForm):
 class RegistrationOrganizationForm(FlaskForm):
     name = StringField('Organization Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
-        Email()])
+        Email(), validate_email])
     username = StringField('User Name', validators=[DataRequired(), Length(1,64), validate_username])
     password = PasswordField('Password', validators=[Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", message="Invalid Password"),
         DataRequired(), EqualTo('password2', message='Passwords must match.')])

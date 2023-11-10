@@ -76,21 +76,19 @@ def index():
 
     recommended_events = Event.get_recommended(user.preferences)
     upcoming_events = Event.get_upcoming(user.id)
-
-    rec_events = []
-    up_events = []
-
-    for i in range(len(recommended_events)):
-        rec_events.append(rec_up_event(recommended_events.__getitem__(i)))
-    
-    for i in range(len(upcoming_events)):
-        if(i<4):
-            print(upcoming_events.__getitem__(i).event_date.from_date.time())
-            up_events.append(rec_up_event(upcoming_events.__getitem__(i)))
+    rec_events_dict_list = []
+    for event in recommended_events:
+        preferences = []
+        for pref_id in event.targeted_preferences:
+            preferences.append(Preference.get_preference_by_id(pref_id))
+        rec_events_dict_list.append({
+            "event": event,
+            "preferences": preferences
+        }) 
 
     return render_template('dashboard.html',
-                           recommended_events=rec_events,
-                           upcoming_events=up_events)     
+                           recommended_events=rec_events_dict_list,
+                           upcoming_events=upcoming_events)     
 
 """ Event Details form
     - Allows org users to create events

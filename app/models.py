@@ -11,6 +11,8 @@ from flask_login import UserMixin
 from bson.objectid import ObjectId
 from config import Config
 
+from .util import validate_email
+
 from PIL import Image
 
 Image.ANTIALIAS = Image.LANCZOS
@@ -54,7 +56,8 @@ class Preference(Document):
     def inc_event_count(preference_id, inc=1):
         try:
             Preference.objects(id=preference_id).update_one(inc__events_with_preference=inc)
-        except:
+        except Exception as e:
+            print(e)
             pass
     
 
@@ -117,18 +120,8 @@ class User(UserMixin, DynamicDocument):
 
     def validate_email(self):
          # validate email properly
-        email_valid = False
-        email_domain = self.email.rsplit("@", 1)
-        if len(email_domain) != 2:
-            raise  Exception(f"'{self.email}' not a valid email (email validation failed)")
-        email_domain_part = email_domain[-1].lower()
-        for domain in Config.DOMAIN_WHITELIST:  
-            if domain == email_domain_part:
-                email_valid = True
-                break
-        if email_valid == False:
-            raise Exception(f"'{email_domain_part}' not a valid domain (email validation failed)")
-        return email_valid
+        
+        return validate_email(self.email)
     
     @staticmethod
     def get_user_by_username(username):
