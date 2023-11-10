@@ -22,6 +22,22 @@
 		.star-container .empty-star {
 			color: #ccc; /* Change the color of empty stars */
 		}
+
+		.reply {
+			background-color: #e2e8f0;
+			color: #262626;
+			padding: 10px 20px;
+			text-align: center;
+			border: none;
+			font-size: 14px;
+			font-weight: 350;
+			font-family: Inter;
+			border-radius: 4px;
+		}
+
+		.reply:hover{
+			background-color: #94a3b8;
+		}
 	</style>
 </head>
 
@@ -96,7 +112,7 @@
                     </p>
                 </div>
                 <div style="flex: 8%;"></div>
-                <div class="white-card-container" style="flex: 32%; height: 300px;">
+                <div class="white-card-container" style="flex: 32%; min-height: 300px;">
                     <div class="subtitle">
                         Related Interests
                     </div>
@@ -159,64 +175,64 @@
 				Comments
 			</div>
 			{% for comment in comments %}
-				<div class="white-card-container" style="margin-bottom: 30px; padding:0;">
-					<div id="{{comment.id}}" class="white-card-container" style="margin-bottom: 0px; ">
-						<div style="display:flex; justify-content:space-between">
-							<div class="subtitle" >
-								{{comment.author.name}}
-							</div>
-							
-						</div>
-						{% if comment.rating %}
-						<div style="display: flex; width: 50%;">
-							<span class="label-bold" style="margin-right: 6px;">
-								Rating: 
-							</span>
-							<div class="star-container">
-								<!-- Loop through the rating and display filled stars -->
-								{% for i in range(comment.rating) %}
-									<span class="star">&#9733;</span>
-								{% endfor %}
+				<div id="{{comment.id}}" >
+					<div class="white-card-container" style="margin-bottom: 30px; padding:0;">
+						<div class="white-card-container" style="margin-bottom: 0px; ">
+							<div style="display:flex; justify-content:space-between">
+								<div class="subtitle" >
+									{{comment.author.name}}
+								</div>
 								
-								<!-- Loop through the remaining empty stars -->
-								{% for i in range(5 - comment.rating) %}
-									<span class="empty-star">&#9734;</span>
-									<!-- Use &#9734; for an empty star -->
-								{% endfor %}
+							</div>
+							{% if comment.rating %}
+							<div style="display: flex; width: 50%;">
+								<div class="label-bold" style="margin-right: 6px;">
+									Rating: 
+								</div>
+								<div class="star-container">
+									<!-- Loop through the rating and display filled stars -->
+									{% for i in range(comment.rating) %}
+										<span class="star">&#9733;</span>
+									{% endfor %}
+									
+									<!-- Loop through the remaining empty stars -->
+									{% for i in range(5 - comment.rating) %}
+										<span class="empty-star">&#9734;</span>
+										<!-- Use &#9734; for an empty star -->
+									{% endfor %}
+								</div>
+							</div>
+							{% endif %}
+							<hr style="margin-bottom: 20px; width: 50%;">
+							<div class="body-text">
+								{{comment.content}}
 							</div>
 						</div>
+					</div>
+					<div style="margin-left: 5%;">
+						{% if comment.replies %}
+							{% for reply in comment.replies %}
+								<div id="{{reply.id}}"  class="white-card-container" style="margin-bottom: 10px; padding: 30px;">
+									<div class="subtitle" >
+										{{reply.author.name}}
+									</div>
+									
+									<hr style="margin-bottom: 20px; width: 50%;">
+									<div class="body-text">
+										{{reply.content}}
+									</div>
+								</div>
+							{% endfor %}
 						{% endif %}
-						<hr style="margin-bottom: 20px; width: 50%;">
-						<div class="body-text">
-							{{comment.content}}
-						</div>
+						<form action="/event/{{event.id}}/comment/reply/{{comment.id}}" method="POST" style="margin-bottom: 30px; margin-top: 30px;">
+							{{reply_form.hidden_tag()}}
+							<div style="display:flex;">
+								{{reply_form.reply(class="search-form", style="width: 90%; margin-right: 40px", maxlength=10000)}}
+								{{reply_form.submit(id=comment.id, value="Reply", class="reply")}}
+							</div>
+						</form>
 					</div>
-					{% if comment.replies %}
-					
-					{% for reply in comment.replies %}
-					<hr style="margin-bottom: 20px; width: 100%;">
-					<div id="{{reply.id}}"  class="white-card-container" style="margin-bottom: 30px; ">
-						<div class="subtitle" >
-							{{reply.author.name}}
-						</div>
-						
-						<hr style="margin-bottom: 20px; width: 50%;">
-						<div class="body-text">
-							{{reply.content}}
-						</div>
-					</div>
-					{% endfor %}
-					{% endif %}
-
-					<form action="/event/{{event.id}}/comment/reply/{{comment.id}}" method="POST">
-						{{reply_form.hidden_tag()}}
-						<div style="display:flex;">
-							{{reply_form.reply(style="width: 75%", maxlength=10000)}}
-							{{reply_form.submit(id=comment.id, value="Reply", class="button-main", style="width:25%")}}
-						</div>
-					</form>
 				</div>
-
 			{% endfor %}
 		</div>	
 	</div>
