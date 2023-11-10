@@ -268,8 +268,6 @@ def event_details(id):
     # get comments for the event
     comments = Comment.get_comments_by_event_id(id)
 
-    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form)
-
     reply_form = ReplyForm()
     return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form, reply_form=reply_form)
 
