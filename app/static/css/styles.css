@@ -19,13 +19,16 @@ h2 {
     font-family: Inter;
     font-size: 24px;
     font-weight: 400;
+    margin-bottom: 10px;
 }
 
 h3 {
+    margin-top: 10px;
     color: var(--Darker-Grey);
     font-family: Inter;
     font-size: 14px;
     font-weight: 250;
+    margin-bottom: 30px;
 }
 
 h4 {
@@ -48,9 +51,10 @@ h5 {
 }
 
 h6 {
-    font-size: 1.17em;
-    font-weight: 300;
-    color: #475569;
+    color: var(--Darker-Grey);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 250;
     text-align: center;
     position: relative;
     bottom: 25px;
@@ -58,8 +62,9 @@ h6 {
 
 .boxUser {
     background-color: white;
+    padding-top: 20px;
     width: 50em;
-    height: 40em;
+    height: auto;
     margin-left: auto;
     margin-right: auto;
     width: 50%;
@@ -85,6 +90,7 @@ h6 {
     width: 50%;
     text-align: center;
     padding-top: 40px;
+    border-radius: 5px;
 }
 
 .sign-in{
@@ -94,7 +100,7 @@ h6 {
     text-align: center;
     border: none;
     font-size: 14px;
-    font-weight: 350;
+    font-weight: 300;
     font-family: Inter;
     border-radius: 4px;
     height: 20px;
@@ -115,12 +121,13 @@ th,
 input {
     width: 60vh;
     border-radius: 3px;
-    padding: 8px;
-    font-size: 14px;
-    font-weight: 350;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 250;
     font-family: Inter;
     color: var(--Darker-Grey);
     margin-bottom: 10px;
+    border-width: 0.8px;
 }
 
 input[type=submit] {

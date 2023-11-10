@@ -21,23 +21,29 @@
             rel="stylesheet"
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
-        <div class="header">
-            <h1>
-                <img
-                    src="../../static/img/OC_Variant3.png"
-                    alt="Occasional Logo"
-                />OCCASIONAL
-            </h1>
-        </div>
+        <style>
+            .error-message{
+                color: #ef4444;
+                font-family: Inter;
+                font-size: 14px;
+                font-weight: 250;
+            }
+        </style>
     </head>
     <script src="script.js"></script>
 
     <body>
-        <h4>Already have an account?</h4>
-        <div class="signin">
-            <h5>
-                <a style="text-decoration: none" href="/auth/login">Sign In</a>
-            </h5>
+        <div style="align-items: right; display: flex; margin-bottom: 60px;">
+            <div class="navbar-brand occasional">
+                <img src="/static/img/OC_Variant3.png" width="50" height="50" class="d-inline-block align-bottom" alt="">
+            </div> 
+            <div class="occasional d-inline-block" style="margin-left: 10px; color: black; margin-top: 12px;">OCCASIONAL</div>
+            <div class="body-text" style="margin-left: 68%; margin-top: 15px; margin-right: 1%;">
+                Already have an account?
+            </div>
+            <a href="/auth/login" class="sign-in" style="text-decoration: none; margin-top: 4px;">
+                Sign In
+            </a>
         </div>
         <div class="boxUser">
             <h2>Create an Occasional Account</h2>
@@ -45,11 +51,11 @@
             <form action="" method="POST">
                 <table>
                     <tr>
-                        <td>{{form.first_name()}}</td>
+                        <td>{{form.first_name(class="search-form")}}</td>
                         {% if form.first_name.errors %}
                             <ul>
                                 {% for error in form.first_name.errors %}
-                                <ul class="error-message">
+                                <ul class="error-message" style="margin-left: -20px;">
                                     {{ error }}
                                 </ul>
                                 {% endfor %}
@@ -98,13 +104,12 @@
                             <i
                                 class="material-icons"
                                 title="Password must contain the following:&#013;
-        Minimum eight characters&#013;
-        At least one uppercase letter&#013;
-        At least one lowercase letter&#013;
-        At least one number&#013;
-        At least one special character"
-                                >info</i
-                            >
+                                    Minimum eight characters&#013;
+                                    At least one uppercase letter&#013;
+                                    At least one lowercase letter&#013;
+                                    At least one number&#013;
+                                    At least one special character"
+                                >info</i>
                             {% if form.password.errors %}
                             <ul>
                                 {% for error in form.password.errors %}
@@ -129,13 +134,13 @@
                             {% endif %}
                     </tr>
                 </table>
-                {{form.submit()}}
+                {{form.submit(class="button-main", style="margin-top: 30px; margin-bottom: 30px;")}}
             </form>
             <h6>
                 Want to register as an organization?
                 <a
                     id="nonbutton"
-                    style="text-decoration: none"
+                    style="text-decoration: none; color: darkblue !important;"
                     href="/auth/register-org"
                     >Click here.</a
                 >
