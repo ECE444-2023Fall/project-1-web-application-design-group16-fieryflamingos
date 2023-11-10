@@ -571,11 +571,15 @@ def get_profile():
     if user.role == "organization":
         return redirect(url_for("main.get_profile_org", id=user.id))
 
+    preferences = []
+    for pref_id in user.preferences:
+        preferences.append(Preference.get_preference_by_id(pref_id))
+
     # get event summary
     future_events = Event.get_summary_from_list_future(user.registered_events)
     past_events = Event.get_summary_from_list_past(user.registered_events)
 
-    return render_template('profile.html', user=user, future_events=future_events, past_events=past_events)
+    return render_template('profile.html', user=user, preferences=preferences, future_events=future_events, past_events=past_events)
 
 
 """ View organization profile """
