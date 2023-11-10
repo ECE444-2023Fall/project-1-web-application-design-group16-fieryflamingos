@@ -83,7 +83,9 @@
 .medium{
     height: 370px;
     width: 250px;
-    margin-top: 40px;
+    margin-top: 20px;
+    position: fixed;
+    margin-bottom: 20px;
 }
 
 .recommended{
@@ -126,6 +128,7 @@ hr.underline_blue {
     text-align: left;
     margin-left: 0;
     margin-top: 20px;
+    margin-bottom: 20px;
     width: 440px;
 }
 
@@ -391,18 +394,28 @@ hr.underline_upp {
     color: #000000;
 }
 
+.card.medium{
+    transition: 0.5s;
+}
 
 .card.medium:hover{
     background-color: var(--Mint);
     transition: 0.5s;
-    height: 390px;
+    transform: scale(1.05);
+    margin-bottom: 0px;
 }
+
 .card_hover{
     display: none;
     margin-top: 28px;
     margin-right: 35px;
     margin-left: 35px;
-    margin-bottom: 0px;
+    margin-bottom: 5px;
+    transition: 0.7s
+}
+
+.card_normal{
+    transition: 0.7s;
 }
 
 .card.medium:hover .card_hover{
