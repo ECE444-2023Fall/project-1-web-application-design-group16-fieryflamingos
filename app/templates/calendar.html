@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %} Calendar {% endblock %}
+{% block content %}
+    <div class="container-fluid" style="padding: 0; margin: 0;">
+        <div style="height: 600px; background-color: var(--Light-Grey); min-width: 1000px;
+        min-height: 100uh; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 100%; max-width: 600px; padding: 30px 20px; border-radius: 18px;
+            background-color: var(--White);">
+                <div style="display:flex; justify-content: space-between; align-items:center;
+                margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid var(--UofT-Blue);">
+                    <div id="month" class="title" style="display:flex; align-items:center; color: var(--UofT-Blue);">
+                        May, 2023
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <div class="btns today">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div class="btns prev">
+                            <i class="fas fa-chevron-left"></i>
+                        </div>
+                        <div class="btns next">
+                            <i class="fas fa-chevron-right"></i> 
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom:10px">
+                    <div class="day label-bold">Sun</div>
+                    <div class="day label-bold">Mon</div>
+                    <div class="day label-bold">Tue</div>
+                    <div class="day label-bold">Wed</div>
+                    <div class="day label-bold">Thu</div>
+                    <div class="day label-bold">Fri</div>
+                    <div class="day label-bold">Sat</div>
+                </div>
+                <div class="days">
+                    <!-- Prev Month Days -->
+                    <div class="day prev">28</div>
+                    <div class="day prev">29</div>
+                    <div class="day prev">30</div>
+    
+                    <!-- Current Month Days -->
+                    <div class="day">1</div>
+                    <div class="day">2</div>
+                    <div class="day ">3</div>
+                    <div class="day">4</div>
+                    <div class="day today">5</div>
+                    <div class="day">6</div>
+                    <div class="day">7</div>
+
+                    <!-- Next Month Days -->
+                    <div class="day next">1</div>
+                    <div class="day next">2</div>
+                    <div class="day next">3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{url_for('static', filename='main.js')}}"></script>
+{% endblock %}

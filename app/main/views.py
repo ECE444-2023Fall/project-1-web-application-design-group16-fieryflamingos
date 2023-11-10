@@ -693,3 +693,9 @@ def update_profile_organization():
             flash("An error occurred while updating your profile")
 
     return render_template('update_profile_org.html', form=form, user=user)
+
+""" Calendar route """
+@main.route("/calendar", methods=['GET', 'POST'])
+@login_required
+def calendar():
+    return render_template('calendar.html')
