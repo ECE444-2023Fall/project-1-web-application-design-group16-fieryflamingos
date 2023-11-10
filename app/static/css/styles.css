@@ -1,0 +1,163 @@
+body {
+    background-color: #F1F5F9;
+    font-family: 'Inter', sans-serif;
+}
+
+h1 {
+    font-size: 3.33em;
+    font-weight: 700;
+    margin: auto;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: 75px;
+}
+
+h2 {
+    font-size: 2em;
+    font-weight: 500;
+    margin: auto;
+    text-align: center;
+    padding-top: 22px;
+}
+
+h3 {
+    font-size: 1.33em;
+    font-weight: 500;
+    margin: auto;
+    text-align: center;
+    padding-top: 8px;
+}
+
+h4 {
+    font-size: 1.17em;
+    font-weight: 300;
+    color: #475569;
+    text-align: right;
+    position: relative;
+    bottom: 73px;
+    right: 137px;
+}
+
+h5 {
+    font-size: 1.17em;
+    font-weight: 500;
+    color: white;
+    margin: auto;
+    text-align: center;
+    padding-top: 12.5px;
+}
+
+h6 {
+    font-size: 1.17em;
+    font-weight: 300;
+    color: #475569;
+    text-align: center;
+    position: relative;
+    bottom: 25px;
+}
+
+.boxUser {
+    background-color: white;
+    width: 50em;
+    height: 40em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    text-align: center;
+}
+
+.boxOrg {
+    background-color: white;
+    width: 50em;
+    height: 35em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    text-align: center;
+}
+
+.boxSignin {
+    background-color: white;
+    width: 50em;
+    height: 20em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    text-align: center;
+}
+
+.signin {
+    background-color: #25355A;
+    width: 103px;
+    height: 51px;
+    position: absolute;
+    right: 28px;
+    top: 28px;
+}
+
+table {
+    border-collapse: collapse;
+    position: relative;
+    margin: 0 auto;
+}
+
+th,
+td {
+    padding: 11px;
+}
+
+input {
+    font-size: 1.17em;
+    font-weight: 300;
+    color: #94A3B8;
+    width: 470px;
+    height: 42px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: #25355A;
+    border-width: 2px;
+    box-shadow: none;
+    margin: 0 auto;
+    padding-left: 10px;
+}
+
+input[type=submit] {
+    font-size: 1.17em;
+    font-weight: 500;
+    color: white;
+    background-color: #25355A;
+    width: 250px;
+    height: 51px;
+    border-style: solid;
+    box-shadow: none;
+    border-radius: 0px;
+}
+
+a {
+    color: white;
+}
+
+#nonbutton {
+    color: #475569;
+}
+
+.header img {
+    width: 70px;
+    height: 70px;
+    padding-right: 8px;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+
+.material-icons {
+    color: #94A3B8;
+    position: absolute;
+    right: 24px;
+    bottom: 93.5px;
+}
