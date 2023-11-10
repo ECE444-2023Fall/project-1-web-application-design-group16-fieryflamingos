@@ -15,7 +15,7 @@ connect(alias=config["testing"].MONGODB_SETTINGS["alias"], db=config["testing"].
 #     p.save()
 
 # users = OrganizationUser.objects()
-regular_users = RegularUser.objects()
+# regular_users = RegularUser.objects()
 
 # users = [org_user1, org_user2, org_user3 ]
 
@@ -35,26 +35,23 @@ regular_users = RegularUser.objects()
 
 
 # A list of possible comment contents
-contents = ["Pretty cool event!!!", "I had a great time.", "This was boring.", "The food was terrible.", "The music was amazing.", "The speaker was very knowledgeable.", "The game was exciting.", "The workshop was very helpful.", "The book was interesting.", "The event was well-organized."]
+# contents = ["Pretty cool event!!!", "I had a great time.", "This was boring.", "The food was terrible.", "The music was amazing.", "The speaker was very knowledgeable.", "The game was exciting.", "The workshop was very helpful.", "The book was interesting.", "The event was well-organized."]
 
 # preferences = Preference.objects()
 # preferences = [preference.id for preference in preferences]
 
+preferences = Preference.objects()
+pref_ids = [preference.id for preference in preferences]
+
 # A loop to generate 35 events
-events = Event.objects()
-for event in events:
+# events = Event.objects()
+# for event in events:
+#   num_prefs = random.randint(1,5)
+#   prefs = random.sample(pref_ids, num_prefs)
 
-    for i in range(5):
-        reg_user = random.choice(regular_users)
-        name = f"{reg_user.first_name} {reg_user.last_name}"
-        content = random.choice(contents)
-        likes = random.randint(0, 100)
-        rating = random.randint(1, 5)
-        # Create a comment object with the selected fields
-        comment = Comment(author={"author_id": reg_user.id, "name": name},
-                          event_id=event.id,
-                        content=content, 
-                        likes=likes, 
-                        rating=rating)
-        comment.save()
+#   for preference in prefs:
+#     Preference.inc_event_count(preference)
+  
+#   Event.objects(id=event.id).update_one(targeted_preferences=prefs)
 
+RegularUser.objects(username="s.czyrny").update_one(preferences=pref_ids)

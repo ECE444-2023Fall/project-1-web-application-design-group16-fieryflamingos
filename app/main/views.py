@@ -4,8 +4,8 @@ from flask_login import current_user, login_required
 from . import main
 # from .forms import NameForm
 from .. import db
-from ..models import User, RegularUser, OrganizationUser, Event, Preference, Comment
-from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm, CommentForm
+from ..models import User, RegularUser, OrganizationUser, Event, Preference, Comment, Reply
+from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm, CommentForm, ReplyForm
 from functools import wraps
 
 from math import ceil
@@ -76,21 +76,19 @@ def index():
 
     recommended_events = Event.get_recommended(user.preferences)
     upcoming_events = Event.get_upcoming(user.id)
-
-    rec_events = []
-    up_events = []
-
-    for i in range(len(recommended_events)):
-        rec_events.append(rec_up_event(recommended_events.__getitem__(i)))
-    
-    for i in range(len(upcoming_events)):
-        if(i<4):
-            print(upcoming_events.__getitem__(i).event_date.from_date.time())
-            up_events.append(rec_up_event(upcoming_events.__getitem__(i)))
+    rec_events_dict_list = []
+    for event in recommended_events:
+        preferences = []
+        for pref_id in event.targeted_preferences:
+            preferences.append(Preference.get_preference_by_id(pref_id))
+        rec_events_dict_list.append({
+            "event": event,
+            "preferences": preferences
+        }) 
 
     return render_template('dashboard.html',
-                           recommended_events=rec_events,
-                           upcoming_events=up_events)     
+                           recommended_events=rec_events_dict_list,
+                           upcoming_events=upcoming_events)     
 
 """ Event Details form
     - Allows org users to create events
@@ -233,15 +231,46 @@ def event_details(id):
             name = f"{current_user.first_name} {current_user.last_name}"
         else:
             name = current_user.name
-        comment = Comment(event_id=id,
+        if comment_form.rating.data:
+            comment = Comment(event_id=id,
             author={"author_id":  current_user.id, "name": name}, 
-            content=comment_form.content.data,
-            rating=comment_form.rating.data)
-        comment = comment.save()
+            content=comment_form.content.data)
+            comment = comment.save()
+        else:
+            comment = Comment(event_id=id,
+                author={"author_id":  current_user.id, "name": name}, 
+                content=comment_form.content.data,
+                rating=comment_form.rating.data)
+            comment = comment.save()
+        return redirect(url_for("main.event_details", id=event.id))
+        
     
     # get comments for the event
     comments = Comment.get_comments_by_event_id(id)
-    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form)
+    reply_form = ReplyForm()
+    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form, reply_form=reply_form)
+
+
+""" Reply to a comment """
+@main.route('/event/<event_id>/comment/reply/<comment_id>', methods=['POST'])
+@login_required
+def comment_reply(event_id, comment_id):
+    comment = Comment.get_comment_by_id(id=comment_id)
+    if not comment:
+        return redirect(url_for("main.event_details", id=event_id))
+    
+    form = ReplyForm()
+
+    if form.validate_on_submit():
+        name = ""
+        if current_user.role == "regular":
+            name = f"{current_user.first_name} {current_user.last_name}"
+        else:
+            name = current_user.name
+        reply = Reply(content=form.reply.data,
+                      author={"author_id": current_user.id, "name": name})
+        Comment.add_reply(comment_id, reply)
+    return redirect(url_for("main.event_details", id=event_id, _anchor=comment_id))
 
 
 """ Event Update form
@@ -480,6 +509,7 @@ def event_search():
         show_prev_button = False
     if page >= max_pages-1:
         show_next_button = False
+    print("EVENTS: ", events)
     return render_template(f'event_list.html', events=events, form=form, page=page, max_pages=max_pages, count=count, show_next_button=show_next_button, show_prev_button=show_prev_button)
 
 

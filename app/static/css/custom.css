@@ -59,7 +59,6 @@
 }
 
 .rec-sec{
-    margin: 0 12%;
     height: 600px;
     background-color: var(--Light-Grey); 
     min-width: 1000px;
@@ -74,10 +73,11 @@
     margin: 90px 12%;
     background-color: var(--UofT-Blue); 
     height: 1100px;
+    min-width: 1000px;
 }
 .cards{
-    margin-left: 12%;
-    margin-right: 12%;
+    margin: 0 12%;
+    justify-content: center;
 }
 
 .s3{
@@ -88,7 +88,9 @@
 .medium{
     height: 370px;
     width: 250px;
-    margin-top: 40px;
+    margin-top: 20px;
+    position: fixed;
+    margin-bottom: 20px;
 }
 
 .recommended{
@@ -131,6 +133,7 @@ hr.underline_blue {
     text-align: left;
     margin-left: 0;
     margin-top: 20px;
+    margin-bottom: 20px;
     width: 440px;
 }
 
@@ -225,6 +228,19 @@ hr.underline_upp {
      background-color: #18223A;
 }
 
+.arrow {
+    position:relative;
+}
+
+.arrow::before {
+    content: '\2193';
+    position:absolute;
+    top: 0;
+    bottom:0;
+    right:0;
+    left: 0;
+}
+
 .white-card-container{
     background-color: white;
     padding: 60px;
@@ -302,6 +318,7 @@ hr.underline_upp {
     margin-left: 35px;
     margin-bottom:0px;
     max-width: 180px;
+    min-height: 110px;
     max-height: 110px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -336,9 +353,7 @@ hr.underline_upp {
 
 .date_time_top{
     margin-top: 42px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    text-wrap: nowrap;
+
 }
 .date_time_date{
     color: #000000;
@@ -346,9 +361,6 @@ hr.underline_upp {
     font-family: Inter;
     font-weight: 400;
     text-align: left;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    text-wrap: nowrap;
 }
 
 .date_time_time{
@@ -357,9 +369,6 @@ hr.underline_upp {
     font-family: Inter;
     font-weight: 100;
     text-align: right;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    text-wrap: nowrap;
 }
 
 .interest-tag{
@@ -403,21 +412,38 @@ hr.underline_upp {
     color: #000000;
 }
 
-@media (max-width: 1466px) {
+.card.medium{
+    transition: 0.5s;
+}
 
 .card.medium:hover{
     background-color: var(--Mint);
     transition: 0.5s;
-    height: 390px;
+    transform: scale(1.05);
+    margin-bottom: 0px;
+}
+
+.card_hover{
+    display: none;
+    margin-top: 28px;
+    margin-right: 35px;
+    margin-left: 35px;
+    margin-bottom: 5px;
+    transition: 0.7s
+}
+
+.card_normal{
+    transition: 0.7s;
 }
 
 .card.medium:hover .card_hover{
+    display: block;
     opacity: 1;
     transition: opacity 0.8s;
 }
 
 .card.medium:hover .card_normal{
-    opacity: 0;
+    display: none;
 }
 
 .upcoming_card:hover   {
