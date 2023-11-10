@@ -31,16 +31,16 @@
 		<form method="POST" action="" >
 			{{form.hidden_tag()}}
 			<div class="label-bold" style="margin-bottom: 10px;">
-				Keyword Search
+				{{form.search.label}}
 			</div>
 			{{ form.search(class="search-form", style="width: 100%") }}
 		
 			<div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
 				<div class="label-bold" style="width: 50%;">
-					Start Date
+					{{form.start_date.label}}
 				</div>
 				<div class="label-bold" style="width: 50%;">
-					End Date
+					{{form.end_date.label}}
 				</div>
 			</div>
 		
@@ -54,16 +54,16 @@
 			</div>
 		
 			<div class="label-bold" style="margin-top: 10px; margin-bottom: 10px;">
-				Interests
+				form.preferences.label
 			</div>
 			<div style="display: flex; flex-wrap: wrap; flex-direction: row; justify-content: flex-start;">
 				{{ form.preferences() }}
 			</div>
 
 			<div class="label-bold" style="margin-bottom: 10px;">
-				Items per page
+				{{form.items_per_page.label}}
 			</div>
-			{{ form.items_per_page(class="search-form", style="width: 100%") }}
+			{{ form.items_per_page(class="search-form", style="width: 55px") }}
 		
 			<div style="margin-bottom: 30px; margin-top: 30px; display: flex; justify-content: flex-start;">
 				<div>
@@ -82,7 +82,11 @@
 				</div>
 			</div>
 			<div class="body-text" style="margin-bottom: 40px;">
+				{% if count == 1 %}
+				<span>{{count}} event found</span>
+				{% else %}
 				<span>{{count}} events found</span>
+				{% endif %}
 			</div>
 			{% for event in events %}
 				<a href="{{event.link}}" style="text-decoration: none">
@@ -126,9 +130,11 @@
 				{% if show_prev_button %}
 					<div tabindex="0" class="turn-page" style="height:100%" onclick="switchPage(-1)">&larr;</div>
 				{% endif %}
+				{% if count > 0 %}
 				<div class="label-bold">
 					Page {{page + 1}} of {{max_pages}}
 				</div>
+				{% endif %} 
 				{% if show_next_button %}
 					<div tabindex="0" class="turn-page" style="height:100%" onclick="switchPage(1)">&rarr;</div>
 				{% endif %}
