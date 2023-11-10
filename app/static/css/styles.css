@@ -15,19 +15,17 @@ h1 {
 }
 
 h2 {
-    font-size: 2em;
-    font-weight: 500;
-    margin: auto;
-    text-align: center;
-    padding-top: 22px;
+    color: black;
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 400;
 }
 
 h3 {
-    font-size: 1.33em;
-    font-weight: 500;
-    margin: auto;
-    text-align: center;
-    padding-top: 8px;
+    color: var(--Darker-Grey);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 250;
 }
 
 h4 {
@@ -80,21 +78,30 @@ h6 {
 
 .boxSignin {
     background-color: white;
-    width: 50em;
-    height: 20em;
+    width: 50%;
+    height: 45vh;
     margin-left: auto;
     margin-right: auto;
     width: 50%;
     text-align: center;
+    padding-top: 40px;
 }
 
-.signin {
+.sign-in{
     background-color: #25355A;
-    width: 103px;
-    height: 51px;
-    position: absolute;
-    right: 28px;
-    top: 28px;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    border: none;
+    font-size: 14px;
+    font-weight: 350;
+    font-family: Inter;
+    border-radius: 4px;
+    height: 20px;
+}
+
+.sign-in:hover{
+    background-color: #18223A;
 }
 
 table {
@@ -104,35 +111,22 @@ table {
 }
 
 th,
-td {
-    padding: 11px;
-}
 
 input {
-    font-size: 1.17em;
-    font-weight: 300;
-    color: #94A3B8;
-    width: 470px;
-    height: 42px;
-    border-radius: 5px;
-    border-style: solid;
-    border-color: #25355A;
-    border-width: 2px;
-    box-shadow: none;
-    margin: 0 auto;
-    padding-left: 10px;
+    width: 60vh;
+    border-radius: 3px;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: 350;
+    font-family: Inter;
+    color: var(--Darker-Grey);
+    margin-bottom: 10px;
 }
 
 input[type=submit] {
-    font-size: 1.17em;
-    font-weight: 500;
-    color: white;
-    background-color: #25355A;
-    width: 250px;
-    height: 51px;
-    border-style: solid;
-    box-shadow: none;
-    border-radius: 0px;
+    margin-top: 40px;
+    width: auto;
+    height: auto;
 }
 
 a {

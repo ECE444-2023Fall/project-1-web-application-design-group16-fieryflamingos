@@ -9,7 +9,7 @@ class LoginForm(FlaskForm):
     username = StringField('Username', render_kw={"placeholder": "Username..."}, validators=[DataRequired(), Length(1, 64)])
     password = PasswordField('Password',render_kw={"placeholder": "Password..."},  validators=[DataRequired()])
     remember_me = BooleanField('Keep me logged in')
-    submit = SubmitField('Sign in to Occasional')
+    submit = SubmitField('Sign in')
 
 
 # check if username already taken
