@@ -28,18 +28,19 @@
       </p>
       {% endif %}
 
-      <form action="" mthod="post">
+      <form action="" method="POST">
+        {{form.hidden_tag()}}
         <div class="label-bold" style="margin-bottom: 10px;">
-          Event Title
+          {{form.title.label}}
         </div>
         {{ form.title(class="search-form", style="width: 100%") }}
       
         <div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
           <div class="label-bold" style="width: 50%;">
-            Start Date
+            {{form.from_date.label}}
           </div>
           <div class="label-bold" style="width: 50%;">
-            End Date
+            {{form.to_date.label}}
           </div>
         </div>
       
@@ -54,10 +55,11 @@
 
         <div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
           <div class="label-bold" style="width: 50%;">
-            Location
+            {{form.location_address.label}}
           </div>
           <div class="label-bold" style="width: 50%;">
-            Room
+            {{form.location_address.room}}
+            
           </div>
         </div>
       
@@ -65,28 +67,41 @@
           <div style="width: 50%;">
             {{ form.location_address(class="search-form", style="width: 90%") }}
           </div>
-          <div style="width: 50%;">
+          <div >
             {{ form.location_room(class="search-form", style="width: 100%") }}
           </div>
         </div>
-      
         <div class="label-bold" style="margin-top: 10px; margin-bottom: 10px;">
-          Interests
+          {{form.registration_open_until.label}}
+        </div>
+        <div style="width: 50%;">
+          {{ form.registration_open_until(class="search-form", style="width: 100%") }}
+        </div>
+        <div class="label-bold" style="margin-top: 10px; margin-bottom: 10px;">
+          {{form.targeted_preferences.label}}
         </div>
         <div>
           {{ form.targeted_preferences(class="search-form", style="width: 100%; height: 20%") }}
         </div>
 
         <div class="label-bold" style="margin-top: 10px; margin-bottom: 10px;">
-          Description
+          {{form.description.label}}
         </div>
         <div>
-          {{ form.description(class="search-form", style="width: 100%; height: 20%") }}
+          {{ form.description(class="search-form", maxlength=10000,  rows=10, style="width:100%") }}
         </div>
 
         <div style="margin-bottom: 40px; margin-top: 40px; display: flex;">
           <div style="margin-right: 40px;">
-            {{ form.submit(class="button-main") }}
+            {% if form_is_update %}
+            <div style="display:flex; flex-wrap:wrap; gap:1rem;">
+              {{ form.submit(value="Update", class="button-main") }}
+              <a class="button-main" href="/event/delete/{{event.id}}" onclick="return confirm('Are you sure you want to delete this event?')" style="height: 100%; background-color: red; text-decoration: none">Delete</a>
+            </div>
+
+            {% else %}
+            {{ form.submit(value="Create", class="button-main") }}
+            {% endif %}
           </div>
         </div>
       </form>

@@ -33,9 +33,18 @@
 					{{event.organizer.name}}
 				</span>
 			</div>
-			<form action="" mthod="post">
-				{{form.submit(class="button-main", style="margin-top: 20%;")}}
-			</form>
+			{% if user_is_owner %}
+				<a class="button-main" href="/event/update/{{event.id}}" style="text-decoration: none">Edit</a>
+
+			{% else %}
+				{% if registration_open %}
+				<form action="" method="POST">
+					{{form.hidden_tag()}}
+					{{form.submit(class="button-main", style="margin-top: 20%;")}}
+				</form>
+				{% endif %}
+			{% endif %}
+
 		</div>
 		<div style="flex: 17%;"></div>
 		<div style="flex: 33%; margin-top: 15px;">
