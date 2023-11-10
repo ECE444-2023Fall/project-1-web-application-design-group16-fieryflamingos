@@ -77,7 +77,7 @@ def index():
     user = current_user
 
     if user.role == "organization":
-        return redirect(url_for("/profile-org"))
+        return redirect(url_for("main.get_profile_org", id=user.id))
 
     recommended_events = Event.get_recommended(user.preferences)
     upcoming_events = Event.get_upcoming(user.id)
@@ -620,6 +620,8 @@ def get_profile_org(id):
 
     if user == None:
         return render_template("errors/user_not_found.html")
+    
+    current_user_is_specified = False
 
     if user.id == current_user.id:
         current_user_is_specified = True
@@ -733,10 +735,10 @@ def update_profile_organization():
     function, which returns the update_profile_org.html template with 
     the data.
     """
-    form = UpdateOrganizationUserForm()
     user = current_user
     if user.role == "regular":
         return redirect(url_for("main.update_profile_regular"))
+    form = UpdateOrganizationUserForm(name=user.name)
 
     if form.validate_on_submit():
         try:

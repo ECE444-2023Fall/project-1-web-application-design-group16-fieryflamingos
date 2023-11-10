@@ -164,7 +164,7 @@ class UpdateRegularUserForm(FlaskForm):
 
 """ Update profile form """
 class UpdateOrganizationUserForm(FlaskForm):
-    name = StringField('Last Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
+    name = StringField('Organization Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
     
     submit = SubmitField("Update")
 

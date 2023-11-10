@@ -10,10 +10,13 @@
                 <div class = "profile_content">
                     <div class="main-title profile_title">
                         <div class="name-and-button">
-                            <span>{{user.name}}</span>
-                            {% if current_user_is_specified %}
-                            <a class="edit-profile" href="/profile-org/edit"></a>
-                            {% endif %}
+                            <form action="" method="POST">
+                                {{form.hidden_tag()}}
+                                {{form.name.label}}
+                                {{form.name(maxlength=50)}}
+                                {{form.submit(class="button-main")}}
+                            </form>
+                          
                         </div>
                         <hr class="underline_name">
                     </div>
