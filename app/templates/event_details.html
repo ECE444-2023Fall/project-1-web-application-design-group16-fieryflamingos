@@ -35,13 +35,13 @@
 					{{ event.event_date.from_date.strftime('%b %d, %Y %I:%M %p') }}
 				{% endif %}
 				
+					<div style="display:flex; gap:1rem; margin-top: 20%;">
+							<a class="button-main no-color" href="/event/update/{{event.id}}" style="text-decoration: none;">Edit</a>
+					</div>
 				{% else %}
 				Registration closed.
 				
 				{% endif %}
-				<div style="display:flex; gap:1rem; margin-top: 20%;">
-						<a class="button-main no-color" href="/event/update/{{event.id}}" style="text-decoration: none;">Edit</a>
-				</div>
 			{% elif user_is_attendee %}
 				You are currently registered for this event. 
 				<div style="display:flex; gap:1rem; margin-top: 20%;">
@@ -134,6 +134,41 @@
             
         </div>
     </div>
+
+	<!-- Statistics for Organizer -->
+	{% if user_is_owner %}
+	<div style="margin-left: 10%; margin-right: 12%; padding-top: 40px; padding-bottom: 0px;">
+		<h2>Attendees: {{num_attendees}}</h2>
+		<button class="button-main" onclick="clip_text()">Copy email list</button>
+		<div style="display:flex; flex-wrap:wrap; gap: 1rem;">
+			{% for attendee in event.attendees %}
+			<div style="display:flex;flex-direction:column">
+				<b>{{attendee.name}}</b>
+				<p>{{attendee.email}}</p>
+			</div>
+			{% endfor %}
+		</div>
+		<h2>Comments</h2>
+		<p><b>Number of Comments: </b>{{num_comments}}</p>
+		<p><b>Average Rating: </b>{{avg_rating}} stars</p>
+	</div>
+	<script>
+		function clip_text(){
+			var input = document.createElement('input')
+			input.id="__copyText__";
+			input.value = "{{attendee_list}}"; // OOPS! document.getElementById(divId).innerText;
+			document.body.appendChild(input);
+			input.select();
+			document.execCommand("copy");
+			var txt = input.value
+			input.remove()
+			console.log("OK COPIED: '"+txt+"'")
+		}
+		function clip_div(divId){
+		   return clip_text(document.getElementById(divId).innerText)
+		}
+		</script>
+	{% endif %}
 
 	<!-- add a new comment -->
 	<div style="margin-left: 10%; margin-right: 12%; padding-top: 40px; padding-bottom: 0px;">

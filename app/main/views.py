@@ -142,6 +142,7 @@ def event_form():
         try:
             event = Event(location={"place": form.location_place.data, "address": form.location_address.data, "room": form.location_room.data},
                         organizer={"author_id": current_user.id,
+                                   "email": current_user.email,
                                     "name": current_user.name},
                         event_date={"from_date": form.from_date.data,
                                     "to_date": form.to_date.data},
@@ -232,7 +233,7 @@ def event_details(id):
                 name = f"{current_user.first_name} {current_user.last_name}"
             else:
                 name = current_user.name
-            Event.add_attendee(event.id, current_user.id, name)
+            Event.add_attendee(event.id, current_user.id, current_user.email, name)
             RegularUser.add_event(current_user.id, event.id)
             user_is_attendee = True
             form = CancelRSVPForm()
@@ -246,8 +247,42 @@ def event_details(id):
     # get comments for the event
     comments = Comment.get_comments_by_event_id(id)
 
+    # get comments
+    num_comments = len(comments)
+    num_attendees = len(event.attendees)
+    avg_rating = 0
+    comments_with_rating = 0
+    attendee_list = [] # email list
+    if is_owner:
+        for comment in comments:
+            if comment.rating:
+                avg_rating += comment.rating
+                comments_with_rating += 1
+        for attendee in event.attendees:
+            if attendee.email:
+
+                attendee_list.append(attendee.email) 
+        attendee_list = ";".join(attendee_list)
+    
+        avg_rating = avg_rating / comments_with_rating
+
+
+
     reply_form = ReplyForm()
-    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form, reply_form=reply_form)
+    return render_template('event_details.html', 
+        event=event, 
+        user_is_attendee=user_is_attendee, 
+        user_is_owner=is_owner, 
+        registration_open=registration_open, 
+        avg_rating=avg_rating, 
+        num_comments=num_comments, 
+        num_attendees=num_attendees,
+        attendee_list=attendee_list,
+        targeted_preferences=preferences, 
+        comments=comments, 
+        form=form, 
+        comment_form=comment_form, 
+        reply_form=reply_form)
 
 
 """ Add a comment to an event """
@@ -271,12 +306,12 @@ def event_comment(id):
             name = current_user.name
         if comment_form.rating.data:
             comment = Comment(event_id=id,
-            author={"author_id":  current_user.id, "name": name}, 
+            author={"author_id":  current_user.id, "email": current_user.email, "name": name}, 
             content=comment_form.content.data)
             comment = comment.save()
         else:
             comment = Comment(event_id=id,
-                author={"author_id":  current_user.id, "name": name}, 
+                author={"author_id":  current_user.id, "email": current_user.email, "name": name}, 
                 content=comment_form.content.data,
                 rating=comment_form.rating.data)
             comment = comment.save()
@@ -301,7 +336,7 @@ def comment_reply(event_id, comment_id):
         else:
             name = current_user.name
         reply = Reply(content=form.reply.data,
-                      author={"author_id": current_user.id, "name": name})
+                      author={"author_id": current_user.id,  "email": current_user.email, "name": name})
         Comment.add_reply(comment_id, reply)
     return redirect(url_for("main.event_details", id=event_id, _anchor=comment_id))
 
