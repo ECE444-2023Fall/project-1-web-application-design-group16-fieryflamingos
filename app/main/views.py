@@ -5,6 +5,7 @@ from pytz import UTC
 from flask import render_template, session, redirect, url_for, flash, abort, request, make_response
 from flask_login import current_user, login_required
 from icalendar import Calendar
+import calendar as pyCalendar
 from icalendar import Event as iEvent
 from bson.objectid import ObjectId
 
@@ -852,8 +853,44 @@ def calendar(id):
     return response
 
   
-  """ Calendar route """
+""" Calendar route """
 @main.route("/calendar", methods=['GET', 'POST'])
 @login_required
-def calendar():
-    return render_template('calendar.html')
+def calendar_view():
+    month = request.args.get("month")
+    year = request.args.get("year")
+    today = datetime.now()
+    if not month or not year:
+        month = today.month
+        year = today.year
+        return redirect(url_for("main.calendar_view",month=month, year=year))
+    else:
+        try:
+            month = int(month)
+        except:
+            month = today.month
+            return redirect(url_for("main.calendar_view",month=month, year=year))
+        try:
+            year = int(year)
+        except:
+            year = today.year
+            return redirect(url_for("main.calendar_view",month=month, year=year))
+        
+        # check if exceeds the max month bound
+        if month > 12:
+            month = 1
+            year += 1
+            return redirect(url_for("main.calendar_view",month=month, year=year))
+
+        # check if exceeds lower bound
+        if month < 1:
+            month = 12
+            year -= 1
+            return redirect(url_for("main.calendar_view",month=month, year=year))
+
+    month_range = pyCalendar.monthrange(year, month)[1]
+    start_date = datetime(year,month, 1)
+    end_date = datetime(year,month, month_range, 23, 59)
+
+    events = Event.get_events_between(start_date, end_date)
+    return render_template('calendar.html', events=events, year=year, month=month)
