@@ -175,6 +175,25 @@ hr.underline_upp {
     margin-bottom: 0px;
 }
 
+.btns {
+    width: 50px;
+    height: 40px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    border-radius: 5px;
+    color: var(--White);
+    background-color: var(--UofT-Blue);
+    font-size: 16px;
+    cursor: pointer;
+    transform: all 0.3s ease-in-out
+}
+
+.btns:hover {
+    background-color: var(--Lighter-Blue);
+    transform: scale(1.08);
+}
+
 .main-title{
     color: #000000;
     font-family: Inter;
@@ -457,9 +476,84 @@ hr.underline_upp {
     background-color: var(--Grey);
 }
 
+
+
+.day{
+    width: calc(100%/7 - 10px);
+    text-align: center;
+}
+
+.days{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 10px;
+}
+
+.days .day{
+    width: calc(100%/7 - 10px);
+    text-align: center;
+    height: 50px; 
+    display: flex; 
+    align-items: center;
+    justify-content:center; 
+    border-radius: 5px; 
+    background-color: var(--Light-Grey);
+    transition: all 0.3s;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 450;
+}
+
+.days .day:not(.prev):not(.next):hover{
+    background-color: var(--Mint);
+    transform: scale(1.08);
+}
+
+.days .day.today{
+    background-color: var(--Mint) 
+}
+
+.days .day.next,
+.days .day.prev{
+    color: var(--UofT-Blue);
+    font-weight: 250;
+}
+
+
+.calendar_info{
+    width: 100%;
+    max-width: 400px; 
+    display: inline-block; 
+    padding: 30px 20px; 
+    border-radius: 18px; 
+    background-color: var(--UofT-Blue); 
+    align-items: center; 
+    justify-content: center; 
+    margin-bottom: 20px; 
+    margin-right: 10px;
+<<<<<<< HEAD
+    margin-top: 50px;
+    height: 520px;
+    display: inline-block;  
+    overflow: auto; 
+    padding: 20px 20px;
+}
+
+.day_info{
+    display: inline-block;
+}
+=======
+    margin-top: 20px;
+    height: 460px;
+}
+
 @media (max-width: 1430px) {
 
     .rec-sec {
       height: 1000px;
     }
-  }
+}
+
+
+
+>>>>>>> refs/remotes/origin/calendar_dev

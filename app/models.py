@@ -59,6 +59,13 @@ class Preference(Document):
         except Exception as e:
             print(e)
             pass
+    @staticmethod
+    def inc_events_count(preference_ids, inc=1):
+        try:
+            Preference.objects(id__in=preference_ids).update(inc__events_with_preference=inc)
+        except Exception as e:
+            print(e)
+            pass
     
 
 """ Generic User object (abstract) """
@@ -194,6 +201,7 @@ class Location(EmbeddedDocument):
 """ CommentAuthor """
 class UserInfo(EmbeddedDocument):
     author_id = ObjectIdField(required=True)
+    email = StringField()
     name = StringField()
 
 
@@ -324,8 +332,8 @@ class Event(Document):
             return None
 
     @staticmethod  
-    def add_attendee(event_id, user_id, user_name):
-        attendee = UserInfo(author_id=user_id, name=user_name)
+    def add_attendee(event_id, user_id, email, user_name):
+        attendee = UserInfo(author_id=user_id, email=email, name=user_name)
         return Event.objects(id=event_id).update_one(push__attendees=attendee)
 
     @staticmethod
@@ -422,24 +430,31 @@ class Event(Document):
     @staticmethod
     def get_summary_from_list_future(id_list):
         today = datetime.now()
-        return Event.objects(id__in=id_list, event_date__from_date__gte=today).exclude("attendees", "description")
+        return Event.objects(id__in=id_list, event_date__from_date__gte=today).exclude("attendees", "description",  "targeted_preferences")
     
     @staticmethod
     def get_summary_from_list_past(id_list):
         today = datetime.now()
-        return Event.objects(id__in=id_list, event_date__from_date__lt=today).exclude("attendees", "description")
+        return Event.objects(id__in=id_list, event_date__from_date__lt=today).exclude("attendees", "description",  "targeted_preferences")
     
     @staticmethod
     def get_organization_events_future(org_id):
         today = datetime.now()
-        return Event.objects(organizer__author_id=org_id, event_date__from_date__lt=today).exclude("attendees", "description")
+        return Event.objects(organizer__author_id=org_id, event_date__from_date__gte=today).order_by("+event_date.from_date").exclude("attendees", "description",  "targeted_preferences")
     
     @staticmethod
     def get_organization_events_past(org_id):
         today = datetime.now()
-        return Event.objects(organizer__author_id=org_id, event_date__from_date__lt=today).exclude("attendees", "description")
+        return Event.objects(organizer__author_id=org_id, event_date__from_date__lt=today).order_by("+event_date.from_date").exclude("attendees", "description", "targeted_preferences")
     
 
+    @staticmethod
+    def get_events_between(start_date, end_date, id_list):
+        return Event.objects(id__in=id_list, event_date__from_date__gte=start_date, event_date__from_date__lt=end_date).order_by("+event_date.from_date").exclude("organizer", "location", "attendees", "description", "targeted_preferences")
+
+    @staticmethod
+    def get_events_between(start_date, end_date, org_id):
+        return Event.objects(organizer__author_id=org_id, event_date__from_date__gte=start_date, event_date__from_date__lt=end_date).order_by("+event_date.from_date").exclude("organizer", "location", "attendees", "description", "targeted_preferences")
 
 
 

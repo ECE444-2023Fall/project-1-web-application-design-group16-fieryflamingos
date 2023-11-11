@@ -17,65 +17,53 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap"
             rel="stylesheet"
         />
-        <div class="header">
-            <h1>
-                <img
-                    src="../../static/img/OC_Variant3.png"
-                    alt="Occasional Logo"
-                />OCCASIONAL
-            </h1>
-        </div>
     </head>
     <script src="script.js"></script>
     <script src="script2.js"></script>
 
     <body>
-        <h4>Don't have an account?</h4>
-        <div class="signin">
-            <h5>
-                <a style="text-decoration: none" href="/auth/register"
-                    >Register</a
-                >
-            </h5>
+        <div style="align-items: right; display: flex; margin-bottom: 60px;">
+            <div class="navbar-brand occasional">
+                <img src="/static/img/OC_Variant3.png" width="50" height="50" class="d-inline-block align-bottom" alt="">
+            </div> 
+            <div class="occasional d-inline-block" style="margin-left: 10px; color: black; margin-top: 12px;">OCCASIONAL</div>
+            <div class="body-text" style="margin-left: 68%; margin-top: 15px; margin-right: 1%;">
+                Don't have an account?
+            </div>
+            <a href="/auth/register" class="sign-in" style="text-decoration: none; margin-top: 4px;">
+                Register
+            </a>
         </div>
         <div class="boxSignin">
             <h2>Sign in to your Occasional Account</h2>
-            <h3>One account for every occasion.</h3>
+            <h3>One account for every occasion</h3>
             <form name="" method="POST">
                 {{form.hidden_tag()}}
                 <table>
-                    <tr></tr>
+                    {% if form.username.errors %}
+                        {% for error in form.username.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{error}}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     <tr>
-                        <td>
-                            <div class="input-container">
-                                {{form.username()}}
-                                {% if form.username.errors %}
-                            <ul>
-                                {% for error in form.username.errors %}
-                                <ul class="error-message">
-                                    {{ error }}
-                                </ul>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
-                            </div>
-                           
+                        <td>{{form.username()}}</td>
                     </tr>
+
+                    {% if form.password.errors %}
+                        {% for error in form.password.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{error}}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     <tr>
-                        <td>
-                            <div class="input-container">
-                                {{form.password()}}
-                                {% if form.password.errors %}
-                            <ul>
-                                {% for error in form.password.errors %}
-                                <ul class="error-message">
-                                    {{ error }}
-                                </ul>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
-                            </div>
-                        </td>
+                        <td>{{form.password()}}</td>
                     </tr>
                 </table>
                 {{form.submit(class="button-main")}}

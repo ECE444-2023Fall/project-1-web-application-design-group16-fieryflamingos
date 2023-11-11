@@ -5,7 +5,9 @@ from pytz import UTC
 from flask import render_template, session, redirect, url_for, flash, abort, request, make_response
 from flask_login import current_user, login_required
 from icalendar import Calendar
+import calendar as pyCalendar
 from icalendar import Event as iEvent
+from bson.objectid import ObjectId
 
 from . import main
 from .. import db
@@ -77,7 +79,7 @@ def index():
     user = current_user
 
     if user.role == "organization":
-        return redirect(url_for("/profile-org"))
+        return redirect(url_for("main.get_profile_org", id=user.id))
 
     recommended_events = Event.get_recommended(user.preferences)
     upcoming_events = Event.get_upcoming(user.id)
@@ -141,6 +143,7 @@ def event_form():
         try:
             event = Event(location={"place": form.location_place.data, "address": form.location_address.data, "room": form.location_room.data},
                         organizer={"author_id": current_user.id,
+                                   "email": current_user.email,
                                     "name": current_user.name},
                         event_date={"from_date": form.from_date.data,
                                     "to_date": form.to_date.data},
@@ -152,8 +155,7 @@ def event_form():
             event = event.save()
 
             # update preferences
-            for preference in form.targeted_preferences.data:
-                Preference.inc_event_count(preference)
+            Preference.inc_events_count(form.targeted_preferences.data)
             return redirect(url_for(f'main.event_details', id=str(event.id)))
         except Exception as e:
             print(e)
@@ -191,7 +193,7 @@ def event_details(id):
 
     # Check if event is valid
     if not event:
-        return render_template('event_not_found.html')
+        return render_template('errors/event_not_found.html')
 
     is_owner = False
     if str(event.organizer.author_id) == str(current_user.id):
@@ -224,18 +226,16 @@ def event_details(id):
     for pref_id in event.targeted_preferences:
         preferences.append(Preference.get_preference_by_id(pref_id))
     
-    preference_names = [preference.preference for preference in preferences]
-
     # VALIDATE FORMS
-    if request.args.get("submit"):
+    if form.validate_on_submit():
         if isinstance(form, RSVPForm):
             name = ""
             if current_user.role == "regular":
                 name = f"{current_user.first_name} {current_user.last_name}"
+                RegularUser.add_event(current_user.id, event.id)
             else:
                 name = current_user.name
-            Event.add_attendee(event.id, current_user.id, name)
-            RegularUser.add_event(current_user.id, event.id)
+            Event.add_attendee(event.id, current_user.id, current_user.email, name)
             user_is_attendee = True
             form = CancelRSVPForm()
         elif isinstance(form, CancelRSVPForm):
@@ -243,8 +243,63 @@ def event_details(id):
             RegularUser.remove_event(current_user.id, event.id)
             user_is_attendee = False
             form = RSVPForm()
-        return redirect(url_for("main.event_details", id=id))
+        return redirect(url_for("main.event_details", id=id, _anchor=""))    
+    
+    # get comments for the event
+    comments = Comment.get_comments_by_event_id(id)
 
+    # get comments
+    num_comments = len(comments)
+    num_attendees = len(event.attendees)
+    avg_rating = 0
+    comments_with_rating = 0
+    attendee_list = [] # email list
+    if is_owner:
+        for comment in comments:
+            if comment.rating:
+                avg_rating += comment.rating
+                comments_with_rating += 1
+        for attendee in event.attendees:
+            if attendee.email:
+
+                attendee_list.append(attendee.email) 
+        attendee_list = ";".join(attendee_list)
+    
+        avg_rating = avg_rating / comments_with_rating
+
+    user_is_organizer = current_user.role == "organization"
+
+    reply_form = ReplyForm()
+    return render_template('event_details.html', 
+        event=event, 
+        user_is_attendee=user_is_attendee, 
+        user_is_owner=is_owner, 
+        user_is_organizer=user_is_organizer,
+        registration_open=registration_open, 
+        avg_rating=avg_rating, 
+        num_comments=num_comments, 
+        num_attendees=num_attendees,
+        attendee_list=attendee_list,
+        targeted_preferences=preferences, 
+        comments=comments, 
+        form=form, 
+        comment_form=comment_form, 
+        reply_form=reply_form)
+
+
+""" Add a comment to an event """
+@main.route('/event/comment/<id>', methods=['POST'])
+@login_required
+def event_comment(id):
+
+    # get event
+    event = Event.get_by_id(id=id)
+
+    # Check if event is valid
+    if not event:
+        return render_template('errors/event_not_found.html')
+
+    comment_form = CommentForm()
     if comment_form.validate_on_submit():
         name = ""
         if current_user.role == "regular":
@@ -253,26 +308,18 @@ def event_details(id):
             name = current_user.name
         if comment_form.rating.data:
             comment = Comment(event_id=id,
-            author={"author_id":  current_user.id, "name": name}, 
+            author={"author_id":  current_user.id, "email": current_user.email, "name": name}, 
             content=comment_form.content.data)
             comment = comment.save()
         else:
             comment = Comment(event_id=id,
-                author={"author_id":  current_user.id, "name": name}, 
+                author={"author_id":  current_user.id, "email": current_user.email, "name": name}, 
                 content=comment_form.content.data,
                 rating=comment_form.rating.data)
             comment = comment.save()
-        return redirect(url_for("main.event_details", id=event.id))
-        
+        return redirect(url_for("main.event_details", id=id, _anchor=str(comment.id)))
+    return redirect(url_for("main.event_details", id=id))
     
-    # get comments for the event
-    comments = Comment.get_comments_by_event_id(id)
-
-    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form)
-
-    reply_form = ReplyForm()
-    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form, reply_form=reply_form)
-
 
 """ Reply to a comment """
 @main.route('/event/<event_id>/comment/reply/<comment_id>', methods=['POST'])
@@ -291,7 +338,7 @@ def comment_reply(event_id, comment_id):
         else:
             name = current_user.name
         reply = Reply(content=form.reply.data,
-                      author={"author_id": current_user.id, "name": name})
+                      author={"author_id": current_user.id,  "email": current_user.email, "name": name})
         Comment.add_reply(comment_id, reply)
     return redirect(url_for("main.event_details", id=event_id, _anchor=comment_id))
 
@@ -353,7 +400,7 @@ def event_update(id):
 
     # Check if event is valid
     if not event:
-        return render_template("errors/404.html")
+        return render_template("errors/event_not_found.html")
 
     # Check if org user is right one
     if event.organizer.author_id != current_user.id:
@@ -361,7 +408,7 @@ def event_update(id):
 
     # Everything valid, set the form
     form = EventForm(location_place=event.location.place,
-        locaton_address=event.location.address,
+        location_address=event.location.address,
         location_room=event.location.room,
         from_date=event.event_date.from_date,
         to_date=event.event_date.to_date,
@@ -396,10 +443,8 @@ def event_update(id):
                 x for x in old_preferences if x not in form.targeted_preferences.data]
 
             # increase/decrease event count
-            for preference in new_preferences:
-                Preference.inc_event_count(preference)
-            for preference in removed_preferences:
-                Preference.inc_event_count(preference, inc=-1)
+            Preference.inc_events_count(new_preferences)
+            Preference.inc_events_count(removed_preferences, inc=-1)
 
             return redirect(url_for(f'main.event_details', id=str(event.id)))
         except Exception as e:
@@ -444,13 +489,14 @@ def event_delete(id):
 
     # Check if event is valid
     if not event:
-        return render_template("errors/404.html")
+        return render_template("errors/event_not_found.html")
 
     # Check if org user is right one
     if event.organizer.author_id != current_user.id:
         return render_template("errors/403.html")
 
-    # delete event
+    # decrement event count for preferences
+    Preference.inc_events_count(event.targeted_preferences, -1)
     event.delete()
 
     return redirect(url_for("main.get_profile_org", id=current_user.id))
@@ -575,11 +621,15 @@ def get_profile():
     if user.role == "organization":
         return redirect(url_for("main.get_profile_org", id=user.id))
 
+    preferences = []
+    for pref_id in user.preferences:
+        preferences.append(Preference.get_preference_by_id(pref_id))
+
     # get event summary
     future_events = Event.get_summary_from_list_future(user.registered_events)
     past_events = Event.get_summary_from_list_past(user.registered_events)
 
-    return render_template('profile.html', user=user, future_events=future_events, past_events=past_events)
+    return render_template('profile.html', user=user, preferences=preferences, future_events=future_events, past_events=past_events)
 
 
 """ View organization profile """
@@ -619,7 +669,9 @@ def get_profile_org(id):
     user = OrganizationUser.get_by_id(id)
 
     if user == None:
-        return render_template("errors/404.html")
+        return render_template("errors/user_not_found.html")
+    
+    current_user_is_specified = False
 
     if user.id == current_user.id:
         current_user_is_specified = True
@@ -678,21 +730,23 @@ def update_profile_regular():
         return redirect(url_for("main.update_profile_organization"))
 
     form = UpdateRegularUserForm(
-        first_name=user.first_name, last_name=user.last_name, preferences=user.preferences)
+        first_name=user.first_name, last_name=user.last_name, preferences=[str(pref) for pref in user.preferences])
 
     if form.validate_on_submit():
         try:
-            user.first_name = form.first_name.data
-            user.last_name = form.last_name.data
-            user.preferences = form.preferences.data
-            RegularUser.objects(id=user.id).update_one(first_name=form.first_name.data,
-                                                       last_name=form.last_name.data,
+            RegularUser.objects(id=user.id).update_one(first_name=form.first_name.data.capitalize().strip(),
+                                                       last_name=form.last_name.data.capitalize().strip(),
                                                        preferences=form.preferences.data)
 
             return redirect(url_for("main.get_profile"))
         except:
             flash("An error occurred while updating your profile")
-    return render_template('update_profile.html', form=form, user=user)
+
+     # get event summary
+    future_events = Event.get_summary_from_list_future(user.registered_events)
+    past_events = Event.get_summary_from_list_past(user.registered_events)
+
+    return render_template('update_profile.html', form=form, user=user, future_events=future_events, past_events=past_events)
 
 
 """ Edit organization profile route """
@@ -733,10 +787,10 @@ def update_profile_organization():
     function, which returns the update_profile_org.html template with 
     the data.
     """
-    form = UpdateOrganizationUserForm()
     user = current_user
     if user.role == "regular":
         return redirect(url_for("main.update_profile_regular"))
+    form = UpdateOrganizationUserForm(name=user.name)
 
     if form.validate_on_submit():
         try:
@@ -747,7 +801,12 @@ def update_profile_organization():
         except:
             flash("An error occurred while updating your profile")
 
-    return render_template('update_profile_org.html', form=form, user=user)
+
+    # get event summary
+    future_events = Event.get_organization_events_future(user.id)
+    past_events = Event.get_organization_events_past(user.id)
+
+    return render_template('update_profile_org.html', future_events=future_events, past_events=past_events, form=form, user=user)
 
 
 
@@ -793,3 +852,108 @@ def calendar(id):
 
     # Return the response object
     return response
+
+  
+""" Calendar route """
+@main.route("/calendar", methods=['GET', 'POST'])
+@login_required
+def calendar_view():
+    month = request.args.get("month")
+    year = request.args.get("year")
+    today = datetime.now()
+    if current_user.role == "organization":
+        return redirect(url_for("main.calendar_view_org", month=month, year=year))
+    
+    if not month or not year:
+        month = today.month
+        year = today.year
+        return redirect(url_for("main.calendar_view",month=month, year=year))
+    else:
+        try:
+            month = int(month)
+        except:
+            month = today.month
+            return redirect(url_for("main.calendar_view",month=month, year=year))
+        try:
+            year = int(year)
+        except:
+            year = today.year
+            return redirect(url_for("main.calendar_view",month=month, year=year))
+        
+        # check if exceeds the max month bound
+        if month > 12:
+            month = 1
+            year += 1
+            return redirect(url_for("main.calendar_view",month=month, year=year))
+
+        # check if exceeds lower bound
+        if month < 1:
+            month = 12
+            year -= 1
+            return redirect(url_for("main.calendar_view",month=month, year=year))
+
+    month_range = pyCalendar.monthrange(year, month)[1]
+    start_date = datetime(year,month, 1)
+    end_date = datetime(year,month, month_range, 23, 59)
+
+    events = Event.get_events_between(start_date, end_date, current_user.registered_events)
+
+    json_events = []
+    # add properties here as need be
+    for event in events:
+        json_events.append({"id": str(event.id), "title": event.title, "from_date": event.event_date.from_date.strftime('%Y-%m-%d %H:%M:%S'), "to_date": event.event_date.to_date.strftime('%Y-%m-%d %H:%M:%S')})
+    
+    return render_template('calendar.html', events=json_events, year=year, month=month)
+
+ 
+""" Calendar route """
+@main.route("/calendar-org", methods=['GET', 'POST'])
+@login_required
+def calendar_view_org():
+    month = request.args.get("month")
+    year = request.args.get("year")
+    today = datetime.now()
+    if current_user.role == "regular":
+        return redirect(url_for("main.calendar_view", month=month, year=year))
+    
+    if not month or not year:
+        month = today.month
+        year = today.year
+        return redirect(url_for("main.calendar_view_org",month=month, year=year))
+    else:
+        try:
+            month = int(month)
+        except:
+            month = today.month
+            return redirect(url_for("main.calendar_view_org",month=month, year=year))
+        try:
+            year = int(year)
+        except:
+            year = today.year
+            return redirect(url_for("main.calendar_view_org",month=month, year=year))
+        
+        # check if exceeds the max month bound
+        if month > 12:
+            month = 1
+            year += 1
+            return redirect(url_for("main.calendar_view_org",month=month, year=year))
+
+        # check if exceeds lower bound
+        if month < 1:
+            month = 12
+            year -= 1
+            return redirect(url_for("main.calendar_view_org",month=month, year=year))
+
+    month_range = pyCalendar.monthrange(year, month)[1]
+    start_date = datetime(year,month, 1)
+    end_date = datetime(year,month, month_range, 23, 59)
+
+    events = Event.get_events_between_organizer(start_date, end_date, current_user.id)
+
+    json_events = []
+    # add properties here as need be
+    for event in events:
+        json_events.append({"id": str(event.id), "title": event.title, "from_date": event.event_date.from_date.strftime('%Y-%m-%d %H:%M:%S'), "to_date": event.event_date.to_date.strftime('%Y-%m-%d %H:%M:%S')})
+    
+    return render_template('calendar.html', events=json_events, year=year, month=month)
+
