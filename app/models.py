@@ -59,6 +59,13 @@ class Preference(Document):
         except Exception as e:
             print(e)
             pass
+    @staticmethod
+    def inc_events_count(preference_ids, inc=1):
+        try:
+            Preference.objects(id__in=preference_ids).update(inc__events_with_preference=inc)
+        except Exception as e:
+            print(e)
+            pass
     
 
 """ Generic User object (abstract) """

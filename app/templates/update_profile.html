@@ -12,25 +12,26 @@ content %}
                 />
             </div>
             <div class="profile_content">
-                <div class="main-title profile_title">
-                    <div class="name-and-button">
-                        <form action="" method="POST">
-                            {{form.hidden_tag()}} {{form.name.label}}
-                            {{form.name(maxlength=50)}}
-                            {{form.submit(class="button-main")}}
-                            <a class="button-main"
-                                href="/profile"
-                                style="
-                                    text-decoration: none;
-                                    background-color: red;
-                                "
-                                >Cancel</a
-                            >
-                        </form>
+                <form action="" method="POST">
+                    {{form.hidden_tag()}}
+                    <div class="main-title profile_title">
+                        <div class="name-and-button">
+                            <div style="display:flex; flex-wrap:wrap; gap:1rem;"
+                            
+                                >{{form.first_name( class="search-form" )}}
+                                {{form.last_name(class="search-form" )}}
+                                </div>
+                        </div>
+                        <hr class="underline_name" />
                     </div>
-                    <hr class="underline_name" />
-                </div>
-                <div class="title profile_info">{{ user.email }}</div>
+                    <div class="title profile_info">{{ user.email }}</div>
+                    {{form.preferences()}} {{form.submit(class="button-main")}}
+                    <a class="button-main"
+                        href="/profile"
+                        style="text-decoration: none; background-color: red"
+                        >Cancel</a
+                    >
+                </form>
             </div>
         </div>
     </div>
@@ -50,6 +51,10 @@ content %}
             <div style="text-align: center; margin-top: 88px">
                 <div class="title" style="color: #ffffff">
                     No Upcoming Events
+                </div>
+                <br />
+                <div class="subtitle" style="color: #ffffff">
+                    Find and RSVP for events using the Discover tab
                 </div>
             </div>
         </div>

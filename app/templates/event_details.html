@@ -27,16 +27,31 @@
 			</div>
 
 			{% if user_is_owner %}
-				<a class="button-main no-color" href="/event/update/{{event.id}}" style="text-decoration: none; margin-top: 20%;">Edit</a>
-
+				{% if registration_open %}
+				Registration open until: 
+				{% if event.registration_open_until %}
+					{{ event.registration_open_until.strftime('%b %d, %Y %I:%M %p') }}
+				{% else %}
+					{{ event.event_date.from_date.strftime('%b %d, %Y %I:%M %p') }}
+				{% endif %}
+				
+				{% else %}
+				Registration closed.
+				
+				{% endif %}
+				<div style="display:flex; gap:1rem; margin-top: 20%;">
+						<a class="button-main no-color" href="/event/update/{{event.id}}" style="text-decoration: none;">Edit</a>
+				</div>
 			{% elif user_is_attendee %}
-				You are currently registered for this event. Click 'Cancel' to cancel your registration, or click 'Export' to download the event and export it to your personal calendar.
-					<div style="display:flex; gap:1rem; margin-top: 20%;">
-						<form action="" method="POST">
-					{{ form.hidden_tag()}}
-					{{form.submit(value="Cancel", style="background-color: red", class="button-main")}}
-				</form>
-				<a class="button-main no-color" style="text-decoration:none; height:100%;" href="/event/ics/{{event.id}}">Export</a>
+				You are currently registered for this event. 
+				<div style="display:flex; gap:1rem; margin-top: 20%;">
+					{% if registration_open %}
+					<form action="" method="POST">
+						{{ form.hidden_tag()}}
+						{{form.submit(value="Cancel", style="background-color: red", class="button-main")}}
+					</form>
+					{% endif %}
+					<a class="button-main no-color" style="text-decoration:none; height:100%;" href="/event/ics/{{event.id}}">Export</a>
 				</div>
 
 			{% elif registration_open %}
@@ -52,7 +67,6 @@
 				</form>
 			{% else %}
 				Registration closed.
-
 			{% endif %}
 		</div>
 		<div style="flex: 17%;"></div>

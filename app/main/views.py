@@ -6,6 +6,7 @@ from flask import render_template, session, redirect, url_for, flash, abort, req
 from flask_login import current_user, login_required
 from icalendar import Calendar
 from icalendar import Event as iEvent
+from bson.objectid import ObjectId
 
 from . import main
 from .. import db
@@ -152,8 +153,7 @@ def event_form():
             event = event.save()
 
             # update preferences
-            for preference in form.targeted_preferences.data:
-                Preference.inc_event_count(preference)
+            Preference.inc_events_count(form.targeted_preferences.data)
             return redirect(url_for(f'main.event_details', id=str(event.id)))
         except Exception as e:
             print(e)
@@ -357,7 +357,7 @@ def event_update(id):
 
     # Everything valid, set the form
     form = EventForm(location_place=event.location.place,
-        locaton_address=event.location.address,
+        location_address=event.location.address,
         location_room=event.location.room,
         from_date=event.event_date.from_date,
         to_date=event.event_date.to_date,
@@ -392,10 +392,8 @@ def event_update(id):
                 x for x in old_preferences if x not in form.targeted_preferences.data]
 
             # increase/decrease event count
-            for preference in new_preferences:
-                Preference.inc_event_count(preference)
-            for preference in removed_preferences:
-                Preference.inc_event_count(preference, inc=-1)
+            Preference.inc_events_count(new_preferences)
+            Preference.inc_events_count(removed_preferences, inc=-1)
 
             return redirect(url_for(f'main.event_details', id=str(event.id)))
         except Exception as e:
@@ -446,7 +444,8 @@ def event_delete(id):
     if event.organizer.author_id != current_user.id:
         return render_template("errors/403.html")
 
-    # delete event
+    # decrement event count for preferences
+    Preference.inc_events_count(event.targeted_preferences, -1)
     event.delete()
 
     return redirect(url_for("main.get_profile_org", id=current_user.id))
@@ -680,21 +679,23 @@ def update_profile_regular():
         return redirect(url_for("main.update_profile_organization"))
 
     form = UpdateRegularUserForm(
-        first_name=user.first_name, last_name=user.last_name, preferences=user.preferences)
+        first_name=user.first_name, last_name=user.last_name, preferences=[str(pref) for pref in user.preferences])
 
     if form.validate_on_submit():
         try:
-            user.first_name = form.first_name.data
-            user.last_name = form.last_name.data
-            user.preferences = form.preferences.data
-            RegularUser.objects(id=user.id).update_one(first_name=form.first_name.data,
-                                                       last_name=form.last_name.data,
+            RegularUser.objects(id=user.id).update_one(first_name=form.first_name.data.capitalize().strip(),
+                                                       last_name=form.last_name.data.capitalize().strip(),
                                                        preferences=form.preferences.data)
 
             return redirect(url_for("main.get_profile"))
         except:
             flash("An error occurred while updating your profile")
-    return render_template('update_profile.html', form=form, user=user)
+
+     # get event summary
+    future_events = Event.get_summary_from_list_future(user.registered_events)
+    past_events = Event.get_summary_from_list_past(user.registered_events)
+
+    return render_template('update_profile.html', form=form, user=user, future_events=future_events, past_events=past_events)
 
 
 """ Edit organization profile route """
@@ -749,7 +750,11 @@ def update_profile_organization():
         except:
             flash("An error occurred while updating your profile")
 
-    return render_template('update_profile_org.html', form=form, user=user)
+        # get event summary
+    future_events = Event.get_organization_events_future(user.id)
+    past_events = Event.get_organization_events_past(user.id)
+
+    return render_template('update_profile_org.html', future_events=future_events, past_events=past_events, form=form, user=user)
 
 
 
