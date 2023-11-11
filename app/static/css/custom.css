@@ -54,9 +54,11 @@
 }
 
 .rec-sec{
-    height: 600px;
+    display: flex;
+    flex-direction: column;
     background-color: var(--Light-Grey); 
     min-width: 1000px;
+    padding-bottom: 20px;
 }
 
 .lower-sec{
@@ -65,9 +67,10 @@
 }
 
 .upp-sec{
+    display: flex;
+    flex-direction: column;
     margin: 90px 12%;
     background-color: var(--UofT-Blue); 
-    height: 1100px;
     min-width: 1000px;
 }
 .cards{
