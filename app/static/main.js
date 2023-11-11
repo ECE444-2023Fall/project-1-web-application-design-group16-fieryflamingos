@@ -24,6 +24,7 @@ const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu",  "Fri", "Sat"];
 
 const date = new Date();
 
+//Variables for current calendar being displayed
 let currentDate = date.getDate();
 let currentMonth = date.getMonth();
 let currentYear = date.getFullYear();
@@ -36,7 +37,6 @@ let calInfoYear = date.getFullYear();
 
 //Function for updating the calendar
 function renderCalendar() {
- 
     date.setDate(1);
     const firstDay = new Date(currentYear, currentMonth, 1);
     const lastDay = new Date(currentYear, currentMonth + 1, 0);
