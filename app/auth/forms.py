@@ -6,8 +6,8 @@ from ..models import RegularUser, OrganizationUser, User
 from ..util import validate_email as util_email_validate
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', render_kw={"placeholder": "Username..."}, validators=[DataRequired(), Length(1, 64)])
-    password = PasswordField('Password',render_kw={"placeholder": "Password..."},  validators=[DataRequired()])
+    username = StringField('Username', render_kw={"placeholder": "Username"}, validators=[DataRequired(), Length(1, 64)])
+    password = PasswordField('Password',render_kw={"placeholder": "Password"},  validators=[DataRequired()])
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Sign in')
 
@@ -30,9 +30,9 @@ class RegistrationRegularForm(FlaskForm):
         Email(), validate_email])
     username = StringField('Username', render_kw={"placeholder": "Username"}, validators=[DataRequired(), Length(1,64), validate_username])
     password = PasswordField('Password', render_kw={"placeholder": "Password"}, validators=[Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", message="Invalid Password"),
-        DataRequired(), EqualTo('password2', message='Passwords must match')])
+        DataRequired()])
     
-    password2 = PasswordField('Confirm password', render_kw={"placeholder": "Confirm Password..."}, validators=[DataRequired()])
+    password2 = PasswordField('Confirm password', render_kw={"placeholder": "Confirm Password"}, validators=[DataRequired(), EqualTo('password', message='Passwords must match')])
     
     submit = SubmitField('Register')
 
@@ -45,9 +45,9 @@ class RegistrationOrganizationForm(FlaskForm):
         Email(), validate_email])
     username = StringField('Username', render_kw={"placeholder": "Username"}, validators=[DataRequired(), Length(1,64), validate_username])
     password = PasswordField('Password', render_kw={"placeholder": "Password"}, validators=[Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$", message="Invalid Password"),
-        DataRequired(), EqualTo('password2', message='Passwords must match')])
+        DataRequired()])
     
-    password2 = PasswordField('Confirm password', render_kw={"placeholder": "Confirm Password..."}, validators=[DataRequired()])
+    password2 = PasswordField('Confirm password', render_kw={"placeholder": "Confirm Password..."}, validators=[DataRequired(), EqualTo('password', message='Passwords must match')])
     
     submit = SubmitField('Register')
 
