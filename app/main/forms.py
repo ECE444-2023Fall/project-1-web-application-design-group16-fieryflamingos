@@ -64,6 +64,7 @@ class TagWidget(object):
             else  {
                 hiddenInput.value = `${hiddenInput.value} ${button.value}`.trim();
             }
+            hiddenInput.value = hiddenInput.value.replace("  ", " ");
         }
         </script>
         """
@@ -107,7 +108,7 @@ class TagField(Field):
 """ Events creation form """
 class EventForm(FlaskForm):
     location_place = StringField("Place")
-    location_address = StringField("Location*")
+    location_address = StringField("Location*", validators=[DataRequired()])
     location_room = StringField("Room")
 
     title = StringField("Title*", validators=[DataRequired()])
@@ -157,14 +158,14 @@ class UpdateRegularUserForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
     last_name = StringField('Last Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
     
-    preferences = SelectMultipleField("Preferences", choices=Preference.get_preferences_as_tuple())
+    preferences = TagField("Preferences", choices=Preference.get_preferences_as_tuple())
 
     submit = SubmitField("Update")
 
 
 """ Update profile form """
 class UpdateOrganizationUserForm(FlaskForm):
-    name = StringField('Last Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
+    name = StringField('Organization Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
     
     submit = SubmitField("Update")
 

@@ -10,26 +10,32 @@
                 <div class = "profile_content">
                     <div class="main-title profile_title">
                         <div class="name-and-button">
-                            <span>Tommy Ni</span>
-                            <button type="button" class="edit-profile"></button>
+                            <span>{{user.first_name}} {{user.last_name}}</span>
+                            <a class="edit-profile" href="/profile/edit"></a>
                         </div>
                         <hr class="underline_name">
                     </div>
                     <div class="title profile_info">
-                        tommy.ni@mail.utoronto.ca
+                        {{ user.email }}
                     </div>
-                    <div class="label-container">
-                        <span class="label interest-tag">Health Science</span>
-                        <span class="label interest-tag">Tea</span>
-                        <span class="label interest-tag">Fish</span>
-                        <span class="label interest-tag">You</span>
-                        <!-- Add more labels as needed -->
-                    </div>
+                    <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
+						{% for interest in preferences %}
+                        <a href="/event/search?preferences={{interest.id}}" style="text-decoration: none">
+                            <button class="interest-tag">
+                                {{interest.preference}}
+                                <div class="tag-number">
+                                    {{interest.events_with_preference}}
+                                </div>
+                            </button>
+                        </a>
+						{% endfor %}
+
+                    </div> 
                 </div>
             </div>
         </div>
     </div>
-    <div class = "col"></div>
+    <a href="#past-events">Go to Past Events</a>
 
     <div class = "container-fluid upp-sec-profile col-9">
         <div class="row">
@@ -37,107 +43,105 @@
                 <hr class="underline_white">
             </div>
         </div>
-        <div class="row">
-            <div class = "card upcoming_card_profile col-11">
-                <div class="row">
-                    <div class="title upcoming_title_profile col-7">
-                        Michael Garron Hospital - Student Open House
+        {% if not future_events %}
+        <div style="display: flex; position: relative;width: 100%;">
+            <div style="display: table-cell; vertical-align: top;">
+                <div style="text-align: center; margin-top: 88px;">
+                    <div class="title" style="color: #FFFFFF">
+                        No Upcoming Events
                     </div>
-                    <div class="col-4">
-                        <div class="row">
-                            <div class="date_time_time col-6 date_time_top_profile">
-                                12:00PM
-                            </div>
-                            <div class="date_time_date col-6 date_time_top_profile">
-                                Wendesday
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="date_time_time col-6">
-                                01:30PM
-                            </div>
-                            <div class="date_time_date col-6">
-                                Oct 4, 2023
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class = "card upcoming_card_profile col-11">
-                <div class="row">
-                    <div class="title upcoming_title_profile col-7">
-                        Michael Garron Hospital - Student Open House
-                    </div>
-                    <div class="col-4">
-                        <div class="row">
-                            <div class="date_time_time col-6 date_time_top_profile">
-                                08:00AM
-                            </div>
-                            <div class="date_time_date col-6 date_time_top_profile">
-                                Monday
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="date_time_time col-6">
-                                08:00PM
-                            </div>
-                            <div class="date_time_date col-6">
-                                Apr 1, 2023
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class = "card upcoming_card_profile col-11">
-                <div class="row">
-                    <div class="title upcoming_title_profile col-7">
-                        Michael Garron Hospital - Student Open House
-                    </div>
-                    <div class="col-4">
-                        <div class="row">
-                            <div class="date_time_time col-6 date_time_top_profile">
-                                11:00AM
-                            </div>
-                            <div class="date_time_date col-6 date_time_top_profile">
-                                Wendesday
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="date_time_time col-6">
-                                01:30PM
-                            </div>
-                            <div class="date_time_date col-6">
-                                Oct 25, 2023
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class = "card upcoming_card_profile col-11">
-                <div class="row">
-                    <div class="title upcoming_title_profile col-7">
-                        Michael Garron Hospital - Student Open House
-                    </div>
-                    <div class="col-4">
-                        <div class="row">
-                            <div class="date_time_time col-6 date_time_top_profile">
-                                12:00PM
-                            </div>
-                            <div class="date_time_date col-6 date_time_top_profile">
-                                Saturday
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="date_time_time col-6">
-                                01:30PM
-                            </div>
-                            <div class="date_time_date col-6">
-                                Oct 14, 2023
-                            </div>
-                        </div>
+                    <br/>
+                    <div class="subtitle" style="color: #FFFFFF">
+                        Find and RSVP for events using the Discover tab
                     </div>
                 </div>
             </div>
         </div>
+        {% else %}
+        <div class="row">
+            {% for event in future_events %}
+            <a href="/event/{{event.id}}" style="text-decoration: none">
+
+            <div class = "card upcoming_card_profile col-11">
+                <div class="row">
+                    <div class="title upcoming_title_profile col-7">
+                        {{event.title}}
+                    </div>
+                    <div class="col-4">
+                        <div class="row">
+                            <div class="date_time_time col-6 date_time_top_profile">
+                                {{event.event_date.from_date.strftime('%I:%M %p')}}
+                            </div>
+                            <div class="date_time_date col-6 date_time_top_profile">
+                                {{event.event_date.from_date.strftime('%A')}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="date_time_time col-6">
+                                {{event.event_date.to_date.strftime('%I:%M %p')}}
+                            </div>
+                            <div class="date_time_date col-6">
+                               {{ event.event_date.from_date.strftime('%b %d, %Y')}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="past-events" class = "container-fluid upp-sec-profile col-9">
+        <div class="row">
+            <div class="upcoming col-8">YOUR PAST EVENTS
+                <hr class="underline_white">
+            </div>
+        </div>
+        {% if not past_events %}
+        <div style="display: flex; position: relative; width: 100%;">
+            <div style="display: table-cell; vertical-align: top;">
+                <div style="text-align: center; margin-top: 88px;">
+                    <div class="title" style="color: #FFFFFF">
+                        No Past Events
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row">
+            {% for event in past_events %}
+            <a href="/event/{{event.id}}" style="text-decoration: none">
+            <div class = "card upcoming_card_profile col-11">
+                <div class="row">
+                    <div class="title upcoming_title_profile col-7">
+                        {{event.title}}
+                    </div>
+                    <div class="col-4">
+                        <div class="row">
+                            <div class="date_time_time col-6 date_time_top_profile">
+                                {{event.event_date.from_date.strftime('%I:%M %p')}}
+                            </div>
+                            <div class="date_time_date col-6 date_time_top_profile">
+                                {{event.event_date.from_date.strftime('%A')}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="date_time_time col-6">
+                                {{event.event_date.to_date.strftime('%I:%M %p')}}
+                            </div>
+                            <div class="date_time_date col-6">
+                               {{ event.event_date.from_date.strftime('%b %d, %Y')}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 {% endblock %}

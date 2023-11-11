@@ -9,192 +9,138 @@
                 </div>
                 <div class = "profile_content">
                     <div class="main-title profile_title">
-                        <span>Tommy Ni</span>
-                        <button type="button" class="edit-profile"></button>
+                        <div class="name-and-button">
+                            <span>{{user.name}}</span>
+                            {% if current_user_is_specified %}
+                            <a class="edit-profile" href="/profile-org/edit"></a>
+                            {% endif %}
+                        </div>
+                        <hr class="underline_name">
                     </div>
-                    <hr class="underline_name">
                     <div class="title profile_info">
-                        tommy.ni@mail.utoronto.ca
+                        {{ user.email }}
                     </div>
-                    <div class="label-container">
-                        <span class="label interest-label">Health Science</span>
-                        <span class="label interest-label">Tea</span>
-                        <span class="label interest-label">Fish</span>
-                        <!-- Add more labels as needed -->
-                    </div>
+                    <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
+						{% for interest in preferences %}
+                        <a href="/event/search?preferences={{interest.id}}" style="text-decoration: none">
+                            <button class="interest-tag">
+                                {{interest.preference}}
+                                <div class="tag-number">
+                                    {{interest.events_with_preference}}
+                                </div>
+                            </button>
+                        </a>
+						{% endfor %}
+
+                    </div> 
                 </div>
             </div>
         </div>
     </div>
-    <div class = "col"></div>
+    <a href="#past-events">Go to Past Events</a>
 
-    <div class = "container-fluid upp-sec col-9">
+    <div class = "container-fluid upp-sec-profile col-9">
         <div class="row">
             <div class="upcoming col-8">YOUR UPCOMING EVENTS
                 <hr class="underline_white">
             </div>
         </div>
-        <div class="row">
-            <div class = "card upcoming_card col-11">
-                <div class="row">
-                    <div class="title upcoming_title col-7">
-                        Michael Garron Hospital - Student Open House
+        {% if not future_events %}
+        <div style="display: flex; position: relative;width: 100%;">
+            <div style="display: table-cell; vertical-align: top;">
+                <div style="text-align: center; margin-top: 88px;">
+                    <div class="title" style="color: #FFFFFF">
+                        No Upcoming Events
                     </div>
-                    <div class="col-4">
-                        <div class="row">
-                            <div class="date_time_time col-6 date_time_top">
-                                12:00PM
-                            </div>
-                            <div class="date_time_date col-6 date_time_top">
-                                Wendesday
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="date_time_time col-6">
-                                01:30PM
-                            </div>
-                            <div class="date_time_date col-6">
-                                Oct 4, 2023
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-11">
-                        <hr class="underline_upp">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="rec_info col-4">
-                        <span class="label-bold">Organizer: </span>
-                        <span class="label">Career Centre Staff, Career Centre</span>
-                    </div>
-                    <div class="rec_info col-6">
-                        <span class="label-bold">Location: </span>
-                        <span class="label">155 College St, Toronto, ON M5T 3M7, Room DL220</span>
-                    </div>
-                </div>
-            </div>
-            <div class = "card upcoming_card col-11">
-                <div class="row">
-                    <div class="title upcoming_title col-7">
-                        Michael Garron Hospital - Student Open House
-                    </div>
-                    <div class="col-4">
-                        <div class="row">
-                            <div class="date_time_time col-6 date_time_top">
-                                08:00AM
-                            </div>
-                            <div class="date_time_date col-6 date_time_top">
-                                Monday
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="date_time_time col-6">
-                                08:00PM
-                            </div>
-                            <div class="date_time_date col-6">
-                                Apr 1, 2023
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-11">
-                        <hr class="underline_upp">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="rec_info col-4">
-                        <span class="label-bold">Organizer: </span>
-                        <span class="label">Career Centre Staff, Career Centre</span>
-                    </div>
-                    <div class="rec_info col-6">
-                        <span class="label-bold">Location: </span>
-                        <span class="label">155 College St, Toronto, ON M5T 3M7, Room DL220</span>
-                    </div>
-                </div>
-            </div>
-            <div class = "card upcoming_card col-11">
-                <div class="row">
-                    <div class="title upcoming_title col-7">
-                        Michael Garron Hospital - Student Open House
-                    </div>
-                    <div class="col-4">
-                        <div class="row">
-                            <div class="date_time_time col-6 date_time_top">
-                                11:00AM
-                            </div>
-                            <div class="date_time_date col-6 date_time_top">
-                                Wendesday
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="date_time_time col-6">
-                                01:30PM
-                            </div>
-                            <div class="date_time_date col-6">
-                                Oct 25, 2023
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-11">
-                        <hr class="underline_upp">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="rec_info col-4">
-                        <span class="label-bold">Organizer: </span>
-                        <span class="label">Career Centre Staff, Career Centre</span>
-                    </div>
-                    <div class="rec_info col-6">
-                        <span class="label-bold">Location: </span>
-                        <span class="label">155 College St, Toronto, ON M5T 3M7, Room DL220</span>
-                    </div>
-                </div>
-            </div>
-            <div class = "card upcoming_card col-11">
-                <div class="row">
-                    <div class="title upcoming_title col-7">
-                        Michael Garron Hospital - Student Open House
-                    </div>
-                    <div class="col-4">
-                        <div class="row">
-                            <div class="date_time_time col-6 date_time_top">
-                                12:00PM
-                            </div>
-                            <div class="date_time_date col-6 date_time_top">
-                                Saturday
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="date_time_time col-6">
-                                01:30PM
-                            </div>
-                            <div class="date_time_date col-6">
-                                Oct 14, 2023
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-11">
-                        <hr class="underline_upp">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="rec_info col-4">
-                        <span class="label-bold">Organizer: </span>
-                        <span class="label">Career Centre Staff, Career Centre</span>
-                    </div>
-                    <div class="rec_info col-6">
-                        <span class="label-bold">Location: </span>
-                        <span class="label">155 College St, Toronto, ON M5T 3M7, Room DL220</span>
-                    </div>
+                  
                 </div>
             </div>
         </div>
+        {% else %}
+        <div class="row">
+            {% for event in future_events %}
+            <a href="/event/{{event.id}}" style="text-decoration: none">
+
+            <div class = "card upcoming_card_profile col-11">
+                <div class="row">
+                    <div class="title upcoming_title_profile col-7">
+                        {{event.title}}
+                    </div>
+                    <div class="col-4">
+                        <div class="row">
+                            <div class="date_time_time col-6 date_time_top_profile">
+                                {{event.event_date.from_date.strftime('%I:%M %p')}}
+                            </div>
+                            <div class="date_time_date col-6 date_time_top_profile">
+                                {{event.event_date.from_date.strftime('%A')}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="date_time_time col-6">
+                                {{event.event_date.to_date.strftime('%I:%M %p')}}
+                            </div>
+                            <div class="date_time_date col-6">
+                               {{ event.event_date.from_date.strftime('%b %d, %Y')}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="past-events" class = "container-fluid upp-sec-profile col-9">
+        <div class="row">
+            <div class="upcoming col-8">YOUR PAST EVENTS
+                <hr class="underline_white">
+            </div>
+        </div>
+        {% if not past_events %}
+        <div style="display: flex; position: relative; width: 100%;">
+            <div style="display: table-cell; vertical-align: top;">
+                <div style="text-align: center; margin-top: 88px;">
+                    <div class="title" style="color: #FFFFFF">
+                        No Past Events
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row">
+            {% for event in past_events %}
+            <a href="/event/{{event.id}}" style="text-decoration: none">
+            <div class = "card upcoming_card_profile col-11">
+                <div class="row">
+                    <div class="title upcoming_title_profile col-7">
+                        {{event.title}}
+                    </div>
+                    <div class="col-4">
+                        <div class="row">
+                            <div class="date_time_time col-6 date_time_top_profile">
+                                {{event.event_date.from_date.strftime('%I:%M %p')}}
+                            </div>
+                            <div class="date_time_date col-6 date_time_top_profile">
+                                {{event.event_date.from_date.strftime('%A')}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="date_time_time col-6">
+                                {{event.event_date.to_date.strftime('%I:%M %p')}}
+                            </div>
+                            <div class="date_time_date col-6">
+                               {{ event.event_date.from_date.strftime('%b %d, %Y')}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 {% endblock %}

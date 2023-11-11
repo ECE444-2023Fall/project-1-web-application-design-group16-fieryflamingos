@@ -1,0 +1,155 @@
+{% extends 'base.html' %} {% block title %} Profile {% endblock %} {% block
+content %}
+<div class="card">
+    <div class="container-fluid profile-sec">
+        <div class="profile-sec">
+            <div class="profile-pic">
+                <img
+                    src="/static/img/profile_pic.jpg"
+                    width="200"
+                    height="200"
+                    alt=""
+                />
+            </div>
+            <div class="profile_content">
+                <div class="main-title profile_title">
+                    <div class="name-and-button">
+                        <form action="" method="POST">
+                            {{form.hidden_tag()}} {{form.name.label}}
+                            {{form.name(maxlength=50)}}
+                            {{form.submit(class="button-main")}}
+                            <a class="button-main"
+                                href="/profile"
+                                style="
+                                    text-decoration: none;
+                                    background-color: red;
+                                "
+                                >Cancel</a
+                            >
+                        </form>
+                    </div>
+                    <hr class="underline_name" />
+                </div>
+                <div class="title profile_info">{{ user.email }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="#past-events">Go to Past Events</a>
+
+<div class="container-fluid upp-sec-profile col-9">
+    <div class="row">
+        <div class="upcoming col-8">
+            YOUR UPCOMING EVENTS
+            <hr class="underline_white" />
+        </div>
+    </div>
+    {% if not future_events %}
+    <div style="display: flex; position: relative; width: 100%">
+        <div style="display: table-cell; vertical-align: top">
+            <div style="text-align: center; margin-top: 88px">
+                <div class="title" style="color: #ffffff">
+                    No Upcoming Events
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        {% for event in future_events %}
+        <a href="/event/{{event.id}}" style="text-decoration: none">
+            <div class="card upcoming_card_profile col-11">
+                <div class="row">
+                    <div class="title upcoming_title_profile col-7">
+                        {{event.title}}
+                    </div>
+                    <div class="col-4">
+                        <div class="row">
+                            <div
+                                class="date_time_time col-6 date_time_top_profile"
+                            >
+                                {{event.event_date.from_date.strftime('%I:%M
+                                %p')}}
+                            </div>
+                            <div
+                                class="date_time_date col-6 date_time_top_profile"
+                            >
+                                {{event.event_date.from_date.strftime('%A')}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="date_time_time col-6">
+                                {{event.event_date.to_date.strftime('%I:%M
+                                %p')}}
+                            </div>
+                            <div class="date_time_date col-6">
+                                {{ event.event_date.from_date.strftime('%b %d,
+                                %Y')}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<div id="past-events" class="container-fluid upp-sec-profile col-9">
+    <div class="row">
+        <div class="upcoming col-8">
+            YOUR PAST EVENTS
+            <hr class="underline_white" />
+        </div>
+    </div>
+    {% if not past_events %}
+    <div style="display: flex; position: relative; width: 100%">
+        <div style="display: table-cell; vertical-align: top">
+            <div style="text-align: center; margin-top: 88px">
+                <div class="title" style="color: #ffffff">No Past Events</div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        {% for event in past_events %}
+        <a href="/event/{{event.id}}" style="text-decoration: none">
+            <div class="card upcoming_card_profile col-11">
+                <div class="row">
+                    <div class="title upcoming_title_profile col-7">
+                        {{event.title}}
+                    </div>
+                    <div class="col-4">
+                        <div class="row">
+                            <div
+                                class="date_time_time col-6 date_time_top_profile"
+                            >
+                                {{event.event_date.from_date.strftime('%I:%M
+                                %p')}}
+                            </div>
+                            <div
+                                class="date_time_date col-6 date_time_top_profile"
+                            >
+                                {{event.event_date.from_date.strftime('%A')}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="date_time_time col-6">
+                                {{event.event_date.to_date.strftime('%I:%M
+                                %p')}}
+                            </div>
+                            <div class="date_time_date col-6">
+                                {{ event.event_date.from_date.strftime('%b %d,
+                                %Y')}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
