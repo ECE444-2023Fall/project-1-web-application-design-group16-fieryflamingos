@@ -34,12 +34,12 @@ content %}
 </div>
 
 <div id="upcoming-events" style="background-color: #25355A; margin-top: 40px; margin-left: 10%; margin-right: 10%;">
-    <div style="padding: 40px;">
+    <div style="padding: 60px;">
         <div style="display: flex; justify-content: space-between;">
             <div class="main-title" style="color: white !important; margin-bottom: 40px;">
                 Upcoming Events
             </div>
-            <a class="label" style="color: white; margin-top: 25px; margin-right: 40px;" href="#past-events">
+            <a class="label" style="color: white; margin-top: 25px; margin-right: 10px;" href="#past-events">
                 Go to Past Events
             </a>
         </div>
@@ -52,7 +52,7 @@ content %}
         {% else %}
         {% for event in future_events %}
             <a href="/event/{{event.id}}" style="text-decoration: none">
-                <div class="white-card-container" style="flex: 60%; margin-bottom: 30px;">
+                <div class="white-card-container" style="flex: 60%; margin-bottom: 30px; border-radius: 4px; padding: 50px; background-color: #f8fafc;">
                     <div class="title" style="margin-bottom: 16px;" >
                         {{event.title}}
                     </div>
@@ -90,15 +90,14 @@ content %}
         {% endif %}
     </div>   
 </div>
-
 <div id="past-events" style="background-color: #F1F5F9; margin-top: 40px;">
     <div style="margin-left: 10%; margin-right: 10%; padding: 40px;">
         <div style="display: flex; justify-content: space-between;">
             <div class="main-title" style="margin-bottom: 40px;">
                 Past Events
             </div>
-            <a class="label" style="margin-top: 25px; margin-right: 40px;" href="#upcoming-events">
-                Go to Past Events
+            <a class="label" style="margin-top: 25px; margin-right: 10px;" href="#upcoming-events">
+                Go to Upcoming Events
             </a>
         </div>
         {% if not past_events %}
