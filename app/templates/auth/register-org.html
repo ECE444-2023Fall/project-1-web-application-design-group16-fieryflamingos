@@ -1,40 +1,123 @@
-{% import "bootstrap/wtf.html" as wtf %}
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Flaskr-TDD | Register</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <br /><br />
-      <h1>Flaskr</h1>
-      <br /><br />
+    <head>
+        <link
+            href="../../static/css/styles.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../static/css/custom.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
+    </head>
+    <script src="script.js"></script>
+    <script src="script2.js"></script>
 
-      {% for message in get_flashed_messages() %}
-      <div class="flash alert alert-success col-sm-4" role="success">
-        {{ message }}
-      </div>
-      {% endfor %}
-
-      <h3>Register</h3>
-
-      {% if error %}
-      <p class="alert alert-danger col-sm-4" role="danger">
-        <strong>Error:</strong> {{ error }}
-      </p>
-      {% endif %}
-
-      {{ wtf.quick_form(form) }}
-    </div>
-    <script
-      type="text/javascript"
-      src="{{url_for('static', filename='main.js') }}"
-    ></script>
-  </body>
+    <body>
+        <div style="align-items: right; display: flex; margin-bottom: 60px;">
+            <div class="navbar-brand occasional">
+                <img src="/static/img/OC_Variant3.png" width="50" height="50" class="d-inline-block align-bottom" alt="">
+            </div> 
+            <div class="occasional d-inline-block" style="margin-left: 10px; color: black; margin-top: 12px;">OCCASIONAL</div>
+            <div class="body-text" style="margin-left: 68%; margin-top: 15px; margin-right: 1%;">
+                Already have an account?
+            </div>
+            <a href="/auth/login" class="sign-in" style="text-decoration: none; margin-top: 4px;">
+                Sign In
+            </a>
+        </div>
+        <div class="boxOrg">
+            <h2>Create an Occasional Account</h2>
+            <h3>One account to share your organization's story</h3>
+            <form action="" method="POST">
+                {{form.hidden_tag()}}
+                <table>
+                    {% if form.name.errors %}
+                        {% for error in form.name.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{ error }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    <tr>
+                        <td>{{ form.name() }}</td>
+                    </tr>
+                    {% if form.email.errors %}
+                        {% for error in form.email.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{ error }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    <tr>
+                        <td>{{ form.email() }}</td>
+                    </tr>
+                    {% if form.username.errors %}
+                        {% for error in form.username.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{ error }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    <tr>
+                        <td>{{ form.username() }}</td>
+                    </tr>
+                    {% if form.password.errors %}
+                        {% for error in form.password.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{ error }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    <tr>
+                        <td>
+                            {{form.password()}}
+                        </td>
+                    </tr>
+                    {% if form.password2.errors %}
+                        {% for error in form.password2.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{ error }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    <tr>
+                        <td>{{ form.password2() }}</td>
+                    </tr>
+                </table>
+                {{form.submit(class="button-main", style="margin-top: 30px; margin-bottom: 30px")}}
+            </form>
+            <h6>
+                Want to register as a user?
+                <a
+                    id="nonbutton"
+                    style="text-decoration: none"
+                    href="/auth/register"
+                    >Click here.</a
+                >
+            </h6>
+        </div>
+    </body>
 </html>

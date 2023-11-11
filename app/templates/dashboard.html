@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block title %} Dashboard {% endblock %}
 {% block content %}
-    <div class="card">
-        <div class = "container-fluid rec-sec">
+    <div class = "container-fluid" style="padding: 0px;">
+        <div class="rec-sec">
             <div class= "row">
                 <div class = "col"></div>
                     <div class = "recommended col-9">RECOMMENDED FOR YOU
@@ -27,22 +27,23 @@
                     </div>
                 </div>     
                 {% else %}
-                <div class="row">
-                    {% for event in recommended_events %}
-                    <div class = "col s3">
+                <div class="row height-static" style="justify-content: center;">
+                    {% for event_dict in recommended_events %}
+                    <a href="/event/{{event_dict.event.id}}" style="text-decoration: none">
+                    <div class = "col-lg-3 col-md-6 col-12">
                         <div class="card medium">
                             <div class="title recommended_title">
-                                {{ event.title }}
+                                {{ event_dict.event.title }}
                             </div>
                             <hr class="underline_title" style="margin-left: 35px;">
                             <div class="card_normal">
                                 <div class="rec_info">
                                     <div class = "label-bold">Date & Time:</div>
                                     <span class = "label">
-                                        {{ event.weekday }} {{ event.date }}
+                                        {{ event_dict.event.event_date.from_date.strftime('%A %b %d, %Y') }}  
                                     </span>
                                     <span class = "label">
-                                        {{ event.start_time }} - {{ event.end_time }}
+                                        {{ event_dict.event.event_date.from_date.strftime('%I:%M %p') }} - {{ event_dict.event.event_date.to_date.strftime('%I:%M %p') }}
                                     </span>
                                 </div>
                                 <div class = "rec_info">
@@ -50,13 +51,13 @@
                                     <span class = "label" style="text-overflow: ellipsis; 
                                     overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; 
                                     line-clamp: 2; -webkit-box-orient: vertical;">
-                                        {{ event.organizer.name}}
+                                        {{ event_dict.event.organizer.name}}
                                     </span>
                                 </div>
                             </div>
                             <div class="card_hover">
                                 <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
-                                    {% for interest in event.targeted_preferences %}
+                                    {% for interest in event_dict.preferences %}
                                     <button class="interest-tag">
                                         {{interest.preference}}
                                         <div class="tag-number">
@@ -68,125 +69,8 @@
                             </div>
                         </div>
                     </div>
+                    </a>
                     {% endfor %}
-                <!--<div class = "col s3">
-                    <div class="card medium">
-                        <span class="title recommended_title">
-                            Fiery Flamingo Phantasmal Faceplant
-                        </span>
-                        <hr class="underline_title" style="margin-left: 35px;">
-                        <div class="card_normal"> 
-                            <div class="rec_info">
-                                <div class = "label-bold">Date & Time:</div>
-                                <span class = "label">
-                                    Monday Apr 4, 2024
-                                </span>
-                                <span class = "label">
-                                    8:00PM - 8:00PM
-                                </span>
-                            </div>
-                            <div class = "rec_info">
-                                <div class = "label-bold">Organizer:</div>
-                                <span class = "label" style="text-overflow: ellipsis; 
-                                overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; 
-                                line-clamp: 2; -webkit-box-orient: vertical;">
-                                    Fiery Flamingo Outreach Team
-                                </span>
-                            </div>
-                        </div>
-                        <div class="card_hover">
-                            <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
-                                {% for interest in targeted_preferences %}
-                                <button class="interest-tag">
-                                    {{interest.preference}}
-                                    <div class="tag-number">
-                                        {{interest.events_with_preference}}
-                                    </div>
-                                </button>
-                                {% endfor %}
-                            </div> 
-                        </div>
-                    </div>  
-                </div>
-                <div class = "col s3">
-                    <div class="card medium">
-                        <span class="title recommended_title">
-                            Build U Up: Mental Health & Wellness Pop-Up
-                        </span>
-                        <hr class="underline_title" style="margin-left: 35px;">
-                        <div class="card_normal"> 
-                            <div class="rec_info">
-                                <div class = "label-bold">Date & Time:</div>
-                                <span class = "label">
-                                    Wendesday Oct 25, 2023
-                                </span>
-                                <span class = "label">
-                                    11:30AM - 1:30PM
-                                </span>
-                            </div>
-                            <div class = "rec_info">
-                                <div class = "label-bold">Organizer:</div>
-                                <span class = "label" style="text-overflow: ellipsis; 
-                                overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; 
-                                line-clamp: 2; -webkit-box-orient: vertical;">
-                                    Skule&trade; Mental Wellness, Health &
-                                    Wellness Centre
-                                </span>
-                            </div>
-                        </div>
-                        <div class="card_hover">
-                            <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
-                                {% for interest in targeted_preferences %}
-                                <button class="interest-tag">
-                                    {{interest.preference}}
-                                    <div class="tag-number">
-                                        {{interest.events_with_preference}}
-                                    </div>
-                                </button>
-                                {% endfor %}
-                            </div> 
-                        </div>
-                    </div>
-                </div>
-                <div class = "col s3">
-                    <div class="card medium">
-                        <span class="title recommended_title">
-                            School of Environment Autumn Hike
-                        </span>
-                        <hr class="underline_title" style="margin-left: 35px;">
-                        <div class="card_normal">
-                            <div class="rec_info">
-                                <div class = "label-bold">Date & Time:</div>
-                                <span class = "label">
-                                    Saturday Oct 14, 2023
-                                </span>
-                                <span class = "label">
-                                    12:00PM - 1:30PM
-                                </span>
-                            </div>
-                            <div class = "rec_info">
-                                <div class = "label-bold">Organizer:</div>
-                                <span class = "label" style="text-overflow: ellipsis; 
-                                overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; 
-                                line-clamp: 2; -webkit-box-orient: vertical;">
-                                    School of Environment
-                                </span>
-                            </div>
-                        </div>
-                        <div class="card_hover">
-                            <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
-                                {% for interest in targeted_preferences %}
-                                <button class="interest-tag">
-                                    {{interest.preference}}
-                                    <div class="tag-number">
-                                        {{interest.events_with_preference}}
-                                    </div>
-                                </button>
-                                {% endfor %}
-                            </div> 
-                        </div>
-                    </div>
-                </div>-->
                 </div>
                 {% endif %}
             </div>
@@ -213,196 +97,63 @@
                             </div>
                         </div>
                     </div>
-                </div>
+        </div>
         {% else %}
             {% for event in upcoming_events %}
-            <div class="row">
-                <div class = "card upcoming_card col-11">
-                    <div class="row">
-                        <div class="title upcoming_title col-8">
-                            {{event.title}}
-                        </div>
-                        <div class="col-3">
-                            <div class="row">
-                                <div class="date_time_time col-5 date_time_top">
-                                    {{event.start_time}}
+            <a href="/event/{{event.id}}" style="text-decoration: none">
+                <div class="row">
+                    <div class = "card upcoming_card col-11" style="justify-content: center;">
+                        <div class="row">
+                            <div class="title upcoming_title col-6">
+                                {{event.title}}
+                            </div>
+                            <div class="col-5" style="justify-content:end; text-align: right;">
+                                <div class="row">
+                                    <div class="date_time_time col-6 date_time_top">
+                                        {{event.event_date.from_date.strftime('%I:%M %p')}}
+                                    </div>
+                                    <div class="date_time_date col-6 date_time_top">
+                                        {{event.event_date.from_date.strftime('%A')}}
+                                    </div>
                                 </div>
-                                <div class="date_time_date col-7 date_time_top">
-                                    {{event.weekday}}
+                                <div class="row">
+                                    <div class="date_time_time col-6">
+                                        {{event.event_date.to_date.strftime('%I:%M %p')}}
+                                    </div>
+                                    <div class="date_time_date col-6">
+                                        {{event.event_date.to_date.strftime('%b %d, %Y')}}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="date_time_time col-5">
-                                    {{event.end_time}}
-                                </div>
-                                <div class="date_time_date col-7">
-                                    {{event.date}}
-                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-11">
+                                <hr class="underline_upp">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-11">
-                            <hr class="underline_upp">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="up_info col-5" style="text-overflow: ellipsis; overflow: hidden;
-                        text-wrap: nowrap;">
-                            <span class="label-bold">Organizer: </span>
-                            <span class="label" >
-                            {{event.organizer.name}}
+                        <div class="row">
+                            <div class="up_info col-6" style="text-overflow: ellipsis; overflow: hidden;
+                            text-wrap: nowrap;">
+                                <span class="label-bold">Organizer: </span>
+                                <span class="label" >
+                                {{event.organizer.name}}
+                                </span>
+                            </div>
+                            <div class="col-5" style="text-overflow: ellipsis; overflow: hidden;
+                            text-wrap: nowrap; margin-top: 28px; margin-bottom: 0px; margin-left: 2%;
+                            text-align: center;">
+                                <span class="label-bold">Location: </span>
+                                <span class="label" >
+                                {{event.location.address}}, {{event.location.room}}
                             </span>
-                        </div>
-                        <div class="col-6" style="text-overflow: ellipsis; overflow: hidden;
-                        text-wrap: nowrap; margin-top: 28px; margin-bottom: 0px;">
-                            <span class="label-bold">Location: </span>
-                            <span class="label" >
-                            {{event.location.address}}, {{event.location.room}}
-                        </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-             <!--<div class = "card upcoming_card col-11">
-                    <div class="row">
-                        <div class="title upcoming_title col-7">
-                            Michael Garron Hospital - Student Open House
-                        </div>
-                        <div class="col-4">
-                            <div class="row">
-                                <div class="date_time_time col-6 date_time_top">
-                                    12:00PM
-                                </div>
-                                <div class="date_time_date col-6 date_time_top">
-                                    Saturday
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="date_time_time col-6">
-                                    01:30PM
-                                </div>
-                                <div class="date_time_date col-6">
-                                    Oct 14, 2023
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-11">
-                            <hr class="underline_upp">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="up_info col-5" style="text-overflow: ellipsis; overflow: hidden;
-                        text-wrap: nowrap;">
-                            <span class="label-bold">Organizer: </span>
-                            <span class="label" >
-                            Career Centre Staff, Career Centre
-                            </span>
-                        </div>
-                        <div class="col-6" style="text-overflow: ellipsis; overflow: hidden;
-                        text-wrap: nowrap; margin-top: 28px; margin-bottom: 0px;">
-                            <span class="label-bold">Location: </span>
-                            <span class="label" >
-                            155 College St, Toronto, ON M5T 3M7, Room DL220
-                        </span>
-                        </div>
-                    </div>
-                </div>
-                <div class = "card upcoming_card col-11">
-                    <div class="row">
-                        <div class="title upcoming_title col-7">
-                            Michael Garron Hospital - Student Open House
-                        </div>
-                        <div class="col-4">
-                            <div class="row">
-                                <div class="date_time_time col-6 date_time_top">
-                                    12:00PM
-                                </div>
-                                <div class="date_time_date col-6 date_time_top">
-                                    Saturday
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="date_time_time col-6">
-                                    01:30PM
-                                </div>
-                                <div class="date_time_date col-6">
-                                    Oct 14, 2023
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-11">
-                            <hr class="underline_upp">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="up_info col-5" style="text-overflow: ellipsis; overflow: hidden;
-                        text-wrap: nowrap;">
-                            <span class="label-bold">Organizer: </span>
-                            <span class="label" >
-                            Career Centre Staff, Career Centre
-                            </span>
-                        </div>
-                        <div class="col-6" style="text-overflow: ellipsis; overflow: hidden;
-                        text-wrap: nowrap; margin-top: 28px; margin-bottom: 0px;">
-                            <span class="label-bold">Location: </span>
-                            <span class="label" >
-                            155 College St, Toronto, ON M5T 3M7, Room DL220
-                        </span>
-                        </div>
-                    </div>
-                </div>
-                <div class = "card upcoming_card col-11">
-                    <div class="row">
-                        <div class="title upcoming_title col-7">
-                            Michael Garron Hospital - Student Open House
-                        </div>
-                        <div class="col-4">
-                            <div class="row">
-                                <div class="date_time_time col-6 date_time_top">
-                                    12:00PM
-                                </div>
-                                <div class="date_time_date col-6 date_time_top">
-                                    Saturday
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="date_time_time col-6">
-                                    01:30PM
-                                </div>
-                                <div class="date_time_date col-6">
-                                    Oct 14, 2023
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-11">
-                            <hr class="underline_upp">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="up_info col-5" style="text-overflow: ellipsis; overflow: hidden;
-                        text-wrap: nowrap;">
-                            <span class="label-bold">Organizer: </span>
-                            <span class="label" >
-                            Career Centre Staff, Career Centre
-                            </span>
-                        </div>
-                        <div class="col-6" style="text-overflow: ellipsis; overflow: hidden;
-                        text-wrap: nowrap; margin-top: 28px; margin-bottom: 0px;">
-                            <span class="label-bold">Location: </span>
-                            <span class="label" >
-                            155 College St, Toronto, ON M5T 3M7, Room DL220
-                        </span>
-                        </div>
-                    </div>
-                </div>-->
+            </a>
             {% endfor %}
-        </div>
+        
+            </div>
         {% endif %}
     </div>
     <div class ="col"></div>

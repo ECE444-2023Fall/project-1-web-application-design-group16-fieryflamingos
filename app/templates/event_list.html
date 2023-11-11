@@ -1,15 +1,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% extends 'base.html' %}
 {% block content %}
-<!DOCTYPE html>
 <html>
-
-<head>
-	<title>Discover</title>
-	<link rel="stylesheet" type="text/css"
-		href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="/static/css/forms.css" />
-</head>
 
 <body>
 	{% for message in get_flashed_messages() %}
@@ -18,8 +10,8 @@
 	</div>
 	{% endfor %}
 
-	<div style="margin-left: 10%; margin-right: 10%;">
-		<div class="main-title" style="margin-bottom: 40px; font-size: 30px;">
+	<div style="margin-left: 10%; margin-right: 10%; margin-bottom: 40px;">
+		<div class="main-title" style="margin-bottom: 30px; font-size: 30px;">
 			Filter Parameters
 		</div>
 
@@ -31,16 +23,16 @@
 		<form method="POST" action="" >
 			{{form.hidden_tag()}}
 			<div class="label-bold" style="margin-bottom: 10px;">
-				Keyword Search
+				{{form.search.label}}
 			</div>
 			{{ form.search(class="search-form", style="width: 100%") }}
 		
 			<div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
 				<div class="label-bold" style="width: 50%;">
-					Start Date
+					{{form.start_date.label}}
 				</div>
 				<div class="label-bold" style="width: 50%;">
-					End Date
+					{{form.end_date.label}}
 				</div>
 			</div>
 		
@@ -54,44 +46,39 @@
 			</div>
 		
 			<div class="label-bold" style="margin-top: 10px; margin-bottom: 10px;">
-				Interests
+				{{form.preferences.label}}
 			</div>
 			<div style="display: flex; flex-wrap: wrap; flex-direction: row; justify-content: flex-start;">
 				{{ form.preferences() }}
 			</div>
+
+			<div class="label-bold" style="margin-bottom: 10px;">
+				{{form.items_per_page.label}}
+			</div>
+			{{ form.items_per_page(class="search-form", style="width: 55px") }}
 		
-			<div style="margin-bottom: 10px; margin-top: 10px; display: flex; justify-content:space-between; align-items:flex-end;">
-				<div style="margin-right: 40px;">
+			<div style="margin-bottom: 30px; margin-top: 30px; display: flex; justify-content: flex-start;">
+				<div>
 					{{ form.submit(class="button-main") }}
 				</div>
-				<span>{{count}} results found.</span>
 			</div>
-			
 		</form>
-		
-		
 	</div>
 
 
 	<div id="filtered-events" style="background-color: #F1F5F9; padding-bottom: 60px;">
 		<div style="margin-left: 10%; margin-right: 10%;">
-			<div style="display: flex; justify-content:space-between; align-items:center; margin-bottom: 40px; padding-top: 40px; ">
+			<div style="display: flex; justify-content:space-between; align-items:center; margin-bottom: 10px; padding-top: 40px; ">
 				<div class="main-title" style="font-size: 30px;">
 					Filtered Events
 				</div>
-				<div style="display:flex; justify-content:space-between; align-items:center;">
-					<div style="display:flex; align-items:center;">Page {{page + 1}} of {{max_pages}}</div>
-				</div>
-				<div style="display:flex; justify-content:center; align-items:center; gap:1rem">
-					{% if show_prev_button %}
-					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(-1)">Back</div>
-					{% endif %}
-					{% if show_next_button %}
-					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(1)">Next</div>
-					{% endif %}
-				</div>
-				
-
+			</div>
+			<div class="body-text" style="margin-bottom: 40px;">
+				{% if count == 1 %}
+				<span>{{count}} event found</span>
+				{% else %}
+				<span>{{count}} events found</span>
+				{% endif %}
 			</div>
 			{% for event in events %}
 				<a href="{{event.link}}" style="text-decoration: none">
@@ -100,8 +87,8 @@
 							{{event.title}}
 						</div>
 						<hr style="margin-bottom: 20px; width: auto;">
-						<div style="display: flex; margin-bottom: 8px;">
-							<div style="display: flex; width: 50%;">
+						<div style="display: flex; flex-wrap:wrap; justify-content:space-between; margin-bottom: 16px; gap:8px;">
+							<div style="display: flex; min-width:calc(50% - 8px)">
 								<span class="label-bold" style="margin-right: 6px;">
 									Organizer: 
 								</span>
@@ -109,7 +96,7 @@
 									{{event.organizer.name}}
 								</div>
 							</div>
-							<div style="display: flex; width: 50%;">
+							<div style="display: flex; min-width:calc(50% - 8px)">
 								<span class="label-bold" style="margin-right: 6px;">
 									Time: 
 								</span>
@@ -117,9 +104,7 @@
 									{{ event.event_date.from_date.strftime('%b %d, %Y %I:%M') }} - {{ event.event_date.to_date.strftime('%I:%M %p').lstrip('0')|upper }}
 								</div>
 							</div>
-						</div>
-						<div style="display: flex; margin-bottom: 16px;">
-							<div style="display: flex; width: 50%;">
+							<div style="display: flex; min-width:calc(50% - 8px)">
 								<span class="label-bold" style="margin-right: 6px;">
 									Location: 
 								</span>
@@ -127,27 +112,26 @@
 									{{event.location.address}}, {{event.location.room}}
 								</div>
 							</div>
-						</div>			
+						</div>
+								
 					</div>
 				</a>			
 			{% endfor %}
-			<div style="margin-bottom: 40px; margin-top: 40px; display: flex; justify-content:space-between;">
-				<div class="main-title" style="visibility: hidden;font-size: 30px;">
-					Filtered Events
+			<div style="margin-bottom: 20px; margin-top: 40px; display: flex; justify-content:center;">
+				{% if show_prev_button %}
+					<div tabindex="0" class="turn-page" style="height:100%" onclick="switchPage(-1)">&larr;</div>
+				{% endif %}
+				{% if count > 0 %}
+				<div class="label-bold">
+					Page {{page + 1}} of {{max_pages}}
 				</div>
-				<div style="display:flex; justify-content:space-between; align-items:center;">
-					<div style="display:flex; align-items:center;">Page {{page + 1}} of {{max_pages}}</div>
-				</div>
-				<div style="display:flex; justify-content:center; align-items:center; gap:1rem">
-					{% if show_prev_button %}
-					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(-1)">Back</div>
-					{% endif %}
-					{% if show_next_button %}
-					<div tabindex="0" class="button-main" style="height:100%" onclick="switchPage(1)">Next</div>
-					{% endif %}
-				</div>
+				{% endif %} 
+				{% if show_next_button %}
+					<div tabindex="0" class="turn-page" style="height:100%" onclick="switchPage(1)">&rarr;</div>
+				{% endif %}
 			</div>
-			
+			<div style="display:flex; justify-content:center; align-items:center; gap:1rem">
+			</div>
 		</div>
 	</div>
 

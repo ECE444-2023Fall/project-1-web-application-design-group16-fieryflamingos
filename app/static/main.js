@@ -24,10 +24,10 @@ const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu",  "Fri", "Sat"];
 
 const date = new Date();
 
-//Variables for current calendar being displayed
-let currentDate = date.getDate();
 let currentMonth = date.getMonth();
 let currentYear = date.getFullYear();
+console.log(monthIdx)
+console.log(year)
 
 //Variables for the current calendar event information being displayed
 let calInfoDate = date.getDate();
@@ -36,6 +36,7 @@ let calInfoYear = date.getFullYear();
 
 //Function for updating the calendar
 function renderCalendar() {
+ 
     date.setDate(1);
     const firstDay = new Date(currentYear, currentMonth, 1);
     const lastDay = new Date(currentYear, currentMonth + 1, 0);
@@ -93,7 +94,6 @@ prevBtn.addEventListener("click", () => {
         currentYear--;
     }
     renderCalendar();
-    attach_day_click();
 });
 
 todayBtn.addEventListener("click", () => {

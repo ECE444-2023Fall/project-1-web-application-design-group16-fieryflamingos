@@ -1,0 +1,171 @@
+body {
+    background-color: #F1F5F9;
+    font-family: 'Inter', sans-serif;
+}
+
+h1 {
+    font-size: 3.33em;
+    font-weight: 700;
+    margin: auto;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: 75px;
+}
+
+h2 {
+    color: black;
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+h3 {
+    margin-top: 10px;
+    color: var(--Darker-Grey);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 250;
+    margin-bottom: 30px;
+}
+
+h4 {
+    font-size: 1.17em;
+    font-weight: 300;
+    color: #475569;
+    text-align: right;
+    position: relative;
+    bottom: 73px;
+    right: 137px;
+}
+
+h5 {
+    font-size: 1.17em;
+    font-weight: 500;
+    color: white;
+    margin: auto;
+    text-align: center;
+    padding-top: 12.5px;
+}
+
+h6 {
+    color: var(--Darker-Grey);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 250;
+    text-align: center;
+    position: relative;
+    bottom: 25px;
+}
+
+.boxUser {
+    background-color: white;
+    padding-top: 20px;
+    width: 50em;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    text-align: center;
+}
+
+.boxOrg {
+    background-color: white;
+    width: 50em;
+    height: auto;
+    padding-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    text-align: center;
+}
+
+.boxSignin {
+    background-color: white;
+    width: 50%;
+    height: 45vh;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    text-align: center;
+    padding-top: 40px;
+    border-radius: 5px;
+}
+
+.sign-in{
+    background-color: #25355A;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    border: none;
+    font-size: 14px;
+    font-weight: 300;
+    font-family: Inter;
+    border-radius: 4px;
+    height: 20px;
+}
+
+.sign-in:hover{
+    background-color: #18223A;
+}
+
+table {
+    border-collapse: collapse;
+    position: relative;
+    margin: 0 auto;
+}
+
+input {
+    width: 60vh;
+    border-radius: 3px;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 250;
+    font-family: Inter;
+    color: var(--Darker-Grey);
+    margin-bottom: 10px;
+    border-width: 0.8px;
+}
+
+input[type=submit] {
+    margin-top: 40px;
+    width: auto;
+    height: auto;
+}
+
+a {
+    color: white;
+}
+
+#nonbutton {
+    color: #475569;
+}
+
+.header img {
+    width: 70px;
+    height: 70px;
+    padding-right: 8px;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+
+.material-icons {
+    color: #94A3B8;
+    position: absolute;
+    right: 24px;
+    bottom: 93.5px;
+}
+
+.error-auth{
+    color: #f87171;
+    font-family: Inter;
+    font-size: 12px;
+    font-weight: 500;
+    justify-content: left !important;
+}
