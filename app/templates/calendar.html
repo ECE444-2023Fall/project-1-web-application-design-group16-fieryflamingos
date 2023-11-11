@@ -2,8 +2,13 @@
 {% block title %} Calendar {% endblock %}
 {% block content %}
     <div class="container-fluid" style="padding: 0; margin: 0;">
-        <div style="height: 600px; background-color: var(--Light-Grey); min-width: 1000px;
+        <div style="height: 640px; background-color: var(--Light-Grey); min-width: 1000px;
         min-height: 100uh; display: flex; align-items: center; justify-content: center;">
+            <div class="calendar_info" style="width: 100%; max-width: 300px; display: inline-block; padding: 30px; 
+            border-radius: 18px; background-color: var(--UofT-Blue); align-items: center; justify-content: center; margin-bottom: 20px; 
+            margin-left: 10px;">
+
+            </div>
             <div style="width: 100%; max-width: 600px; padding: 30px 20px; border-radius: 18px;
             background-color: var(--White);">
                 <div style="display:flex; justify-content: space-between; align-items:center;
@@ -12,13 +17,16 @@
                     </div>
                     <div style="display: flex; gap: 10px;">
                         <div class="btns today-btn">
-                            <i class="fas fa-calendar-day"></i>
+                            <i class="fas fa-calendar-day" 
+                            style="margin-top: 11px; align-items: center;"></i>
                         </div>
                         <div class="btns prev-btn">
-                            <i class="fas fa-chevron-left"></i>
+                            <i class="fas fa-chevron-left"
+                            style="margin-top: 11px; align-items: center;"></i>
                         </div>
                         <div class="btns next-btn">
-                            <i class="fas fa-chevron-right"></i> 
+                            <i class="fas fa-chevron-right"
+                            style="margin-top: 11px; align-items: center;"></i> 
                         </div>
                     </div>
                 </div>

@@ -86,7 +86,7 @@ prevBtn.addEventListener("click", () => {
 
 todayBtn.addEventListener("click", () => {
     currentMonth = date.getMonth();
-    currentYear = date.getFullYear;
+    currentYear = date.getFullYear();
     renderCalendar();
 });
 

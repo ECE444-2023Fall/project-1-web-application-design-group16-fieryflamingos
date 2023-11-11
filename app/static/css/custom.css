@@ -486,3 +486,22 @@ hr.underline_upp {
     color: var(--UofT-Blue);
     font-weight: 250;
 }
+
+.joe{
+    margin-top: 2px;
+}
+
+.calendar_info{
+    width: 100%;
+    max-width: 300px; 
+    display: inline-block; 
+    padding: 30px 20px; 
+    border-radius: 18px; 
+    background-color: var(--UofT-Blue); 
+    align-items: center; 
+    justify-content: center; 
+    margin-bottom: 20px; 
+    margin-right: 10px;
+    margin-top: 20px;
+    height: 460px;
+}
