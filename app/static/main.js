@@ -23,6 +23,7 @@ const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu",  "Fri", "Sat"];
 
 const date = new Date();
 
+let currentDate = date.getDate();
 let currentMonth = date.getMonth();
 let currentYear = date.getFullYear();
 
@@ -49,7 +50,7 @@ function renderCalendar() {
     }
 
     for(let i = 1; i <= lastDayDate; i++){
-        if(i === thisDate && currentMonth === thisMonth && currentYear === thisYear){
+        if(i === currentDate && currentMonth === thisMonth && currentYear === thisYear){
             days += `<div class="day today">${i}</div>`;
         }else{
             days += `<div class="day">${i}</div>`;
