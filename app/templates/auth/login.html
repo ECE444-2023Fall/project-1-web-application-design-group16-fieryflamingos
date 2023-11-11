@@ -40,38 +40,30 @@
             <form name="" method="POST">
                 {{form.hidden_tag()}}
                 <table>
-                    <tr></tr>
+                    {% if form.username.errors %}
+                        {% for error in form.username.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{error}}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     <tr>
-                        <td>
-                            <div class="input-container">
-                                {{form.username()}}
-                                {% if form.username.errors %}
-                            <ul>
-                                {% for error in form.username.errors %}
-                                <ul class="error-message">
-                                    {{ error }}
-                                </ul>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
-                            </div>
-                           
+                        <td>{{form.username()}}</td>
                     </tr>
+
+                    {% if form.password.errors %}
+                        {% for error in form.password.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{error}}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     <tr>
-                        <td>
-                            <div class="input-container">
-                                {{form.password()}}
-                                {% if form.password.errors %}
-                            <ul>
-                                {% for error in form.password.errors %}
-                                <ul class="error-message">
-                                    {{ error }}
-                                </ul>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
-                            </div>
-                        </td>
+                        <td>{{form.password()}}</td>
                     </tr>
                 </table>
                 {{form.submit(class="button-main")}}

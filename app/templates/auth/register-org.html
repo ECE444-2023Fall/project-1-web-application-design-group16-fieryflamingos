@@ -44,77 +44,76 @@
             <form action="" method="POST">
                 {{form.hidden_tag()}}
                 <table>
+                    {% if form.name.errors %}
+                        {% for error in form.name.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{ error }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     <tr>
-                        <td>{{form.name()}}</td>
-                        {% if form.name.errors %}
-                        <ul>
-                            {% for error in form.name.errors %}
-                            <ul class="error-message">
-                                {{ error }}
-                            </ul>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
+                        <td>{{ form.name() }}</td>
                     </tr>
+                    {% if form.email.errors %}
+                        {% for error in form.email.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{ error }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     <tr>
-                        <td>{{form.email()}}</td>
-                        {% if form.email.errors %}
-                        <ul>
-                            {% for error in form.email.errors %}
-                            <ul class="error-message">
-                                {{ error }}
-                            </ul>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
+                        <td>{{ form.email() }}</td>
                     </tr>
+                    {% if form.username.errors %}
+                        {% for error in form.username.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{ error }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     <tr>
-                        <td>{{form.username()}}</td>
-                        {% if form.username.errors %}
-                        <ul>
-                            {% for error in form.username.errors %}
-                            <ul class="error-message">
-                                {{ error }}
-                            </ul>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
+                        <td>{{ form.username() }}</td>
                     </tr>
+                    {% if form.password.errors %}
+                        {% for error in form.password.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{ error }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     <tr>
                         <td>
                             {{form.password()}}
                             <i
                                 class="material-icons"
                                 title="Password must contain the following:&#013;
-        Minimum eight characters&#013;
-        At least one uppercase letter&#013;
-        At least one lowercase letter&#013;
-        At least one number&#013;
-        At least one special character"
-                                >info</i
-                            >
-                            {% if form.password.errors %}
-                            <ul>
-                                {% for error in form.password.errors %}
-                                <ul class="error-message">
-                                    {{ error }}
-                                </ul>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
+                                        Minimum eight characters&#013;
+                                        At least one uppercase letter&#013;
+                                        At least one lowercase letter&#013;
+                                        At least one number&#013;
+                                        At least one special character"
+                            >info</i>
                         </td>
                     </tr>
+                    {% if form.password2.errors %}
+                        {% for error in form.password2.errors %}
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="error-auth">{{ error }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     <tr>
-                        <td>{{form.password2()}}</td>
-                        {% if form.password2.errors %}
-                        <ul>
-                            {% for error in form.password2.errors %}
-                            <ul class="error-message">
-                                {{ error }}
-                            </ul>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
+                        <td>{{ form.password2() }}</td>
                     </tr>
                 </table>
                 {{form.submit(class="button-main", style="margin-top: 30px; margin-bottom: 30px")}}

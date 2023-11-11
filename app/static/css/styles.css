@@ -163,3 +163,11 @@ a {
     right: 24px;
     bottom: 93.5px;
 }
+
+.error-auth{
+    color: #f87171;
+    font-family: Inter;
+    font-size: 12px;
+    font-weight: 500;
+    justify-content: left !important;
+}
