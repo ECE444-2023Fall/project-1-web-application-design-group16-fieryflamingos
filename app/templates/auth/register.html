@@ -41,6 +41,7 @@
             <h2>Create an Occasional Account</h2>
             <h3>One account for all club, faculty, and campus events.</h3>
             <form action="" method="POST">
+                {{form.hidden_tag()}}
                 <table>
                     {% if form.first_name.errors %}
                         {% for error in form.first_name.errors %}
