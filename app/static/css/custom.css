@@ -527,8 +527,7 @@ hr.underline_upp {
     align-items: center; 
     justify-content: center; 
     margin-bottom: 20px; 
-    margin-right: 10px;
-<<<<<<< HEAD
+    margin-right: 20px;
     margin-top: 50px;
     height: 520px;
     display: inline-block;  
@@ -539,18 +538,3 @@ hr.underline_upp {
 .day_info{
     display: inline-block;
 }
-=======
-    margin-top: 20px;
-    height: 460px;
-}
-
-@media (max-width: 1430px) {
-
-    .rec-sec {
-      height: 1000px;
-    }
-}
-
-
-
->>>>>>> refs/remotes/origin/calendar_dev

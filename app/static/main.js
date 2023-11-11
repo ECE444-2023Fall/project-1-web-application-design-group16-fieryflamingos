@@ -24,10 +24,10 @@ const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu",  "Fri", "Sat"];
 
 const date = new Date();
 
+let currentDate = date.getDate();
 let currentMonth = date.getMonth();
 let currentYear = date.getFullYear();
-console.log(monthIdx)
-console.log(year)
+
 
 //Variables for the current calendar event information being displayed
 let calInfoDate = date.getDate();
@@ -94,6 +94,7 @@ prevBtn.addEventListener("click", () => {
         currentYear--;
     }
     renderCalendar();
+    attach_day_click();
 });
 
 todayBtn.addEventListener("click", () => {
