@@ -1,42 +1,26 @@
 {% extends 'base.html' %}
 {% block title %} Profile {% endblock %}
 {% block content %}
-    <div class = "card">
-        <div class = "container-fluid profile-sec">
-            <div class = "profile-sec">
-                <div class = "profile-pic">
-                    <img src="/static/img/profile_pic.jpg" width="200" height="200" alt="">
+<div style="background-color: #F1F5F9; height: auto;">
+    <div style="margin-left: 15%; margin-right: 15%; display: flex; padding-top: 40px; padding-bottom: 40px; ">
+        <div style="padding-top: 30px; padding-bottom: 30px;">
+            <img src="/static/img/profile_pic.jpg" width="200" height="200" alt="">
+        </div>
+        <div style="padding-top: 40px; padding-left: 50px; padding-bottom: 40px;">
+            <div style="display: flex; flex-direction: row; justify-content: space-between; width: 90vh;">
+                <div class="main-title">
+                    {{user.name}}
                 </div>
-                <div class = "profile_content">
-                    <div class="main-title profile_title">
-                        <div class="name-and-button">
-                            <span>{{user.name}}</span>
-                            {% if current_user_is_specified %}
-                            <a class="edit-profile" href="/profile-org/edit"></a>
-                            {% endif %}
-                        </div>
-                        <hr class="underline_name">
-                    </div>
-                    <div class="title profile_info">
-                        {{ user.email }}
-                    </div>
-                    <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
-						{% for interest in preferences %}
-                        <a href="/event/search?preferences={{interest.id}}" style="text-decoration: none">
-                            <button class="interest-tag">
-                                {{interest.preference}}
-                                <div class="tag-number">
-                                    {{interest.events_with_preference}}
-                                </div>
-                            </button>
-                        </a>
-						{% endfor %}
-
-                    </div> 
-                </div>
+                <a class="edit-profile" href="/profile/edit" style="margin-top: 20px; margin-right: 20px;"></a>
+            </div>
+            <a class="edit-profile" href="/profile/edit"></a>
+            <hr style="margin-bottom: 10px; width: 100%;">
+            <div class="body-text" style="margin-bottom: 10px;">
+                {{ user.email }}
             </div>
         </div>
     </div>
+</div>
     <a href="#past-events">Go to Past Events</a>
 
     <div class = "container-fluid upp-sec-profile col-9">
