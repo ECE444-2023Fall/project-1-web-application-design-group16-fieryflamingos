@@ -241,8 +241,28 @@ def event_details(id):
             RegularUser.remove_event(current_user.id, event.id)
             user_is_attendee = False
             form = RSVPForm()
-        return redirect(url_for("main.event_details", id=id))
+        return redirect(url_for("main.event_details", id=id, _anchor=""))    
+    
+    # get comments for the event
+    comments = Comment.get_comments_by_event_id(id)
 
+    reply_form = ReplyForm()
+    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form, reply_form=reply_form)
+
+
+""" Add a comment to an event """
+@main.route('/event/comment/<id>', methods=['POST'])
+@login_required
+def event_comment(id):
+
+    # get event
+    event = Event.get_by_id(id=id)
+
+    # Check if event is valid
+    if not event:
+        return render_template('errors/event_not_found.html')
+
+    comment_form = CommentForm()
     if comment_form.validate_on_submit():
         name = ""
         if current_user.role == "regular":
@@ -260,15 +280,9 @@ def event_details(id):
                 content=comment_form.content.data,
                 rating=comment_form.rating.data)
             comment = comment.save()
-        return redirect(url_for("main.event_details", id=event.id))
-        
+        return redirect(url_for("main.event_details", id=id, _anchor=str(comment.id)))
+    return redirect(url_for("main.event_details", id=id))
     
-    # get comments for the event
-    comments = Comment.get_comments_by_event_id(id)
-
-    reply_form = ReplyForm()
-    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form, reply_form=reply_form)
-
 
 """ Reply to a comment """
 @main.route('/event/<event_id>/comment/reply/<comment_id>', methods=['POST'])

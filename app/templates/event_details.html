@@ -140,8 +140,8 @@
 		<div class="title" style="margin-bottom: 40px; margin-top: 10px;">
 			Leave a Review
 		</div>
-		<form method="POST" action="/event/{{event.id}}">
-			{{form.hidden_tag()}}
+		<form method="POST" action="/event/comment/{{event.id}}">
+			{{comment_form.hidden_tag()}}
 			<div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
 				<div class="label-bold" style="width: 50%;">
 					{{comment_form.rating.label}}
