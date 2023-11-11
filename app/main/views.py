@@ -1,14 +1,19 @@
+from math import ceil
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, flash, abort, request
+from pytz import UTC
+
+from flask import render_template, session, redirect, url_for, flash, abort, request, make_response
 from flask_login import current_user, login_required
+from icalendar import Calendar
+from icalendar import Event as iEvent
+
 from . import main
-# from .forms import NameForm
 from .. import db
-from ..models import User, RegularUser, OrganizationUser, Event, Preference, Comment
-from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm, CommentForm
+from ..models import User, RegularUser, OrganizationUser, Event, Preference, Comment, Reply
+from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm, CommentForm, ReplyForm
 from functools import wraps
 
-from math import ceil
+
 
 class rec_up_event():
     def __init__ (self, event):
@@ -135,14 +140,15 @@ def event_form():
     if form.validate_on_submit():
         try:
             event = Event(location={"place": form.location_place.data, "address": form.location_address.data, "room": form.location_room.data},
-                          organizer={"author_id": current_user.id,
-                                     "name": current_user.name},
-                          event_date={"from_date": form.from_date.data,
-                                      "to_date": form.to_date.data},
-                          title=form.title.data,
-                          description=form.description.data,
-                          targeted_preferences=form.targeted_preferences.data
-                          )
+                        organizer={"author_id": current_user.id,
+                                    "name": current_user.name},
+                        event_date={"from_date": form.from_date.data,
+                                    "to_date": form.to_date.data},
+                        registration_open_until=form.registration_open_until.data,
+                        title=form.title.data,
+                        description=form.description.data,
+                        targeted_preferences=form.targeted_preferences.data
+                        )
             event = event.save()
 
             # update preferences
@@ -152,7 +158,7 @@ def event_form():
         except Exception as e:
             print(e)
             pass
-    return render_template('event_create.html', form=form)
+    return render_template('event_create.html', form=form, form_is_update=False)
 
 
 """ Events detail route 
@@ -186,6 +192,20 @@ def event_details(id):
     # Check if event is valid
     if not event:
         return render_template('event_not_found.html')
+
+    is_owner = False
+    if str(event.organizer.author_id) == str(current_user.id):
+        is_owner = True
+    
+    # check if registration still open
+    registration_open = True
+    if event.registration_open_until:
+        if datetime.now() > event.registration_open_until:
+            registration_open = False
+    elif datetime.now() > event.event_date.from_date:
+        registration_open = False
+        
+
 
     # create RSVP form
     form = RSVPForm()
@@ -231,15 +251,50 @@ def event_details(id):
             name = f"{current_user.first_name} {current_user.last_name}"
         else:
             name = current_user.name
-        comment = Comment(event_id=id,
+        if comment_form.rating.data:
+            comment = Comment(event_id=id,
             author={"author_id":  current_user.id, "name": name}, 
-            content=comment_form.content.data,
-            rating=comment_form.rating.data)
-        comment = comment.save()
+            content=comment_form.content.data)
+            comment = comment.save()
+        else:
+            comment = Comment(event_id=id,
+                author={"author_id":  current_user.id, "name": name}, 
+                content=comment_form.content.data,
+                rating=comment_form.rating.data)
+            comment = comment.save()
+        return redirect(url_for("main.event_details", id=event.id))
+        
     
     # get comments for the event
     comments = Comment.get_comments_by_event_id(id)
-    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form)
+
+    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form)
+
+    reply_form = ReplyForm()
+    return render_template('event_details.html', event=event, user_is_attendee=user_is_attendee, user_is_owner=is_owner, registration_open=registration_open, targeted_preferences=preferences, comments=comments, form=form, comment_form=comment_form, reply_form=reply_form)
+
+
+""" Reply to a comment """
+@main.route('/event/<event_id>/comment/reply/<comment_id>', methods=['POST'])
+@login_required
+def comment_reply(event_id, comment_id):
+    comment = Comment.get_comment_by_id(id=comment_id)
+    if not comment:
+        return redirect(url_for("main.event_details", id=event_id))
+    
+    form = ReplyForm()
+
+    if form.validate_on_submit():
+        name = ""
+        if current_user.role == "regular":
+            name = f"{current_user.first_name} {current_user.last_name}"
+        else:
+            name = current_user.name
+        reply = Reply(content=form.reply.data,
+                      author={"author_id": current_user.id, "name": name})
+        Comment.add_reply(comment_id, reply)
+    return redirect(url_for("main.event_details", id=event_id, _anchor=comment_id))
+
 
 
 """ Event Update form
@@ -310,10 +365,11 @@ def event_update(id):
         location_room=event.location.room,
         from_date=event.event_date.from_date,
         to_date=event.event_date.to_date,
+        registration_open_until=event.registration_open_until,
         description=event.description,
         title=event.title,
-        targeted_preferences=event.targeted_preferences)
-    
+        targeted_preferences=[str(preference) for preference in event.targeted_preferences])
+
 
     if form.validate_on_submit():
         try:
@@ -323,6 +379,7 @@ def event_update(id):
                 location__room=form.location_room.data,
                 event_date__from_date=form.from_date.data,
                 event_date__to_date=form.to_date.data,
+                registration_open_until=form.registration_open_until.data,
                 title=form.title.data,
                 description=form.description.data,
                 targeted_preferences=form.targeted_preferences.data)
@@ -348,14 +405,14 @@ def event_update(id):
         except Exception as e:
             print(e)
             pass
-    return render_template('event_create.html', form=form)
+    return render_template('event_create.html', event=event, form=form, form_is_update=True)
 
 
 """ Event delete route
 Deletes an event """
 
 
-@main.route('/event/delete/<id>', methods=['POST'])
+@main.route('/event/delete/<id>', methods=['GET'])
 @login_required
 @org_user_required
 def event_delete(id):
@@ -691,3 +748,48 @@ def update_profile_organization():
             flash("An error occurred while updating your profile")
 
     return render_template('update_profile_org.html', form=form, user=user)
+
+
+
+@main.route("/event/ics/<id>", methods=['GET'])
+@login_required
+def calendar(id):
+
+    # get event
+    event = Event.get_by_id(id=id)
+
+    # Check if event is valid
+    if not event:
+        return render_template('event_not_found.html')
+    
+    # Create a Calendar object
+    cal = Calendar()
+    cal.add("prodid", "-//My calendar product//mxm.dk//")
+    cal.add("version", "2.0")
+    cal.add("method", "PUBLISH")
+
+    # Create an Event object
+    ievent = iEvent()
+    ievent.add("summary", event.title)
+    ievent.add("description", event.description)
+    ievent.add("dtstart", event.event_date.from_date)
+    ievent.add("dtend", event.event_date.to_date)
+    # event.add("dtend", datetime(2023, 11, 9, 17, 0, 0, tzinfo=UTC))
+    ievent.add("dtstamp", datetime.now())
+    ievent.add("location", event.location.address)
+    ievent.add("uid", "20231109T160000Z-123456@mxm.dk")
+
+    # Add the Event object to the Calendar object
+    cal.add_component(ievent)
+
+    # Convert the Calendar object to a string
+    cal_str = cal.to_ical()
+
+    # Create a Flask response object
+    response = make_response(cal_str)
+    # Set the content type and disposition headers
+    response.headers["Content-Type"] = "text/calendar"
+    response.headers["Content-Disposition"] = f"attachment; filename={event.title}.ics"
+
+    # Return the response object
+    return response
