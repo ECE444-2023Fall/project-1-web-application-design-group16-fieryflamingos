@@ -286,6 +286,10 @@ hr.underline_upp {
     padding: 60px;
 }
 
+.white-card-container:hover{
+    transform: scale(1.01);
+}
+
 .main-title{
     color: #000000;
     font-family: Inter;
