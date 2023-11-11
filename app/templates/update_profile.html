@@ -1,41 +1,38 @@
 {% extends 'base.html' %} {% block title %} Profile {% endblock %} {% block
 content %}
-<div class="card">
-    <div class="container-fluid profile-sec">
-        <div class="profile-sec">
-            <div class="profile-pic">
-                <img
-                    src="/static/img/profile_pic.jpg"
-                    width="200"
-                    height="200"
-                    alt=""
-                />
-            </div>
-            <div class="profile_content">
-                <form action="" method="POST">
-                    {{form.hidden_tag()}}
-                    <div class="main-title profile_title">
-                        <div class="name-and-button">
-                            <div style="display:flex; flex-wrap:wrap; gap:1rem;"
-                            
-                                >{{form.first_name( class="search-form" )}}
-                                {{form.last_name(class="search-form" )}}
-                                </div>
-                        </div>
-                        <hr class="underline_name" />
-                    </div>
-                    <div class="title profile_info">{{ user.email }}</div>
-                    {{form.preferences()}} {{form.submit(class="button-main")}}
-                    <a class="button-main"
-                        href="/profile"
-                        style="text-decoration: none; background-color: red"
-                        >Cancel</a
-                    >
-                </form>
-            </div>
+<div style="background-color: #F1F5F9; height: auto;">
+    <div style="margin-left: 15%; margin-right: 15%; display: flex; padding-top: 40px; padding-bottom: 40px; ">
+        <div style="padding-top: 30px; padding-bottom: 30px;">
+            <img src="/static/img/profile_pic.jpg" width="200" height="200" alt="">
         </div>
+
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+            <div style="padding-top: 40px; padding-left: 50px; padding-bottom: 40px;">
+                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                    <div style="display: flex; gap: 20px; height: 50px;">
+                        {{ form.first_name(class="search-form") }}
+                        {{ form.last_name(class="search-form") }}
+                    </div>
+                </div>
+                <hr style="margin-bottom: 10px; width: 100%;">
+                <div class="body-text" style="margin-bottom: 10px;">
+                    {{ user.email }}
+                </div>
+                <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
+                    {{ form.preferences() }}
+                </div>
+                <div style="display: flex; margin-top: 20px;">
+                    <div style="margin-right: 20px;">
+                        {{ form.submit(class="button-main") }}
+                    </div>
+                    <a class="button-cancel" href="/profile" style="text-decoration: none;">Cancel</a>
+                </div> 
+            </div>
+        </form>  
     </div>
 </div>
+
 <a href="#past-events">Go to Past Events</a>
 
 <div class="container-fluid upp-sec-profile col-9">
