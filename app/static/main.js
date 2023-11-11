@@ -19,12 +19,13 @@ const months = [
     "December",
 ];
 
-const days = ["Sun", "Mon", "Tue", "Wed", "Thu",  "Fri", "Sat"];
+const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu",  "Fri", "Sat"];
 
 const date = new Date();
 
 let currentMonth = date.getMonth();
 let currentYear = date.getFullYear();
+
 
 function renderCalendar() {
     date.setDate(1);
@@ -35,21 +36,20 @@ function renderCalendar() {
     const prevLastDay = new Date(currentYear, currentMonth, 0);
     const prevLastDayDate = prevLastDay.getDate();
     const nextDays = 7 - lastDayIndex - 1;
+    thisDate = date.getDate();
+    thisMonth = date.getMonth();
+    thisYear = date.getFullYear();
 
     month.innerHTML = `${months[currentMonth]} ${currentYear}`;
 
     let days = "";
     
-    for(let x = firstDay.getDay(); x > 0; x++){
-        days = `<div class="days prev"> ${prevLastDayDate - x + 1}</div>`;
+    for(let x = firstDay.getDay(); x > 0; x--){
+        days += `<div class="day prev"> ${prevLastDayDate - x + 1}</div>`;
     }
 
     for(let i = 1; i <= lastDayDate; i++){
-        if(
-            i === new Date.getDate() && 
-            currentMonth === new Date().getMonth() &&
-            currentYear === new Date().getFullYear()
-        ){
+        if(i === thisDate && currentMonth === thisMonth && currentYear === thisYear){
             days += `<div class="day today">${i}</div>`;
         }else{
             days += `<div class="day">${i}</div>`;
