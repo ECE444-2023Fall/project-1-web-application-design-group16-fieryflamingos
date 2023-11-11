@@ -251,6 +251,23 @@ hr.underline_upp {
      background-color: #18223A;
 }
 
+.button-cancel{
+    background-color: #dc2626;
+    color: var(--White);
+    padding: 15px 40px;
+    text-align: center;
+    border: none;
+    font-size: 14px;
+    font-weight: 350;
+    font-family: Inter;
+    border-radius: 4px;
+}
+
+.button-cancel:hover{
+    background-color: #991b1b;
+    color: var(--White);
+}
+
 .arrow {
     position:relative;
 }
