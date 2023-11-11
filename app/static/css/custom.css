@@ -48,6 +48,19 @@ a.no-color:hover {
     line-height: normal;
 }
 
+.flex-container {
+    display:flex;
+    flex-wrap:wrap;
+}
+
+.flex-center {
+    justify-content: center;
+}
+
+.flex-space-between {
+    justify-content: space-betwen;
+}
+
 .nav-link:hover{
  color: var(--UofT-Blue);
 }

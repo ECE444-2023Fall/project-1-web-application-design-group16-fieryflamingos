@@ -19,7 +19,7 @@ def login():
                 next = url_for('main.index')
             return redirect(next)
         else:
-            flash('Invalid username or password.')
+            form.password.errors.append("Invalid username/password.")
     return render_template('auth/login.html', form=form)
 
 
@@ -27,7 +27,6 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.')
     return redirect(url_for('main.index'))
 
 
