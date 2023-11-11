@@ -10,8 +10,10 @@
                 <div class = "profile_content">
                     <div class="main-title profile_title">
                         <div class="name-and-button">
-                            <span>{{user.first_name}} {{user.last_name}}</span>
-                            <a class="edit-profile" href="/profile/edit"></a>
+                            <span>{{user.name}}</span>
+                            {% if current_user_is_specified %}
+                            <a class="edit-profile" href="/profile-org/edit"></a>
+                            {% endif %}
                         </div>
                         <hr class="underline_name">
                     </div>
@@ -50,10 +52,7 @@
                     <div class="title" style="color: #FFFFFF">
                         No Upcoming Events
                     </div>
-                    <br/>
-                    <div class="subtitle" style="color: #FFFFFF">
-                        Find and RSVP for events using the Discover tab
-                    </div>
+                  
                 </div>
             </div>
         </div>

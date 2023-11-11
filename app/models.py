@@ -11,6 +11,8 @@ from flask_login import UserMixin
 from bson.objectid import ObjectId
 from config import Config
 
+from .util import validate_email
+
 from PIL import Image
 
 Image.ANTIALIAS = Image.LANCZOS
@@ -54,7 +56,15 @@ class Preference(Document):
     def inc_event_count(preference_id, inc=1):
         try:
             Preference.objects(id=preference_id).update_one(inc__events_with_preference=inc)
-        except:
+        except Exception as e:
+            print(e)
+            pass
+    @staticmethod
+    def inc_events_count(preference_ids, inc=1):
+        try:
+            Preference.objects(id__in=preference_ids).update(inc__events_with_preference=inc)
+        except Exception as e:
+            print(e)
             pass
     
 
@@ -117,18 +127,8 @@ class User(UserMixin, DynamicDocument):
 
     def validate_email(self):
          # validate email properly
-        email_valid = False
-        email_domain = self.email.rsplit("@", 1)
-        if len(email_domain) != 2:
-            raise  Exception(f"'{self.email}' not a valid email (email validation failed)")
-        email_domain_part = email_domain[-1].lower()
-        for domain in Config.DOMAIN_WHITELIST:  
-            if domain == email_domain_part:
-                email_valid = True
-                break
-        if email_valid == False:
-            raise Exception(f"'{email_domain_part}' not a valid domain (email validation failed)")
-        return email_valid
+        
+        return validate_email(self.email)
     
     @staticmethod
     def get_user_by_username(username):
@@ -201,6 +201,7 @@ class Location(EmbeddedDocument):
 """ CommentAuthor """
 class UserInfo(EmbeddedDocument):
     author_id = ObjectIdField(required=True)
+    email = StringField()
     name = StringField()
 
 
@@ -219,7 +220,7 @@ class Comment(Document):
     update_date = DateTimeField()
     event_id = ObjectIdField(required=True)
     author = EmbeddedDocumentField(UserInfo)
-    content = StringField(required=True, max_length=1000)
+    content = StringField(required=True, max_length=10000)
    
     likes = IntField(min_value=0, default=0)
 
@@ -235,6 +236,18 @@ class Comment(Document):
     @staticmethod
     def get_comments_by_event_id(event_id):
         return Comment.objects(event_id=event_id).order_by("+creation_date")
+
+    @staticmethod 
+    def get_comment_by_id(id):
+        try:
+            comment = Comment.objects(id=id).get()
+            return comment
+        except:
+            return None
+    
+    @staticmethod
+    def add_reply(event_id, reply):
+        Comment.objects(id=event_id).update_one(push__replies=reply)
     
 
 
@@ -249,12 +262,13 @@ class Event(Document):
     creation_date = DateTimeField(default=datetime.now())
 
     update_date = DateTimeField()
+    registration_open_until = DateTimeField()
     event_date = EmbeddedDocumentField(EventDate)
     location = EmbeddedDocumentField(Location)
     title = StringField(required=True)
     targeted_preferences = ListField(ObjectIdField(), required=True, default=[])
     organizer = EmbeddedDocumentField(UserInfo)
-    description = StringField(required=True, max_length=1000)
+    description = StringField(required=True, max_length=10000)
 
     """ List of attendees, should be RegularUser objects """
     attendees = EmbeddedDocumentListField(UserInfo, default=[])
@@ -318,8 +332,8 @@ class Event(Document):
             return None
 
     @staticmethod  
-    def add_attendee(event_id, user_id, user_name):
-        attendee = UserInfo(author_id=user_id, name=user_name)
+    def add_attendee(event_id, user_id, email, user_name):
+        attendee = UserInfo(author_id=user_id, email=email, name=user_name)
         return Event.objects(id=event_id).update_one(push__attendees=attendee)
 
     @staticmethod
@@ -387,9 +401,7 @@ class Event(Document):
             }
         ]
         pipeline.append({
-            "$project": {
-                "attendees": 0,
-            }
+            "$unset": [ 'attendees', 'description', 'targeted_preferences']
         })
 
         pipeline.append({
@@ -418,22 +430,22 @@ class Event(Document):
     @staticmethod
     def get_summary_from_list_future(id_list):
         today = datetime.now()
-        return Event.objects(id__in=id_list, event_date__from_date__gte=today).exclude("attendees", "description")
+        return Event.objects(id__in=id_list, event_date__from_date__gte=today).exclude("attendees", "description",  "targeted_preferences")
     
     @staticmethod
     def get_summary_from_list_past(id_list):
         today = datetime.now()
-        return Event.objects(id__in=id_list, event_date__from_date__lt=today).exclude("attendees", "description")
+        return Event.objects(id__in=id_list, event_date__from_date__lt=today).exclude("attendees", "description",  "targeted_preferences")
     
     @staticmethod
     def get_organization_events_future(org_id):
         today = datetime.now()
-        return Event.objects(organizer__author_id=org_id, event_date__from_date__lt=today).exclude("attendees", "description")
+        return Event.objects(organizer__author_id=org_id, event_date__from_date__gte=today).order_by("+event_date.from_date").exclude("attendees", "description",  "targeted_preferences")
     
     @staticmethod
     def get_organization_events_past(org_id):
         today = datetime.now()
-        return Event.objects(organizer__author_id=org_id, event_date__from_date__lt=today).exclude("attendees", "description")
+        return Event.objects(organizer__author_id=org_id, event_date__from_date__lt=today).order_by("+event_date.from_date").exclude("attendees", "description", "targeted_preferences")
     
 
 

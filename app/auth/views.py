@@ -36,10 +36,10 @@ def register_regular():
     form = RegistrationRegularForm()
     if form.validate_on_submit():
         try:
-            user = RegularUser(first_name=form.first_name.data,
-                        last_name=form.last_name.data,
-                        email=form.email.data,
-                        username=form.username.data,
+            user = RegularUser(first_name=form.first_name.data.strip().capitalize(),
+                        last_name=form.last_name.data.strip().capitalize(),
+                        email=form.email.data.strip(),
+                        username=form.username.data.strip(),
                         password=form.password.data)
             user.save()
             flash('You can now login.')
@@ -54,11 +54,10 @@ def register_regular():
 def register_org():
     form = RegistrationOrganizationForm()
     if form.validate_on_submit():
-      
         try:
             user = OrganizationUser(name=form.name.data,
-                        email=form.email.data,
-                        username=form.username.data,
+                        email=form.email.data.strip(),
+                        username=form.username.data.strip(),
                         password=form.password.data)
             user.save()
             flash('You can now login.')

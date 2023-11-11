@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import Field, StringField, PasswordField, BooleanField, SubmitField, SelectMultipleField, SelectField, HiddenField, DateField
 from wtforms.fields import DateTimeLocalField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo, Optional
-from wtforms.widgets import html_params
+from wtforms.widgets import html_params, TextArea
 from wtforms import ValidationError
 from markupsafe import Markup
 from ..models import Preference
@@ -64,6 +64,7 @@ class TagWidget(object):
             else  {
                 hiddenInput.value = `${hiddenInput.value} ${button.value}`.trim();
             }
+            hiddenInput.value = hiddenInput.value.replace("  ", " ");
         }
         </script>
         """
@@ -107,16 +108,17 @@ class TagField(Field):
 """ Events creation form """
 class EventForm(FlaskForm):
     location_place = StringField("Place")
-    location_address = StringField("Location")
+    location_address = StringField("Location*", validators=[DataRequired()])
     location_room = StringField("Room")
 
-    title = StringField("Title", validators=[DataRequired()])
+    title = StringField("Title*", validators=[DataRequired()])
 
-    targeted_preferences = SelectMultipleField("Preferences", choices=Preference.get_preferences_as_tuple())
-    description = StringField("Description", validators=[DataRequired(), Length(0, 1000, message="Length must be less than 1000 characters.")])
+    targeted_preferences = TagField("Interests", choices=Preference.get_preferences_as_tuple())
+    description = StringField("Description", widget=TextArea(), validators=[Length(0, 10000, message="Length must be less than 10000 characters.")])
 
-    from_date = DateTimeLocalField("Start Date", format="%Y-%m-%dT%H:%M", validators=[DataRequired()])
-    to_date = DateTimeLocalField("End Date", format="%Y-%m-%dT%H:%M", validators=[DataRequired()])
+    from_date = DateTimeLocalField("Start Date*", format="%Y-%m-%dT%H:%M", validators=[DataRequired()])
+    to_date = DateTimeLocalField("End Date*", format="%Y-%m-%dT%H:%M", validators=[DataRequired()])
+    registration_open_until = DateTimeLocalField("Registration Open Until", format="%Y-%m-%dT%H:%M", validators=[Optional()])
 
     submit = SubmitField("Create Event")
 
@@ -138,11 +140,10 @@ class CancelRSVPForm(FlaskForm):
 
 """ Events creation form """
 class EventSearchForm(FlaskForm):
-    search = StringField("Search", render_kw={"placeholder": "Event title, location, or organizer..."})
+    search = StringField("Keyword Search", render_kw={"placeholder": "Event title, location, or organizer..."})
 
+    preferences = TagField("Interests", choices=Preference.get_preferences_as_tuple())
 
-    # targeted_preferences = SelectMultipleField("Preferences", choices=Preference.get_preferences_as_tuple())
-    preferences = TagField("Preferences", choices=Preference.get_preferences_as_tuple())
     start_date = DateField("Start Date", format="%Y-%m-%d", validators=[Optional()])
     end_date = DateField("End Date", format="%Y-%m-%d", validators=[Optional()])
 
@@ -157,21 +158,30 @@ class UpdateRegularUserForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
     last_name = StringField('Last Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
     
-    preferences = SelectMultipleField("Preferences", choices=Preference.get_preferences_as_tuple())
+    preferences = TagField("Preferences", choices=Preference.get_preferences_as_tuple())
 
     submit = SubmitField("Update")
 
 
 """ Update profile form """
 class UpdateOrganizationUserForm(FlaskForm):
-    name = StringField('Last Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
+    name = StringField('Organization Name', validators=[DataRequired(Regexp("^[a-zA-Z \-]+$", message="Not a valid name."))])
     
     submit = SubmitField("Update")
 
     
 """ Comment form """
 class CommentForm(FlaskForm):
-    content = StringField("Comment", validators=[DataRequired(), Length(0, 1000, message="Length must be less than 1000 characters.")])
+    content = StringField("Comment", widget=TextArea(), render_kw={"placeholder":"Write a short review or ask a question"}, validators=[DataRequired(), Length(0, 10000, message="Length must be less than 10,000 characters.")])
 
-    rating = SelectField("Rating (1-5)", choices=[(1,1), (2,2), (3,3), (4,4), (5,5)], validators=[DataRequired()])
+    rating = SelectField("Rating (1-5), or leave blank", choices=[(None, "---"), (1,1), (2,2), (3,3), (4,4), (5,5)], validators=[DataRequired()])
+    submit = SubmitField("Comment")
+
+""" Reply Form """
+class ReplyForm(FlaskForm):
+    reply = StringField("Reply", widget=TextArea(), render_kw={"placeholder":"Reply..."},)
+    submit = SubmitField("Reply")
+
+
+
 
