@@ -1,8 +1,9 @@
 const daysContainer = document.querySelector(".days"),
     nextBtn = document.querySelector(".next-btn"),
     prevBtn = document.querySelector(".prev-btn"),
-    month = document.getElementById("month");
-    todayBtn = document.querySelector(".today-btn");
+    month = document.getElementById("month"),
+    todayBtn = document.querySelector(".today-btn"),
+    calendarInfo = document.querySelector(".calendar_info");
 
 const months = [
     "January",
@@ -27,6 +28,9 @@ let currentDate = date.getDate();
 let currentMonth = date.getMonth();
 let currentYear = date.getFullYear();
 
+let calInfoDate = date.getDate();
+let calInfoMonth = date.getMonth();
+let calInfoYear = date.getFullYear();
 
 function renderCalendar() {
     date.setDate(1);
@@ -51,9 +55,9 @@ function renderCalendar() {
 
     for(let i = 1; i <= lastDayDate; i++){
         if(i === currentDate && currentMonth === thisMonth && currentYear === thisYear){
-            days += `<div class="day today">${i}</div>`;
+            days += `<div class="day today day_info" id=${i}>${i}</div>`;
         }else{
-            days += `<div class="day">${i}</div>`;
+            days += `<div class="day day_info" id=${i}>${i}</div>`;
         }
     }
 
@@ -66,6 +70,8 @@ function renderCalendar() {
 }
 
 renderCalendar();
+attach_day_click();
+render_day_info();
 
 nextBtn.addEventListener("click", () => {
     currentMonth++;
@@ -74,6 +80,7 @@ nextBtn.addEventListener("click", () => {
         currentYear++;
     }
     renderCalendar();
+    attach_day_click();
 });
 
 prevBtn.addEventListener("click", () => {
@@ -83,12 +90,14 @@ prevBtn.addEventListener("click", () => {
         currentYear--;
     }
     renderCalendar();
+    attach_day_click();
 });
 
 todayBtn.addEventListener("click", () => {
     currentMonth = date.getMonth();
     currentYear = date.getFullYear();
     renderCalendar();
+    attach_day_click();
 });
 
 function hideTodayBtn(){
@@ -100,4 +109,21 @@ function hideTodayBtn(){
     }else {
         todayBtn.style.display = "flex";
     }
+}
+
+function attach_day_click (){
+    [...document.querySelectorAll('.day_info')].forEach(function(item) {
+        item.addEventListener('click', function(item) {
+          calInfoDate = item.target.id;
+          calInfoMonth = currentMonth;
+          calInfoYear = currentYear;
+          render_day_info();
+        });
+         });
+}
+
+function render_day_info(){
+    let calendar_info = "";
+    calendar_info += `<div class="title" style="color: var(--White); margin-bottom: 0px;">${months[calInfoMonth]} ${calInfoDate}, ${calInfoYear}</div>`;
+    calendarInfo.innerHTML = calendar_info;
 }
