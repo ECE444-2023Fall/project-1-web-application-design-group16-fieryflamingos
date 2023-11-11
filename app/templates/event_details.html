@@ -42,7 +42,7 @@
 				Registration closed.
 				
 				{% endif %}
-			{% elif user_is_attendee %}
+			{% elif user_is_attendee and not user_is_organizer %}
 				You are currently registered for this event. 
 				<div style="display:flex; gap:1rem; margin-top: 20%;">
 					{% if registration_open %}
@@ -54,7 +54,7 @@
 					<a class="button-main no-color" style="text-decoration:none; height:100%;" href="/event/ics/{{event.id}}">Export</a>
 				</div>
 
-			{% elif registration_open %}
+			{% elif registration_open and not user_is_organizer %}
 				Registration open until: 
 				{% if event.registration_open_until %}
 					{{ event.registration_open_until.strftime('%b %d, %Y %I:%M %p') }}
@@ -65,7 +65,7 @@
 					{{ form.hidden_tag()}}
 					{{form.submit(value="RSVP", class="button-main")}}
 				</form>
-			{% else %}
+			{% elif not user_is_organizer %}
 				Registration closed.
 			{% endif %}
 		</div>
