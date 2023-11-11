@@ -12,17 +12,8 @@ class Config:
   
     SECRET_KEY = secret.SECRET_KEY
 
-    # Configuration of a Gmail account for sending mails
-    MAIL_SERVER = 'smtp.googlemail.com'
-    MAIL_PORT = 465
-    MAIL_USE_TLS = True
-    MAIL_USERNAME = secret.MAIL_USERNAME
-    MAIL_PASSWORD = secret.MAIL_PASSWORD
-    ADMINS = ['occasional@gmail.com']
+  
     DOMAIN_WHITELIST = ["mail.utoronto.ca"]
-
-    FLASKY_MAIL_SUBJECT_PREFIX = '[Occasional]'
-    FLASKY_MAIL_SENDER = 'Occasional <occasional@no-reply.com>'
 
 
     # Number of times a password is hashed
