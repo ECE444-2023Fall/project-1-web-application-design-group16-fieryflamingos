@@ -21,9 +21,6 @@
             rel="stylesheet"
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
-        <style>
-            
-        </style>
     </head>
     <script src="script.js"></script>
 
@@ -107,17 +104,7 @@
                         {% endfor %}
                     {% endif %}
                     <tr>
-                        <td>
-                            {{form.password()}}
-                            <i class="material-icons"
-                                title="Password must contain the following:&#013;
-                                        Minimum eight characters&#013;
-                                        At least one uppercase letter&#013;
-                                        At least one lowercase letter&#013;
-                                        At least one number&#013;
-                                        At least one special character"
-                            >info</i>
-                        </td>
+                        <td>{{form.password()}}</td>
                     </tr>
 
                     {% if form.password2.errors %}
