@@ -5,6 +5,7 @@ from pytz import UTC
 from flask import render_template, session, redirect, url_for, flash, abort, request, make_response
 from flask_login import current_user, login_required
 from icalendar import Calendar
+import calendar as pyCalendar
 from icalendar import Event as iEvent
 from bson.objectid import ObjectId
 
@@ -231,10 +232,10 @@ def event_details(id):
             name = ""
             if current_user.role == "regular":
                 name = f"{current_user.first_name} {current_user.last_name}"
+                RegularUser.add_event(current_user.id, event.id)
             else:
                 name = current_user.name
             Event.add_attendee(event.id, current_user.id, current_user.email, name)
-            RegularUser.add_event(current_user.id, event.id)
             user_is_attendee = True
             form = CancelRSVPForm()
         elif isinstance(form, CancelRSVPForm):
@@ -266,13 +267,14 @@ def event_details(id):
     
         avg_rating = avg_rating / comments_with_rating
 
-
+    user_is_organizer = current_user.role == "organization"
 
     reply_form = ReplyForm()
     return render_template('event_details.html', 
         event=event, 
         user_is_attendee=user_is_attendee, 
         user_is_owner=is_owner, 
+        user_is_organizer=user_is_organizer,
         registration_open=registration_open, 
         avg_rating=avg_rating, 
         num_comments=num_comments, 
@@ -799,7 +801,8 @@ def update_profile_organization():
         except:
             flash("An error occurred while updating your profile")
 
-        # get event summary
+
+    # get event summary
     future_events = Event.get_organization_events_future(user.id)
     past_events = Event.get_organization_events_past(user.id)
 
@@ -849,3 +852,108 @@ def calendar(id):
 
     # Return the response object
     return response
+
+  
+""" Calendar route """
+@main.route("/calendar", methods=['GET', 'POST'])
+@login_required
+def calendar_view():
+    month = request.args.get("month")
+    year = request.args.get("year")
+    today = datetime.now()
+    if current_user.role == "organization":
+        return redirect(url_for("main.calendar_view_org", month=month, year=year))
+    
+    if not month or not year:
+        month = today.month
+        year = today.year
+        return redirect(url_for("main.calendar_view",month=month, year=year))
+    else:
+        try:
+            month = int(month)
+        except:
+            month = today.month
+            return redirect(url_for("main.calendar_view",month=month, year=year))
+        try:
+            year = int(year)
+        except:
+            year = today.year
+            return redirect(url_for("main.calendar_view",month=month, year=year))
+        
+        # check if exceeds the max month bound
+        if month > 12:
+            month = 1
+            year += 1
+            return redirect(url_for("main.calendar_view",month=month, year=year))
+
+        # check if exceeds lower bound
+        if month < 1:
+            month = 12
+            year -= 1
+            return redirect(url_for("main.calendar_view",month=month, year=year))
+
+    month_range = pyCalendar.monthrange(year, month)[1]
+    start_date = datetime(year,month, 1)
+    end_date = datetime(year,month, month_range, 23, 59)
+
+    events = Event.get_events_between(start_date, end_date, current_user.registered_events)
+
+    json_events = []
+    # add properties here as need be
+    for event in events:
+        json_events.append({"id": str(event.id), "title": event.title, "from_date": event.event_date.from_date.strftime('%Y-%m-%d %H:%M:%S'), "to_date": event.event_date.to_date.strftime('%Y-%m-%d %H:%M:%S')})
+    
+    return render_template('calendar.html', events=json_events, year=year, month=month)
+
+ 
+""" Calendar route """
+@main.route("/calendar-org", methods=['GET', 'POST'])
+@login_required
+def calendar_view_org():
+    month = request.args.get("month")
+    year = request.args.get("year")
+    today = datetime.now()
+    if current_user.role == "regular":
+        return redirect(url_for("main.calendar_view", month=month, year=year))
+    
+    if not month or not year:
+        month = today.month
+        year = today.year
+        return redirect(url_for("main.calendar_view_org",month=month, year=year))
+    else:
+        try:
+            month = int(month)
+        except:
+            month = today.month
+            return redirect(url_for("main.calendar_view_org",month=month, year=year))
+        try:
+            year = int(year)
+        except:
+            year = today.year
+            return redirect(url_for("main.calendar_view_org",month=month, year=year))
+        
+        # check if exceeds the max month bound
+        if month > 12:
+            month = 1
+            year += 1
+            return redirect(url_for("main.calendar_view_org",month=month, year=year))
+
+        # check if exceeds lower bound
+        if month < 1:
+            month = 12
+            year -= 1
+            return redirect(url_for("main.calendar_view_org",month=month, year=year))
+
+    month_range = pyCalendar.monthrange(year, month)[1]
+    start_date = datetime(year,month, 1)
+    end_date = datetime(year,month, month_range, 23, 59)
+
+    events = Event.get_events_between_organizer(start_date, end_date, current_user.id)
+
+    json_events = []
+    # add properties here as need be
+    for event in events:
+        json_events.append({"id": str(event.id), "title": event.title, "from_date": event.event_date.from_date.strftime('%Y-%m-%d %H:%M:%S'), "to_date": event.event_date.to_date.strftime('%Y-%m-%d %H:%M:%S')})
+    
+    return render_template('calendar.html', events=json_events, year=year, month=month)
+

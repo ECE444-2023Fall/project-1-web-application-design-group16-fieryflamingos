@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %} Calendar {% endblock %}
+{% block content %}
+    <div class="container-fluid" style="padding: 0; margin: 0;">
+        <div style="height: 640px; background-color: var(--Light-Grey); min-width: 1000px;
+        min-height: 100uh; display: flex; align-items: top; justify-content: center;">
+            <div class="calendar_info">
+                <!--<div class="title" style="color: var(--White); margin-bottom: 0px">Nov 11, 2023</div>
+                <hr class="underline_white" style="width:100%; margin-bottom: 0px;">
+                <div class="row">
+                    <div class="col-11 subtitle" style="color: var(--White); margin-top: 32px;
+                    margin-left: 20px;">
+                        10:00 PM - 11:00 PM
+                    </div>
+                </div>
+                <div class = "row">
+                    <div class="col-11 label" style="text-overflow: ellipsis; overflow: hidden;
+                    text-wrap: nowrap; color: var(--White); margin-top: 8px; margin-left: 20px;">
+                    Fiery Flamingos Phantasmal Faceplant of death</div>
+                </div>
+                <div class="row">
+                    <div class="col-11 subtitle" style="color: var(--White); margin-top: 32px;
+                    margin-left: 20px;">
+                        10:00 PM - 11:00 PM
+                    </div>
+                </div>
+                <div class = "row">
+                    <div class="col-11 label" style="text-overflow: ellipsis; overflow: hidden;
+                    text-wrap: nowrap; color: var(--White); margin-top: 8px; margin-left: 20px;">
+                    Fiery Flamingos Phantasmal Faceplant of death</div>
+                </div>-->
+            </div>
+            <div style="width: 100%; max-width: 600px; padding: 30px 20px; border-radius: 18px;
+            background-color: var(--White); margin-top: 50px; height: 520px">
+                <div style="display:flex; justify-content: space-between; align-items:center;
+                margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid var(--UofT-Blue);">
+                    <div id="month" class="title" style="display:flex; align-items:center; color: var(--UofT-Blue);">
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <div class="btns today-btn">
+                            <i class="fas fa-calendar-day" 
+                            style="margin-top: 11px; align-items: center;"></i>
+                        </div>
+                        <div class="btns prev-btn">
+                            <i class="fas fa-chevron-left"
+                            style="margin-top: 11px; align-items: center;"></i>
+                        </div>
+                        <div class="btns next-btn">
+                            <i class="fas fa-chevron-right"
+                            style="margin-top: 11px; align-items: center;"></i> 
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom:10px">
+                    <div class="day label-bold">Sun</div>
+                    <div class="day label-bold">Mon</div>
+                    <div class="day label-bold">Tue</div>
+                    <div class="day label-bold">Wed</div>
+                    <div class="day label-bold">Thu</div>
+                    <div class="day label-bold">Fri</div>
+                    <div class="day label-bold">Sat</div>
+                </div>
+                <div class="days">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var monthIdx = {{month}};
+        var year = {{year}};
+        var events = {{events | tojson}};
+    </script>
+    <script src="{{url_for('static', filename='main.js')}}"></script>
+{% endblock %}
