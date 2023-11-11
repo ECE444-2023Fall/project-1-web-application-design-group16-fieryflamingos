@@ -893,4 +893,10 @@ def calendar_view():
     end_date = datetime(year,month, month_range, 23, 59)
 
     events = Event.get_events_between(start_date, end_date)
-    return render_template('calendar.html', events=events, year=year, month=month)
+
+    json_events = []
+    # add properties here as need be
+    for event in events:
+        json_events.append({"title": event.title, "organizer": event.organizer.name, "from_date": event.event_date.from_date.strftime('%Y-%m-%d %H:%M:%S'), "to_date": event.event_date.to_date.strftime('%Y-%m-%d %H:%M:%S')})
+    
+    return render_template('calendar.html', events=json_events, year=year, month=month)

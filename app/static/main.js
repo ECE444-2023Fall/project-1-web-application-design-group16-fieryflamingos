@@ -23,12 +23,9 @@ const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu",  "Fri", "Sat"];
 
 const date = new Date();
 
-let monthIdx = "{{month}}";
-let monthAsNumber = Number(monthIdx);
-let year = "{{year}}";
-let yearAsNumber = Number(year);
-date.setMonth(monthAsNumber-1);
-date.setFullYear(yearAsNumber);
+
+date.setMonth(monthIdx-1);
+date.setFullYear(year);
 let currentMonth = date.getMonth();
 let currentYear = date.getFullYear();
 console.log(monthIdx)
@@ -77,10 +74,6 @@ renderCalendar();
 
 nextBtn.addEventListener("click", () => {
     const urlParams = new URLSearchParams(window.location.search);
-    let month = "{{month}}";
-    let monthAsNumber = Number(month);
-    let year = "{{year}}";
-    let yearAsNumber = Number(year);
     urlParams.set('month', `${monthAsNumber+1}`);
     urlParams.set('year', `${yearAsNumber}`);
     let url = `${window.location.pathname}?${urlParams}`;
@@ -90,10 +83,6 @@ nextBtn.addEventListener("click", () => {
 
 prevBtn.addEventListener("click", () => {
     const urlParams = new URLSearchParams(window.location.search);
-    let month = "{{month}}";
-    let monthAsNumber = Number(month);
-    let year = "{{year}}";
-    let yearAsNumber = Number(year);
     urlParams.set('month', `${monthAsNumber-1}`);
     urlParams.set('year', `${yearAsNumber}`);
     let url = `${window.location.pathname}?${urlParams}`;
