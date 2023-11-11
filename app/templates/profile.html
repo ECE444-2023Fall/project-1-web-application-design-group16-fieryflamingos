@@ -2,145 +2,142 @@
 {% block title %} Profile {% endblock %}
 {% block content %}
 
-    <div style="background-color: #F1F5F9; height: auto;">
-        <div style="margin-left: 15%; margin-right: 15%; display: flex; padding-top: 40px; padding-bottom: 40px; ">
-            <div style="padding-top: 30px; padding-bottom: 30px;">
-                <img src="/static/img/profile_pic.jpg" width="200" height="200" alt="">
-            </div>
-            <div style="padding-top: 40px; padding-left: 50px; padding-bottom: 40px;">
-                <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <div class="main-title">
-                        {{user.first_name}} {{user.last_name}}
-                    </div>
-                    <a class="edit-profile" href="/profile/edit" style="margin-top: 20px; margin-right: 20px;"></a>
+<div style="background-color: #F1F5F9; height: auto;">
+    <div style="margin-left: 15%; margin-right: 15%; display: flex; padding-top: 40px; padding-bottom: 40px; ">
+        <div style="padding-top: 30px; padding-bottom: 30px;">
+            <img src="/static/img/profile_pic.jpg" width="200" height="200" alt="">
+        </div>
+        <div style="padding-top: 40px; padding-left: 50px; padding-bottom: 40px;">
+            <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                <div class="main-title">
+                    {{user.first_name}} {{user.last_name}}
                 </div>
-                <a class="edit-profile" href="/profile/edit"></a>
-                <hr style="margin-bottom: 10px; width: 100%;">
-                <div class="body-text" style="margin-bottom: 10px;">
-                    {{ user.email }}
-                </div>
-                <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
-                    {% for interest in preferences %}
-                    <a href="/event/search?preferences={{interest.id}}" style="text-decoration: none">
-                        <button class="interest-tag">
-                            {{interest.preference}}
-                            <div class="tag-number">
-                                {{interest.events_with_preference}}
-                            </div>
-                        </button>
-                    </a>
-                    {% endfor %}
-                </div> 
+                <a class="edit-profile" href="/profile/edit" style="margin-top: 20px; margin-right: 20px;"></a>
             </div>
+            <a class="edit-profile" href="/profile/edit"></a>
+            <hr style="margin-bottom: 10px; width: 100%;">
+            <div class="body-text" style="margin-bottom: 10px;">
+                {{ user.email }}
+            </div>
+            <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
+                {% for interest in preferences %}
+                <a href="/event/search?preferences={{interest.id}}" style="text-decoration: none">
+                    <button class="interest-tag">
+                        {{interest.preference}}
+                        <div class="tag-number">
+                            {{interest.events_with_preference}}
+                        </div>
+                    </button>
+                </a>
+                {% endfor %}
+            </div> 
         </div>
     </div>
-    <a href="#past-events">Go to Past Events</a>
+</div>
+<!-- <a href="#past-events">Go to Past Events</a> -->
 
-    <div class = "container-fluid upp-sec-profile col-9">
-        <div class="row">
-            <div class="upcoming col-8">YOUR UPCOMING EVENTS
-                <hr class="underline_white">
-            </div>
+<div style="background-color: #25355A;">
+    <div style="margin-left: 10%; margin-right: 10%; padding: 40px;">
+        <div class="main-title" style="color: white !important; margin-bottom: 40px;">
+            Upcoming Events
         </div>
         {% if not future_events %}
-        <div style="display: flex; position: relative;width: 100%;">
-            <div style="display: table-cell; vertical-align: top;">
-                <div style="text-align: center; margin-top: 88px;">
-                    <div class="title" style="color: #FFFFFF">
-                        No Upcoming Events
-                    </div>
-                    <br/>
-                    <div class="subtitle" style="color: #FFFFFF">
-                        Find and RSVP for events using the Discover tab
-                    </div>
+            <div style="display: flex; position: relative;width: 100%;">
+                <div class="body-text" style="color: white;">
+                    No Upcoming Events, Find and RSVP for events using the Discover tab
                 </div>
             </div>
-        </div>
         {% else %}
-        <div class="row">
-            {% for event in future_events %}
+        {% for event in future_events %}
             <a href="/event/{{event.id}}" style="text-decoration: none">
-
-            <div class = "card upcoming_card_profile col-11">
-                <div class="row">
-                    <div class="title upcoming_title_profile col-7">
+                <div class="white-card-container" style="flex: 60%; margin-bottom: 30px;">
+                    <div class="title" style="margin-bottom: 16px;" >
                         {{event.title}}
                     </div>
-                    <div class="col-4">
-                        <div class="row">
-                            <div class="date_time_time col-6 date_time_top_profile">
-                                {{event.event_date.from_date.strftime('%I:%M %p')}}
-                            </div>
-                            <div class="date_time_date col-6 date_time_top_profile">
-                                {{event.event_date.from_date.strftime('%A')}}
+                    <hr style="margin-bottom: 20px; width: auto;">
+                    <div style="display: flex; flex-wrap:wrap; justify-content:space-between; margin-bottom: 16px; gap:8px;">
+                        <div style="display: flex; min-width:calc(50% - 8px)">
+                            <span class="label-bold" style="margin-right: 6px;">
+                                Organizer: 
+                            </span>
+                            <div class="label">
+                                {{event.organizer.name}}
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="date_time_time col-6">
-                                {{event.event_date.to_date.strftime('%I:%M %p')}}
+                        <div style="display: flex; min-width:calc(50% - 8px)">
+                            <span class="label-bold" style="margin-right: 6px;">
+                                Time: 
+                            </span>
+                            <div class="label">
+                                {{ event.event_date.from_date.strftime('%b %d, %Y %I:%M') }} - {{ event.event_date.to_date.strftime('%I:%M %p').lstrip('0')|upper }}
                             </div>
-                            <div class="date_time_date col-6">
-                               {{ event.event_date.from_date.strftime('%b %d, %Y')}}
+                        </div>
+                        <div style="display: flex; min-width:calc(50% - 8px)">
+                            <span class="label-bold" style="margin-right: 6px;">
+                                Location: 
+                            </span>
+                            <div class="label">
+                                {{event.location.address}}, {{event.location.room}}
                             </div>
                         </div>
                     </div>
+                            
                 </div>
-            </div>
-            </a>
-            {% endfor %}
-        </div>
+            </a>			
+        {% endfor %}
         {% endif %}
-    </div>
+    </div>   
+</div>
 
-    <div id="past-events" class = "container-fluid upp-sec-profile col-9">
-        <div class="row">
-            <div class="upcoming col-8">YOUR PAST EVENTS
-                <hr class="underline_white">
-            </div>
+<div id="past-events" class = "container-fluid upp-sec-profile col-9">
+    <div class="row">
+        <div class="upcoming col-8">YOUR PAST EVENTS
+            <hr class="underline_white">
         </div>
-        {% if not past_events %}
-        <div style="display: flex; position: relative; width: 100%;">
-            <div style="display: table-cell; vertical-align: top;">
-                <div style="text-align: center; margin-top: 88px;">
-                    <div class="title" style="color: #FFFFFF">
-                        No Past Events
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-        {% else %}
-        <div class="row">
-            {% for event in past_events %}
-            <a href="/event/{{event.id}}" style="text-decoration: none">
-            <div class = "card upcoming_card_profile col-11">
-                <div class="row">
-                    <div class="title upcoming_title_profile col-7">
-                        {{event.title}}
-                    </div>
-                    <div class="col-4">
-                        <div class="row">
-                            <div class="date_time_time col-6 date_time_top_profile">
-                                {{event.event_date.from_date.strftime('%I:%M %p')}}
-                            </div>
-                            <div class="date_time_date col-6 date_time_top_profile">
-                                {{event.event_date.from_date.strftime('%A')}}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="date_time_time col-6">
-                                {{event.event_date.to_date.strftime('%I:%M %p')}}
-                            </div>
-                            <div class="date_time_date col-6">
-                               {{ event.event_date.from_date.strftime('%b %d, %Y')}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </a>
-            {% endfor %}
-        </div>
-        {% endif %}
     </div>
+    {% if not past_events %}
+    <div style="display: flex; position: relative; width: 100%;">
+        <div style="display: table-cell; vertical-align: top;">
+            <div style="text-align: center; margin-top: 88px;">
+                <div class="title" style="color: #FFFFFF">
+                    No Past Events
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        {% for event in past_events %}
+        <a href="/event/{{event.id}}" style="text-decoration: none">
+        <div class = "card upcoming_card_profile col-11">
+            <div class="row">
+                <div class="title upcoming_title_profile col-7">
+                    {{event.title}}
+                </div>
+                <div class="col-4">
+                    <div class="row">
+                        <div class="date_time_time col-6 date_time_top_profile">
+                            {{event.event_date.from_date.strftime('%I:%M %p')}}
+                        </div>
+                        <div class="date_time_date col-6 date_time_top_profile">
+                            {{event.event_date.from_date.strftime('%A')}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="date_time_time col-6">
+                            {{event.event_date.to_date.strftime('%I:%M %p')}}
+                        </div>
+                        <div class="date_time_date col-6">
+                            {{ event.event_date.from_date.strftime('%b %d, %Y')}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

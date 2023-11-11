@@ -33,12 +33,65 @@ content %}
     </div>
 </div>
 
-<a href="#past-events">Go to Past Events</a>
+<!-- <a href="#past-events">Go to Past Events</a> -->
+
+<div style="background-color: #25355A;">
+    <div style="margin-left: 10%; margin-right: 10%; padding: 40px;">
+        <div class="main-title" style="color: white !important; margin-bottom: 40px;">
+            Upcoming Events
+        </div>
+        {% if not future_events %}
+            <div style="display: flex; position: relative;width: 100%;">
+                <div class="body-text" style="color: white;">
+                    No Upcoming Events, Find and RSVP for events using the Discover tab
+                </div>
+            </div>
+        {% else %}
+        {% for event in future_events %}
+            <a href="/event/{{event.id}}" style="text-decoration: none">
+                <div class="white-card-container" style="flex: 60%; margin-bottom: 30px;">
+                    <div class="title" style="margin-bottom: 16px;" >
+                        {{event.title}}
+                    </div>
+                    <hr style="margin-bottom: 20px; width: auto;">
+                    <div style="display: flex; flex-wrap:wrap; justify-content:space-between; margin-bottom: 16px; gap:8px;">
+                        <div style="display: flex; min-width:calc(50% - 8px)">
+                            <span class="label-bold" style="margin-right: 6px;">
+                                Organizer: 
+                            </span>
+                            <div class="label">
+                                {{event.organizer.name}}
+                            </div>
+                        </div>
+                        <div style="display: flex; min-width:calc(50% - 8px)">
+                            <span class="label-bold" style="margin-right: 6px;">
+                                Time: 
+                            </span>
+                            <div class="label">
+                                {{ event.event_date.from_date.strftime('%b %d, %Y %I:%M') }} - {{ event.event_date.to_date.strftime('%I:%M %p').lstrip('0')|upper }}
+                            </div>
+                        </div>
+                        <div style="display: flex; min-width:calc(50% - 8px)">
+                            <span class="label-bold" style="margin-right: 6px;">
+                                Location: 
+                            </span>
+                            <div class="label">
+                                {{event.location.address}}, {{event.location.room}}
+                            </div>
+                        </div>
+                    </div>
+                            
+                </div>
+            </a>			
+        {% endfor %}
+        {% endif %}
+    </div>   
+</div>
 
 <div class="container-fluid upp-sec-profile col-9">
     <div class="row">
         <div class="upcoming col-8">
-            YOUR UPCOMING EVENTS
+            Upcoming Events
             <hr class="underline_white" />
         </div>
     </div>
