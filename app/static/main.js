@@ -125,5 +125,6 @@ function attach_day_click (){
 function render_day_info(){
     let calendar_info = "";
     calendar_info += `<div class="title" style="color: var(--White); margin-bottom: 0px;">${months[calInfoMonth]} ${calInfoDate}, ${calInfoYear}</div>`;
+    calendar_info += `<hr class="underline_white" style="width:100%; margin-bottom: 0px;"></hr>`
     calendarInfo.innerHTML = calendar_info;
 }
