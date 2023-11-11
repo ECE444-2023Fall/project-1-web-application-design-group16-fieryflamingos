@@ -453,7 +453,7 @@ class Event(Document):
         return Event.objects(id__in=id_list, event_date__from_date__gte=start_date, event_date__from_date__lt=end_date).order_by("+event_date.from_date").exclude("organizer", "location", "attendees", "description", "targeted_preferences")
 
     @staticmethod
-    def get_events_between(start_date, end_date, org_id):
+    def get_events_between_organizer(start_date, end_date, org_id):
         return Event.objects(organizer__author_id=org_id, event_date__from_date__gte=start_date, event_date__from_date__lt=end_date).order_by("+event_date.from_date").exclude("organizer", "location", "attendees", "description", "targeted_preferences")
 
 
