@@ -1,13 +1,11 @@
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
-from flask_mail import Mail
 from flask_moment import Moment
 from flask_bcrypt import Bcrypt
 from app.mongodb import MongoEngine
 from flask_login import LoginManager
 from config import config
 
-mail = Mail()
 bcrypt = Bcrypt()
 moment = Moment()
 db = MongoEngine()
@@ -20,7 +18,6 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
     bootstrap.init_app(app)
-    mail.init_app(app)
     moment.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
