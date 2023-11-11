@@ -24,14 +24,17 @@ const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu",  "Fri", "Sat"];
 
 const date = new Date();
 
+//Variables for current calendar being displayed
 let currentDate = date.getDate();
 let currentMonth = date.getMonth();
 let currentYear = date.getFullYear();
 
+//Variables for the current calendar event information being displayed
 let calInfoDate = date.getDate();
 let calInfoMonth = date.getMonth();
 let calInfoYear = date.getFullYear();
 
+//Function for updating the calendar
 function renderCalendar() {
     date.setDate(1);
     const firstDay = new Date(currentYear, currentMonth, 1);

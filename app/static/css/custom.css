@@ -460,7 +460,7 @@ hr.underline_upp {
 .days .day{
     width: calc(100%/7 - 10px);
     text-align: center;
-    height: 60px; 
+    height: 50px; 
     display: flex; 
     align-items: center;
     justify-content:center; 
@@ -487,6 +487,7 @@ hr.underline_upp {
     font-weight: 250;
 }
 
+
 .calendar_info{
     width: 100%;
     max-width: 400px; 
@@ -498,8 +499,8 @@ hr.underline_upp {
     justify-content: center; 
     margin-bottom: 20px; 
     margin-right: 10px;
-    margin-top: 20px;
-    height: 510px;
+    margin-top: 50px;
+    height: 520px;
     display: inline-block;  
     overflow: auto; 
     padding: 20px 20px;
