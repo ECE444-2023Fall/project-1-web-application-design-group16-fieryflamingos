@@ -151,12 +151,14 @@
                     <hr style="width: auto;">
                     <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
 						{% for interest in targeted_preferences %}
-                        <button class="interest-tag">
-                            {{interest.preference}}
-                            <div class="tag-number">
-                                {{interest.events_with_preference}}
-                            </div>
-                        </button>
+                        <a href="/event/search?preferences={{interest.id}}" style="text-decoration: none">
+							<button class="interest-tag">
+								{{interest.preference}}
+								<div class="tag-number">
+									{{interest.events_with_preference}}
+								</div>
+							</button>
+						</a>
 						{% endfor %}
 
                     </div> 
