@@ -82,7 +82,7 @@ def index():
     if user.role == "organization":
         return redirect(url_for("main.get_profile_org", id=user.id))
 
-    recommended_events = Event.get_recommended(user.preferences)
+    recommended_events = Event.get_recommended(user.id, user.preferences)
     upcoming_events = Event.get_upcoming(user.id)
     rec_events_dict_list = []
     for event in recommended_events:
