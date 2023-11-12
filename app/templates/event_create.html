@@ -82,8 +82,8 @@
             {% if form_is_update %}
             <div style="display:flex; flex-wrap:wrap; gap:1rem;">
               {{ form.submit(value="Update", class="button-main") }}
-              <a class="button-main" href="/event/{{event.id}}" onclick="return confirm('Are you sure you want to cancel updating this event?')" style="text-decoration: none; background-color: red">Cancel</a>
-              <a class="button-main" href="/event/delete/{{event.id}}" onclick="return confirm('Are you sure you want to delete this event?')" style="height: 100%; background-color: red; text-decoration: none">Delete</a>
+              <a class="button-cancel" href="/event/{{event.id}}" onclick="return confirm('Are you sure you want to cancel updating this event?')" style="text-decoration: none;">Cancel</a>
+              <a class="button-cancel" href="/event/delete/{{event.id}}" onclick="return confirm('Are you sure you want to delete this event?')" style="height: 100%; text-decoration: none">Delete</a>
             </div>
 
             {% else %}
