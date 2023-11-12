@@ -1,5 +1,5 @@
-{% import "bootstrap/wtf.html" as wtf %}
 {% extends 'base.html' %}
+{% block title %} Create {% endblock %}
 {% block content %}
 <!DOCTYPE html>
 <html>
@@ -8,13 +8,13 @@
 
       <h3>Create</h3>
 
-      {% if error %}
-      <p class="alert alert-danger col-sm-4" role="danger">
-        <strong>Error:</strong> {{ error }}
-      </p>
-      {% endif %}
-
       <form action="" method="POST">
+        {% if form.errors %} {% for field, errors in form.errors.items() %}
+        {% for error in errors %}
+          <div style="text-align: left">
+              <span class="error-auth">{{error}}</span>
+          </div>
+          {% endfor %}{% endfor %} {% endif %}
         {{form.hidden_tag()}}
         <div class="label-bold" style="margin-bottom: 10px;">
           {{form.title.label}}
