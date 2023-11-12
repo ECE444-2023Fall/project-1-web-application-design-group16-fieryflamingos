@@ -2,7 +2,7 @@
 {% block title %} Calendar {% endblock %}
 {% block content %}
     <div class="container-fluid" style="padding: 0; margin: 0;">
-        <div style="height: 640px; background-color: var(--Light-Grey); min-width: 1000px;
+        <div style="height: 640px; background-color: var(--Light-Grey); min-width: 700px;
         min-height: 100uh; display: flex; align-items: top; justify-content: center;">
             <div class="calendar_info">
             </div>
@@ -161,13 +161,13 @@
                 if(i === currentDate && currentMonth === thisMonth && currentYear === thisYear){
                     days += `<div class="day today day_info" id=${i}>`
                     if(eventExistsThisDay[i] == true){
-                        days += `<div class="event_exists"></div>`
+                        days += `<div class="event_exists" id=${i}></div>`
                     }
                     days+=`<div class="number" id=${i}>${i}</div></div>`;
                 }else{
                     days += `<div class="day day_info" id=${i}>`;
                     if(eventExistsThisDay[i] == true){
-                        days += `<div class="event_exists"></div>`
+                        days += `<div class="event_exists" id=${i}></div>`
                     }
                     days+=`<div class="number" id=${i}>${i}</div></div>`
                 }
