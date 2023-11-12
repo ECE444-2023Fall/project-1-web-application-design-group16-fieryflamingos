@@ -533,7 +533,9 @@ hr.underline_upp {
     font-family: Inter;
     font-size: 14px;
     font-weight: 450;
+    position: relative;
 }
+
 
 .days .day:not(.prev):not(.next):hover{
     background-color: var(--Mint);
@@ -570,5 +572,17 @@ hr.underline_upp {
 }
 
 .day_info{
-    display: inline-block;
+    position: inline-block;
+}
+
+.number{
+    position: absolute;
+}
+
+.event_exists{
+    position: absolute; 
+    top: 4px; 
+    height: 2px; 
+    width: 50px;
+    background-color:var(--UofT-Blue);
 }

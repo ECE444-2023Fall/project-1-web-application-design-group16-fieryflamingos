@@ -5,30 +5,6 @@
         <div style="height: 640px; background-color: var(--Light-Grey); min-width: 1000px;
         min-height: 100uh; display: flex; align-items: top; justify-content: center;">
             <div class="calendar_info">
-                <!--<div class="title" style="color: var(--White); margin-bottom: 0px">Nov 11, 2023</div>
-                <hr class="underline_white" style="width:100%; margin-bottom: 0px;">
-                <div class="row">
-                    <div class="col-11 subtitle" style="color: var(--White); margin-top: 32px;
-                    margin-left: 20px;">
-                        10:00 PM - 11:00 PM
-                    </div>
-                </div>
-                <div class = "row">
-                    <div class="col-11 label" style="text-overflow: ellipsis; overflow: hidden;
-                    text-wrap: nowrap; color: var(--White); margin-top: 8px; margin-left: 20px;">
-                    Fiery Flamingos Phantasmal Faceplant of death</div>
-                </div>
-                <div class="row">
-                    <div class="col-11 subtitle" style="color: var(--White); margin-top: 32px;
-                    margin-left: 20px;">
-                        10:00 PM - 11:00 PM
-                    </div>
-                </div>
-                <div class = "row">
-                    <div class="col-11 label" style="text-overflow: ellipsis; overflow: hidden;
-                    text-wrap: nowrap; color: var(--White); margin-top: 8px; margin-left: 20px;">
-                    Fiery Flamingos Phantasmal Faceplant of death</div>
-                </div>-->
             </div>
             <div style="width: 100%; max-width: 600px; padding: 30px 20px; border-radius: 18px;
             background-color: var(--White); margin-top: 50px; height: 520px">
@@ -88,6 +64,11 @@
         var eventsThisYear = [];
         var eventsThisMonth = [];
         var eventsThisDay = [];
+        var eventExistsThisDay = [];
+
+        for(var i = 1; i < 32; i++){
+            eventExistsThisDay.push(false);
+        }
     
         const months = [
             "January",
@@ -131,11 +112,15 @@
 
         //Grab the events for the current displayed month indicated by currentMonth
         function getEventsThisMonth(){
-            eventsThisMonth = []
+            eventsThisMonth = [];
+            eventExistsThisDay= [];
+            for(var i = 1; i < 32; i++){
+                eventExistsThisDay.push(false);
+            }
             for(i = 0; i < eventsThisYear.length; i++){
                 if(eventsThisYear[i].month == currentMonth+1){
+                    eventExistsThisDay[eventsThisYear[i].day] = true;
                     eventsThisMonth.push(eventsThisYear[i]);
-                    console.log(eventsThisYear[i].title)
                 }
             }
         }
@@ -146,7 +131,6 @@
             for(i = 0; i < eventsThisMonth.length; i++){
                 if(eventsThisMonth[i].day == calInfoDate){
                     eventsThisDay.push(eventsThisMonth[i]);
-                    console.log(eventsThisMonth[i].title)
                 }
             }
         }
@@ -175,9 +159,17 @@
 
             for(let i = 1; i <= lastDayDate; i++){
                 if(i === currentDate && currentMonth === thisMonth && currentYear === thisYear){
-                    days += `<div class="day today day_info" id=${i}>${i}</div>`;
+                    days += `<div class="day today day_info" id=${i}>`
+                    if(eventExistsThisDay[i] == true){
+                        days += `<div class="event_exists"></div>`
+                    }
+                    days+=`<div class="number">${i}</div></div>`;
                 }else{
-                    days += `<div class="day day_info" id=${i}>${i}</div>`;
+                    days += `<div class="day day_info" id=${i}>`;
+                    if(eventExistsThisDay[i] == true){
+                        days += `<div class="event_exists"></div>`
+                    }
+                    days+=`<div class="number">${i}</div></div>`
                 }
             }
 
@@ -255,12 +247,13 @@
             let calendar_info = "";
             calendar_info += `<div class="title" style="color: var(--White); margin-bottom: 0px;">
                 ${months[calInfoMonth]} ${calInfoDate}, ${calInfoYear}</div>`;
+                calendarInfo.innerHTML = calendar_info;
             calendar_info += `<hr class="underline_white" style="width:100%; margin-bottom: 0px;"></hr>`;
             getEventsThisDay();
             if(eventsThisDay.length == 0){
                 calendar_info += `<div class="title" style= "margin-top: 120px; justify-content: center; color: var(--White);
                 width: 100%; margin-left: 120px;">
-                    No Events<\div>`
+                    No Events</div>`
             }else{
                 for(var i = 0; i < eventsThisDay.length; i++){
                     calendar_info +=  `<div class="row"> <div class="col-11 subtitle" style="color: var(--White); 
@@ -274,5 +267,4 @@
             calendarInfo.innerHTML = calendar_info;
         }
     </script>
-    <!--<script src="{{url_for('static', filename='main.js')}}"></script>-->
 {% endblock %}
