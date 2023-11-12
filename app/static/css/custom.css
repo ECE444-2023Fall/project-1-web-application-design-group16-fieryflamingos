@@ -307,6 +307,11 @@ hr.underline_upp {
     transform: scale(1.01);
 }
 
+.card-container{
+    background-color: white;
+    padding: 60px;
+}
+
 .main-title{
     color: #000000;
     font-family: Inter;

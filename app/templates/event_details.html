@@ -58,13 +58,15 @@
 				{% endif %}
 			{% elif user_is_attendee and not user_is_organizer %}
 				<!-- User is Attendee -->
-				You are currently registered for this event. 
+				<div class="label">
+					You are currently registered for this event. 
+				</div>
 				<div style="display:flex; gap:1rem; margin-top: 20%;">
 					{% if registration_open %}
 						<!-- Cancel Registration Form -->
 						<form action="" method="POST">
 							{{ form.hidden_tag()}}
-							{{form.submit(value="Cancel", style="background-color: red", class="button-main")}}
+							{{form.submit(value="Cancel", class="button-cancel")}}
 						</form>
 					{% endif %}
 					<!-- Export Button -->
@@ -87,7 +89,7 @@
 				<!-- RSVP Form -->
 				<form action="" method="POST">
 					{{ form.hidden_tag()}}
-					{{form.submit(value="RSVP", class="button-main")}}
+					{{form.submit(value="RSVP", class="button-main", style="margin-top: 80px")}}
 				</form>
 			{% elif not user_is_organizer %}
 				<!-- Registration Closed for Attendee -->
@@ -97,7 +99,7 @@
 			{% endif %}
 		</div>
 		<div style="flex: 17%;"></div>
-		<div style="flex: 33%; margin-top: 15px;">
+		<div style="flex: 33%; margin-top: 45px;">
 			<!-- Location Section -->
 			<div class="subtitle" style="margin-bottom: 14px" ;>
 				Location
@@ -120,21 +122,21 @@
 					{{event.location.room}}
 				</span>
 			</div>
-			<!-- Google Maps Embed -->
+			<!-- Google Maps Embed
 			<iframe width=80% height=200px style="border: 0; margin-top: 16px;" loading="lazy" allowfullscreen
 					referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/place?key=API_KEY
 						&q=Space+Needle,Seattle+WA">
-			</iframe>
+			</iframe> -->
 		</div>
 	</div>
 
-	<div class="event-details" style="background-color: #F1F5F9;">
+	<div class="event-details" style="background-color: #F1F5F9; padding-bottom: 80px;">
         <div style="margin-left: 10%; margin-right: 12%; padding-top: 40px;">
             <div class="title" style="margin-bottom: 40px; margin-top: 10px;">
                 Event Details
             </div>
             <div style="display: flex;">
-                <div class="white-card-container" style="flex: 60%;">
+                <div class="card-container" style="flex: 60%;">
                     <div class="subtitle" style="margin-bottom: 28px;">
                         Description
                     </div>
@@ -144,7 +146,7 @@
                     </p>
                 </div>
                 <div style="flex: 8%;"></div>
-                <div class="white-card-container" style="flex: 32%; min-height: 300px;">
+                <div class="card-container" style="flex: 32%; min-height: 300px;">
                     <div class="subtitle">
                         Related Interests
                     </div>
@@ -193,7 +195,7 @@
 				Event Statistics
 			</div>
 			<div style="display: flex;">
-				<div class="white-card-container" style="flex: 60%; margin-bottom: 40px;">
+				<div class="card-container" style="flex: 60%; margin-bottom: 40px;">
 					<div class="subtitle" style="margin-bottom: 6px;">
 						Attendance Information
 					</div>
@@ -221,7 +223,7 @@
 				</div>
 			</div>
 
-			<div class="white-card-container" style="flex: 60%; margin-bottom: 40px;">
+			<div class="card-container" style="flex: 60%; margin-bottom: 40px;">
 				<div class="subtitle" style="margin-bottom: 6px;">
 					Review Summary
 				</div>
@@ -293,8 +295,8 @@
 			</div>
 			{% for comment in comments %}
 				<div id="{{comment.id}}" >
-					<div class="white-card-container" style="margin-bottom: 30px; padding:0;">
-						<div class="white-card-container" style="margin-bottom: 0px; ">
+					<div class="card-container" style="margin-bottom: 30px; padding:0;">
+						<div class="card-container" style="margin-bottom: 0px; ">
 							<div style="display:flex; justify-content:space-between">
 								<div class="subtitle" >
 									{{comment.author.name}}
@@ -329,7 +331,7 @@
 					<div style="margin-left: 5%;">
 						{% if comment.replies %}
 							{% for reply in comment.replies %}
-								<div id="{{reply.id}}"  class="white-card-container" style="margin-bottom: 10px; padding: 30px;">
+								<div id="{{reply.id}}"  class="card-container" style="margin-bottom: 10px; padding: 30px;">
 									<div class="subtitle" >
 										{{reply.author.name}}
 									</div>
