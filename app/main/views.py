@@ -886,7 +886,9 @@ def calendar_view_org():
     json_events = []
     # add properties here as need be
     for event in events:
-        json_events.append({"id": str(event.id), "title": event.title, "month": event.event_date.from_date.month, "to_date": event.event_date.to_date.strftime('%Y-%m-%d %H:%M:%S')})
+         json_events.append({"id": str(event.id), "title": event.title, "year": event.event_date.from_date.year, 
+                            "month": event.event_date.from_date.month, "day": event.event_date.from_date.day,
+                            "from_time": event.event_date.from_date.strftime('%I:%M %p'), "to_time": event.event_date.to_date.strftime('%I:%M %p')})
     
-    return render_template('calendar.html', events=json.dumps(json_events));
+    return render_template('calendar.html', events=json_events)
 

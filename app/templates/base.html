@@ -44,45 +44,80 @@
                 id="navbarSupportedContent"> 
             <ul class="navbar-nav justify-content-center"> 
                 {% if current_user.role == "organization"%}
-                    <li class="nav-item" style="margin-left: 10%;"> 
+                    <li class="nav-item banner" style="margin-left: 10%;"> 
                         <a class="nav-link" 
                         href="/event/create"> 
                         CREATE
                         </a> 
                     </li> 
                 {% else %}
-                    <li class="nav-item" style="margin-left: 10%;"> 
+                    <li class="nav-item banner" style="margin-left: 10%;"> 
                         <a class="nav-link" 
                         href="/"> 
                         DASHBOARD  
                         </a> 
                     </li> 
                 {% endif %}
-                <li class="nav-item"> 
+                <li class="nav-item banner"> 
                     <a class="nav-link" 
                         href="/event/search"> 
                         DISCOVER 
                     </a> 
                 </li> 
-                <li class="nav-item"> 
+                <li class="nav-item banner"> 
                     <a class="nav-link"
                         href="/profile"> 
                         PROFILE 
                     </a> 
                 </li>
-                <li class="nav-item"> 
+                <li class="nav-item banner"> 
                     <a class="nav-link"
-                        href="/calendar  "> 
+                        href="/calendar"> 
                         CALENDAR
                     </a> 
                 </li>  
-            </ul>
+            </ul>    
         </div>
-    
-        <a class="nav-link" href="/auth/logout" style="position: absolute; right: -15%; color: black;">
-            LOGOUT
-            <svg style="margin-bottom: 4px;" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M497 273L329 441c-15 15-41 4.5-41-17v-96H152c-13.3 0-24-10.7-24-24v-96c0-13.3 10.7-24 24-24h136V88c0-21.4 25.9-32 41-17l168 168c9.3 9.4 9.3 24.6 0 34zM192 436v-40c0-6.6-5.4-12-12-12H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h84c6.6 0 12-5.4 12-12V76c0-6.6-5.4-12-12-12H96c-53 0-96 43-96 96v192c0 53 43 96 96 96h84c6.6 0 12-5.4 12-12z"/></svg>
-        </a>
+        <div class= "banner" style="padding: 0; margin-left: auto; margin-right: -12%;">
+            <a class="nav-link" href="/auth/logout" style="color: black;">
+                LOGOUT
+                <svg style="margin-bottom: 4px;" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M497 273L329 441c-15 15-41 4.5-41-17v-96H152c-13.3 0-24-10.7-24-24v-96c0-13.3 10.7-24 24-24h136V88c0-21.4 25.9-32 41-17l168 168c9.3 9.4 9.3 24.6 0 34zM192 436v-40c0-6.6-5.4-12-12-12H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h84c6.6 0 12-5.4 12-12V76c0-6.6-5.4-12-12-12H96c-53 0-96 43-96 96v192c0 53 43 96 96 96h84c6.6 0 12-5.4 12-12z"/></svg>
+            </a>
+        </div> 
+        <div class="hamburger">
+            <input id="menu-toggle" type="checkbox"/>
+            <label class="menu-button-container" for="menu-toggle">
+                <div class="menu-button"></div>
+            </label>
+            <ul class="menu">
+                <li>
+                    {% if current_user.role == "organization"%}
+                    <a class="lablel-bold" style="color: var(--White);" href="/event/create"> 
+                        CREATE
+                    </a> 
+                    {% else %}
+                    <a class="lablel-bold" style="color: var(--White);" href="/"> 
+                        DASHBOARD  
+                    </a> 
+                    {% endif %}
+                </li>
+                <li>
+                    <a class="lablel-bold" style="color: var(--White);" href="/event/search"> 
+                        DISCOVER 
+                    </a> 
+                </li>
+                <li>
+                    <a class="lablel-bold" style="color: var(--White);" href="/profile"> 
+                        PROFILE 
+                    </a> 
+                </li>
+                <li>
+                    <a class="lablel-bold" style="color: var(--White);" href="/calendar"> 
+                        CALENDAR 
+                    </a> 
+                </li>
+            </ul>
+        </div> 
     </nav> 
     <div class="content">
         {% block content %} {% endblock %}

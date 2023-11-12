@@ -28,7 +28,6 @@ a.no-color:hover {
     margin-left: 1%;
     margin-right: 14%;
     margin-bottom: 5%;
-    min-width: 700px;
 }
 
 
@@ -479,7 +478,7 @@ hr.underline_upp {
 }
 
 .card.medium:hover{
-    background-color: var(--Mint);
+    background-color: #f8fafc
     transition: 0.7s;
     transform: scale(1.05);
     overflow: hidden;
@@ -542,12 +541,12 @@ hr.underline_upp {
 
 
 .days .day:not(.prev):not(.next):hover{
-    background-color: var(--Mint);
+    background-color: #cbd5e1
     transform: scale(1.08);
 }
 
 .days .day.today{
-    background-color: var(--Mint) 
+    background-color: #cbd5e1
 }
 
 .days .day.next,
@@ -590,4 +589,139 @@ hr.underline_upp {
     height: 2px; 
     width: 80%;
     background-color:var(--UofT-Blue);
+}
+
+.hamburger{
+    padding: 0; 
+    margin-left: auto;
+    margin-right: -12%;
+    display: none;
+    margin-bottom: 15px;
+}
+
+.menu li:hover{
+    color:white;
+    cursor:pointer;
+  }
+  
+.menu {
+    width: 50px;
+    list-style-type: none;
+    margin-left: auto;
+    margin-right: 10%;
+    padding: 0;
+}
+  
+.menu > li {
+    margin: 0 1rem;
+    overflow: hidden;
+}
+/*Container for menu button  */
+.menu-button-container {
+  display: none;
+  height: 100%;
+  width: 30px;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  z-index: 1;
+}
+
+#menu-toggle {
+    display: none;
+}
+
+/*  Creating the menu button */
+.menu-button,
+.menu-button::before,
+.menu-button::after {
+  display: block;
+  background-color: var(--UofT-Blue);
+  position: absolute;
+  height: 6px;
+  width: 32px;
+  border-radius: 3px;
+}
+
+.menu-button::before {
+    content: '';
+    margin-top: -8px;
+}
+  
+.menu-button::after {
+    content: '';
+    margin-top: 8px;
+}
+
+/*  Adding Functionality to the Hamburger Menu with CSS  */
+#menu-toggle:checked + .menu-button-container .menu-button::before {
+    margin-top: 0px;
+    transform: rotate(45deg);
+    background-color: var(--White);
+    width: 24px;
+    height: 5px;
+}
+  
+#menu-toggle:checked + .menu-button-container .menu-button {
+background: rgba(255, 255, 255, 0);
+}
+  
+#menu-toggle:checked + .menu-button-container .menu-button::after {
+    margin-top: 0px;
+    /*  transforms the hamburger icon into a cross  */
+    transform: rotate(-45deg);
+    background-color: var(--White);
+    width: 24px;
+    height: 5px;
+}
+
+@media screen and (max-width: 1050px){
+    .banner{
+        display: none;
+    }
+
+    .hamburger{
+        display: flex;
+    }
+
+    .menu-button-container {
+        display: flex;
+      }
+    .menu {
+        position: absolute;
+        margin-top: 21px;
+        right: -20%;
+        top: 0;
+        flex-direction: column;
+        width: 200px;
+        justify-content: center;
+        align-items: center;
+    }
+    #menu-toggle ~ .menu li {
+        height: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+    #menu-toggle:checked ~ .menu li {
+        border: 1px solid var(--UofT-Blue);
+        height: 2.5em;
+        padding: 0.5em;
+    }
+    .menu > li {
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        padding: 0.5em 0;
+        width: 100%;
+        color: var(--White);
+        background-color: var(--UofT-Blue);
+    
+    }
+    .menu > li:not(:last-child) {
+        border-bottom: 1px solid #444;
+    
+    }
 }
