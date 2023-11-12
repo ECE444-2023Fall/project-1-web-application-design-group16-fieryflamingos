@@ -14,6 +14,7 @@ from .. import db
 from ..models import User, RegularUser, OrganizationUser, Event, Preference, Comment, Reply
 from .forms import EventForm, RSVPForm, CancelRSVPForm, EventSearchForm, UpdateRegularUserForm, UpdateOrganizationUserForm, CommentForm, ReplyForm
 from functools import wraps
+import json as json
 
 
 
@@ -868,7 +869,9 @@ def calendar_view():
     json_events = []
     # add properties here as need be
     for event in events:
-        json_events.append({"id": str(event.id), "title": event.title, "from_date": event.event_date.from_date.strftime('%Y-%m-%d %H:%M:%S'), "to_date": event.event_date.to_date.strftime('%Y-%m-%d %H:%M:%S')})
+        json_events.append({"id": str(event.id), "title": event.title, "year": event.event_date.from_date.year, 
+                            "month": event.event_date.from_date.month, "day": event.event_date.from_date.day,
+                            "from_time": event.event_date.from_date.strftime('%H:%M'), "to_time": event.event_date.to_date.strftime('%H:%M')})
     
     return render_template('calendar.html', events=json_events)
 
@@ -883,7 +886,7 @@ def calendar_view_org():
     json_events = []
     # add properties here as need be
     for event in events:
-        json_events.append({"id": str(event.id), "title": event.title, "from_date": event.event_date.from_date.strftime('%Y-%m-%d %H:%M:%S'), "to_date": event.event_date.to_date.strftime('%Y-%m-%d %H:%M:%S')})
+        json_events.append({"id": str(event.id), "title": event.title, "month": event.event_date.from_date.month, "to_date": event.event_date.to_date.strftime('%Y-%m-%d %H:%M:%S')})
     
-    return render_template('calendar.html', events=json_events)
+    return render_template('calendar.html', events=json.dumps(json_events));
 

@@ -5,6 +5,19 @@ const daysContainer = document.querySelector(".days"),
     todayBtn = document.querySelector(".today-btn"),
     calendarInfo = document.querySelector(".calendar_info");
 
+
+    var eventList = new Array(3000);
+    
+    for(x = 0; x < eventList.length; x++){
+        eventList[x] = new Array(12);
+    }
+
+    for(x = 0; x < eventList.length; x++){
+        for(y = 0; y < eventList[x].length; y++){
+            eventList[x][y] = new Array(31);
+        }
+    }
+
 const months = [
     "January",
     "February",
@@ -23,6 +36,13 @@ const months = [
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu",  "Fri", "Sat"];
 
 const date = new Date();
+
+//Put users events into correct Year/month/day bin
+function eventSetup(events){
+    for(i = 0; i < events.length; i++){
+        eventList[Number(events[i].year)][Number(events[i].month)][Number(events[i].day)] = events[i];
+    }
+}
 
 //Variables for current calendar being displayed
 let currentDate = date.getDate();
@@ -128,7 +148,8 @@ function attach_day_click (){
 
 function render_day_info(){
     let calendar_info = "";
-    calendar_info += `<div class="title" style="color: var(--White); margin-bottom: 0px;">${months[calInfoMonth]} ${calInfoDate}, ${calInfoYear}</div>`;
+    calendar_info += `<div class="title" style="color: var(--White); margin-bottom: 0px;">
+    ${months[calInfoMonth]} ${calInfoDate}, ${calInfoYear}</div>`;
     calendar_info += `<hr class="underline_white" style="width:100%; margin-bottom: 0px;"></hr>`
     calendarInfo.innerHTML = calendar_info;
 }

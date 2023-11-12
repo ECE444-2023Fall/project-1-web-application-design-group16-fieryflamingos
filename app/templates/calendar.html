@@ -65,8 +65,9 @@
             </div>
         </div>
     </div>
-    <script>
-        var events = {{events | tojson}};
-    </script>
     <script src="{{url_for('static', filename='main.js')}}"></script>
+    <script type="text/javascript">
+        var events = JSON.parse('{{events|tojson|safe}}');
+        var output = eventSetup(events);
+    </script>
 {% endblock %}
