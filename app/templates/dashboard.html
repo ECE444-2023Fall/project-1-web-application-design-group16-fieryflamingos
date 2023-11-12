@@ -57,7 +57,8 @@
                                     </div>
                                 </div>
                                 <div class="card_hover">
-                                    <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
+                                    <div style="display: -webkit-box; flex-direction: row; justify-content: flex-start;
+                                    -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">
                                         {% for interest in event_dict.preferences %}
                                         <button class="interest-tag">
                                             {{interest.preference}}
