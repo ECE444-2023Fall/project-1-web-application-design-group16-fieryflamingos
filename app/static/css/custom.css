@@ -482,6 +482,7 @@ hr.underline_upp {
     background-color: var(--Mint);
     transition: 0.7s;
     transform: scale(1.05);
+    overflow: hidden;
 }
 
 .card_hover{
