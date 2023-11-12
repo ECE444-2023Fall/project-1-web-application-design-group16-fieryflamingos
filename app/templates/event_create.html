@@ -6,12 +6,6 @@
   <body>
     <div class="container">
 
-      {% for message in get_flashed_messages() %}
-      <div class="flash alert alert-success col-sm-4" role="success">
-        {{ message }}
-      </div>
-      {% endfor %}
-
       <h3>Create</h3>
 
       {% if error %}

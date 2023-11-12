@@ -48,6 +48,19 @@ a.no-color:hover {
     line-height: normal;
 }
 
+.flex-container {
+    display:flex;
+    flex-wrap:wrap;
+}
+
+.flex-center {
+    justify-content: center;
+}
+
+.flex-space-between {
+    justify-content: space-betwen;
+}
+
 .nav-link:hover{
  color: var(--UofT-Blue);
 }
@@ -254,6 +267,23 @@ hr.underline_upp {
      background-color: #18223A;
 }
 
+.button-cancel{
+    background-color: #dc2626;
+    color: var(--White);
+    padding: 15px 40px;
+    text-align: center;
+    border: none;
+    font-size: 14px;
+    font-weight: 350;
+    font-family: Inter;
+    border-radius: 4px;
+}
+
+.button-cancel:hover{
+    background-color: #991b1b;
+    color: var(--White);
+}
+
 .arrow {
     position:relative;
 }
@@ -270,6 +300,10 @@ hr.underline_upp {
 .white-card-container{
     background-color: white;
     padding: 60px;
+}
+
+.white-card-container:hover{
+    transform: scale(1.01);
 }
 
 .main-title{
@@ -501,7 +535,9 @@ hr.underline_upp {
     font-family: Inter;
     font-size: 14px;
     font-weight: 450;
+    position: relative;
 }
+
 
 .days .day:not(.prev):not(.next):hover{
     background-color: var(--Mint);
@@ -529,7 +565,7 @@ hr.underline_upp {
     align-items: center; 
     justify-content: center; 
     margin-bottom: 20px; 
-    margin-right: 10px;
+    margin-right: 20px;
     margin-top: 50px;
     height: 520px;
     display: inline-block;  
@@ -538,5 +574,17 @@ hr.underline_upp {
 }
 
 .day_info{
-    display: inline-block;
+    position: inline-block;
+}
+
+.number{
+    position: absolute;
+}
+
+.event_exists{
+    position: absolute; 
+    top: 4px; 
+    height: 2px; 
+    width: 50px;
+    background-color:var(--UofT-Blue);
 }

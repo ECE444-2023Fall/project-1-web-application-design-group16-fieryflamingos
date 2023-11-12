@@ -6,13 +6,14 @@ from app.models import Preference, OrganizationUser, User, Event, Comment, Regul
 import random
 from datetime import datetime
 
-connect(alias=config["testing"].MONGODB_SETTINGS["alias"], db=config["testing"].MONGODB_SETTINGS["db"], host=config["testing"].MONGODB_SETTINGS["host"])
+setting = "production"
+connect(alias=config[setting].MONGODB_SETTINGS["alias"], db=config[setting].MONGODB_SETTINGS["db"], host=config[setting].MONGODB_SETTINGS["host"])
 
-# preferences = ["Academic", "Cultural", "Extra-Curricular", "Health", "Science", "Math", "Business", "Languages", "Art", "Music", "Sports"]
+preferences = ["Academic", "Cultural", "Extra-Curricular", "Health", "Science", "Math", "Business", "Languages", "Art", "Music", "Sports"]
 
-# for preference in preferences:
-#     p = Preference(preference=preference)
-#     p.save()
+for preference in preferences:
+    p = Preference(preference=preference)
+    p.save()
 
 # users = OrganizationUser.objects()
 # regular_users = RegularUser.objects()
@@ -40,8 +41,8 @@ connect(alias=config["testing"].MONGODB_SETTINGS["alias"], db=config["testing"].
 # preferences = Preference.objects()
 # preferences = [preference.id for preference in preferences]
 
-preferences = Preference.objects()
-pref_ids = [preference.id for preference in preferences]
+# preferences = Preference.objects()
+# pref_ids = [preference.id for preference in preferences]
 
 # A loop to generate 35 events
 # events = Event.objects()
@@ -54,4 +55,4 @@ pref_ids = [preference.id for preference in preferences]
   
 #   Event.objects(id=event.id).update_one(targeted_preferences=prefs)
 
-RegularUser.objects(username="s.czyrny").update_one(preferences=pref_ids)
+# RegularUser.objects(username="s.czyrny").update_one(preferences=pref_ids)

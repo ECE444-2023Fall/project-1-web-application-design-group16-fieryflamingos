@@ -169,3 +169,46 @@ a {
     font-weight: 500;
     justify-content: left !important;
 }
+
+.sign-container {
+    display:flex;
+    flex-direction:column;
+    width: 50%;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color:white;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Style the tooltip text */
+  .tooltip .tooltiptext {
+    visibility: hidden; /* Hide the tooltip by default */
+    width: 120px; /* Set a fixed width for the tooltip */
+    background-color: #555; /* Set a dark background color for the tooltip */
+    color: #fff; /* Set a white text color for the tooltip */
+    text-align: center; /* Center the tooltip text */
+    padding: 5px 0; /* Add some padding to the tooltip */
+    border-radius: 6px; /* Add rounded corners to the tooltip */
+
+    /* Position the tooltip text */
+    position: absolute; /* Use absolute positioning to place the tooltip relative to the element */
+    z-index: 1; /* Bring the tooltip to the front */
+    bottom: 125%; /* Place the tooltip below the element */
+    left: 50%; /* Place the tooltip in the middle of the element */
+    margin-left: -60px; /* Shift the tooltip to the left by half of its width */
+
+    /* Add a transition effect to the tooltip */
+    opacity: 0; /* Set the initial opacity to 0 */
+    transition: all 0.3s; /* Set the duration of the opacity transition to 0.3 seconds */
+  }
+
+
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible; /* Make the tooltip visible */
+    opacity: 1; /* Set the opacity to 1 */
+  }
