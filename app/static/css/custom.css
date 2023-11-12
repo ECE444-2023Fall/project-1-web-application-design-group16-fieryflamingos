@@ -76,9 +76,11 @@ a.no-color:hover {
 }
 
 .rec-sec{
-    height: 600px;
+    display: flex;
+    flex-direction: column;
     background-color: var(--Light-Grey); 
-    min-width: 1000px;
+    min-width: 700px;
+    padding-bottom: 20px;
 }
 
 .lower-sec{
@@ -87,10 +89,11 @@ a.no-color:hover {
 }
 
 .upp-sec{
+    display: flex;
+    flex-direction: column;
     margin: 90px 12%;
     background-color: var(--UofT-Blue); 
-    height: 1100px;
-    min-width: 1000px;
+    min-width: 700px;
 }
 .cards{
     margin: 0 12%;
@@ -470,14 +473,14 @@ hr.underline_upp {
 }
 
 .card.medium{
-    transition: 0.5s;
+    transition: 0.7s;
+    margin-bottom: 8px;
 }
 
 .card.medium:hover{
     background-color: var(--Mint);
-    transition: 0.5s;
+    transition: 0.7s;
     transform: scale(1.05);
-    margin-bottom: 0px;
 }
 
 .card_hover{
@@ -485,8 +488,7 @@ hr.underline_upp {
     margin-top: 28px;
     margin-right: 35px;
     margin-left: 35px;
-    margin-bottom: 5px;
-    transition: 0.7s
+    transition: 0.7s;
 }
 
 .card_normal{
