@@ -439,14 +439,14 @@ hr.underline_upp {
 }
 
 .card.medium{
-    transition: 0.5s;
+    transition: 0.7s;
+    margin-bottom: 8px;
 }
 
 .card.medium:hover{
     background-color: var(--Mint);
-    transition: 0.5s;
+    transition: 0.7s;
     transform: scale(1.05);
-    margin-bottom: 0px;
 }
 
 .card_hover{
@@ -454,8 +454,7 @@ hr.underline_upp {
     margin-top: 28px;
     margin-right: 35px;
     margin-left: 35px;
-    margin-bottom: 5px;
-    transition: 0.7s
+    transition: 0.7s;
 }
 
 .card_normal{
@@ -531,7 +530,6 @@ hr.underline_upp {
     justify-content: center; 
     margin-bottom: 20px; 
     margin-right: 10px;
-<<<<<<< HEAD
     margin-top: 50px;
     height: 520px;
     display: inline-block;  
@@ -542,18 +540,3 @@ hr.underline_upp {
 .day_info{
     display: inline-block;
 }
-=======
-    margin-top: 20px;
-    height: 460px;
-}
-
-@media (max-width: 1430px) {
-
-    .rec-sec {
-      height: 1000px;
-    }
-}
-
-
-
->>>>>>> refs/remotes/origin/calendar_dev
