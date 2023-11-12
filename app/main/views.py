@@ -871,7 +871,7 @@ def calendar_view():
     for event in events:
         json_events.append({"id": str(event.id), "title": event.title, "year": event.event_date.from_date.year, 
                             "month": event.event_date.from_date.month, "day": event.event_date.from_date.day,
-                            "from_time": event.event_date.from_date.strftime('%H:%M'), "to_time": event.event_date.to_date.strftime('%H:%M')})
+                            "from_time": event.event_date.from_date.strftime('%I:%M %p'), "to_time": event.event_date.to_date.strftime('%I:%M %p')})
     
     return render_template('calendar.html', events=json_events)
 

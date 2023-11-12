@@ -6,17 +6,13 @@ const daysContainer = document.querySelector(".days"),
     calendarInfo = document.querySelector(".calendar_info");
 
 
-    var eventList = new Array(3000);
-    
-    for(x = 0; x < eventList.length; x++){
-        eventList[x] = new Array(12);
-    }
+    var eventsThisYear = [];
+    var eventsThisMonth = [];
+    var eventsThisDay = [];
+    //const allUserEvents = [];
 
-    for(x = 0; x < eventList.length; x++){
-        for(y = 0; y < eventList[x].length; y++){
-            eventList[x][y] = new Array(31);
-        }
-    }
+    //var events = JSON.parse('{{events|tojson|safe}}');
+        //var output = eventSetup(events);
 
 const months = [
     "January",
@@ -37,12 +33,12 @@ const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu",  "Fri", "Sat"];
 
 const date = new Date();
 
-//Put users events into correct Year/month/day bin
-function eventSetup(events){
-    for(i = 0; i < events.length; i++){
-        eventList[Number(events[i].year)][Number(events[i].month)][Number(events[i].day)] = events[i];
+//Copy all of the user's events for ease of reference
+/*function eventSetup(events){
+    for(var i = 0; i < events.length; i++){
+        allUserEvents.push(events[i]);
     }
-}
+}*/
 
 //Variables for current calendar being displayed
 let currentDate = date.getDate();
@@ -54,6 +50,40 @@ let currentYear = date.getFullYear();
 let calInfoDate = date.getDate();
 let calInfoMonth = date.getMonth();
 let calInfoYear = date.getFullYear();
+
+//Grab the events for the current displayed year indicated by currentYear
+function getEventsThisYear(){
+    eventsThisYear = [];
+    for(i = 0; i < allUserEvents.length; i++){
+        console.log(allUserEvents[i].year);
+        if(allUserEvents[i].year == currentYear){
+            eventsThisYear.push(allUserEvents[i]);
+            console.log(allUserEvents[i].title);
+            console.log('Im here');
+        }
+    }
+}
+
+//Grab the events for the current displayed month indicated by currentMonth
+function getEventsThisMonth(){
+    eventsThisMonth = []
+    for(i = 0; i < eventsThisMonth.length; i++){
+        if(eventsThisYear[i].month == currentMonth){
+            eventsThisMonth.push(eventsThisYear[i]);
+            console.log(eventsThisYear[i].title)
+        }
+    }
+}
+
+//Grab the events for the current displayed month indicated by calInfoDate
+function getEventsThisDay(){
+    for(i = 0; i < eventsThisMonth.length; i++){
+        if(eventsThisMonth[i].day == Number(calInfoDate)){
+            eventsThisDay.push(eventsThisMonth[i]);
+            console.log(eventsThisMonth[i].title)
+        }
+    }
+}
 
 //Function for updating the calendar
 function renderCalendar() {
@@ -93,8 +123,11 @@ function renderCalendar() {
     daysContainer.innerHTML = days;
 }
 
+
 renderCalendar();
 attach_day_click();
+getEventsThisYear();
+getEventsThisMonth();
 render_day_info();
 
 nextBtn.addEventListener("click", () => {
@@ -102,7 +135,9 @@ nextBtn.addEventListener("click", () => {
     if(currentMonth > 11){
         currentMonth = 0;
         currentYear++;
+        getEventsThisYear();
     }
+    getEventsThisMonth();
     renderCalendar();
     attach_day_click();
 });
@@ -112,7 +147,9 @@ prevBtn.addEventListener("click", () => {
     if(currentMonth < 0){
         currentMonth = 11;
         currentYear--;
+        geteEventsThisYear();
     }
+    getEventsThisMonth();
     renderCalendar();
     attach_day_click();
 });
@@ -120,6 +157,8 @@ prevBtn.addEventListener("click", () => {
 todayBtn.addEventListener("click", () => {
     currentMonth = date.getMonth();
     currentYear = date.getFullYear();
+    getEventsThisYear();
+    getEventsThisMonth();
     renderCalendar();
     attach_day_click();
 });
@@ -149,7 +188,15 @@ function attach_day_click (){
 function render_day_info(){
     let calendar_info = "";
     calendar_info += `<div class="title" style="color: var(--White); margin-bottom: 0px;">
-    ${months[calInfoMonth]} ${calInfoDate}, ${calInfoYear}</div>`;
-    calendar_info += `<hr class="underline_white" style="width:100%; margin-bottom: 0px;"></hr>`
+        ${months[calInfoMonth]} ${calInfoDate}, ${calInfoYear}</div>`;
+    calendar_info += `<hr class="underline_white" style="width:100%; margin-bottom: 0px;"></hr>`;
+    getEventsThisDay();
+    for(var i = 0; i < eventsThisDay.length; i++){
+        calendar_info +=  `<div class="row"> <div class="col-11 subtitle" style="color: var(--White); 
+        margin-top: 32px; margin-left: 20px;"> ${eventsThisDay[i].from_time} - ${eventsThisDay[i].to_time}
+        </div></div><div class = "row"> <div class="col-11 label" style="text-overflow: ellipsis; 
+        overflow: hidden; text-wrap: nowrap; color: var(--White); margin-top: 8px; margin-left: 20px;">
+        ${eventsThisDay[i].title}</div></div>`;
+    }
     calendarInfo.innerHTML = calendar_info;
 }
