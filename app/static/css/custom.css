@@ -28,6 +28,7 @@ a.no-color:hover {
     margin-left: 1%;
     margin-right: 14%;
     margin-bottom: 5%;
+    min-width: 700px;
 }
 
 
