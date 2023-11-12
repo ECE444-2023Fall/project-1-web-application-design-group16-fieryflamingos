@@ -17,56 +17,60 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap"
             rel="stylesheet"
         />
+        <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
+        <title>Occasional | Login</title>
     </head>
-    <script src="script.js"></script>
-    <script src="script2.js"></script>
 
     <body>
-        <div style="align-items: right; display: flex; margin-bottom: 60px;">
-            <div class="navbar-brand occasional">
-                <img src="/static/img/OC_Variant3.png" width="50" height="50" class="d-inline-block align-bottom" alt="">
-            </div> 
-            <div class="occasional d-inline-block" style="margin-left: 10px; color: black; margin-top: 12px;">OCCASIONAL</div>
-            <div class="body-text" style="margin-left: 68%; margin-top: 15px; margin-right: 1%;">
-                Don't have an account?
+        <div style="display: flex; margin-bottom: 60px; justify-content: space-between;">
+            <div style="display: flex;">
+                <div class="navbar-brand occasional">
+                    <img src="/static/img/OC_Variant3.png" width="50" height="50" class="d-inline-block align-bottom" alt="">
+                </div> 
+                <div class="occasional d-inline-block" style="margin-left: 10px; color: black; margin-top: 12px;">OCCASIONAL</div>
             </div>
-            <a href="/auth/register" class="sign-in" style="text-decoration: none; margin-top: 4px;">
-                Register
-            </a>
+            <div style="display: flex;">
+                <div class="body-text" style="margin-left: 80; margin-top: 15px; margin-right: 10px;">
+                    Don't have an account?
+                </div>
+                <a href="/auth/register" class="sign-in" style="text-decoration: none; margin-top: 4px;">
+                    Register
+                </a>
+            </div>
         </div>
-        <div class="boxSignin">
-            <h2>Sign in to your Occasional Account</h2>
-            <h3>One account for every occasion</h3>
+        <div class="sign-container">
+            <h2 style="text-align: center">
+                Sign in to your Occasional Account
+            </h2>
+            <h3 style="text-align: center">One account for every occasion</h3>
             <form name="" method="POST">
                 {{form.hidden_tag()}}
-                <table>
-                    {% if form.username.errors %}
-                        {% for error in form.username.errors %}
-                            <tr>
-                                <td style="text-align: left;">
-                                    <span class="error-auth">{{error}}</span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                    <tr>
-                        <td>{{form.username()}}</td>
-                    </tr>
+                <div class="flex-container">
+                    <div class="label-bold" style="margin-bottom: 10px">
+                        {{form.username.label}}
+                    </div>
+                    {{ form.username(class="search-form", style="width: 100%")
+                    }} {% if form.username.errors %} {% for error in
+                    form.username.errors %}
+                    <div style="text-align: left">
+                        <span class="error-auth">{{error}}</span>
+                    </div>
+                    {% endfor %} {% endif %}
+                    <div class="label-bold" style="margin-bottom: 10px">
+                        {{form.password.label}}
+                    </div>
+                    {{ form.password(class="search-form", style="width: 100%")
+                    }} {% if form.password.errors %} {% for error in
+                    form.password.errors %}
+                    <div style="text-align: left">
+                        <span class="error-auth">{{error}}</span>
+                    </div>
+                    {% endfor %} {% endif %}
 
-                    {% if form.password.errors %}
-                        {% for error in form.password.errors %}
-                            <tr>
-                                <td style="text-align: left;">
-                                    <span class="error-auth">{{error}}</span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                    <tr>
-                        <td>{{form.password()}}</td>
-                    </tr>
-                </table>
-                {{form.submit(class="button-main")}}
+                    <div class="flex-container flex-center" style="width: 100%">
+                        {{form.submit(class="button-main")}}
+                    </div>
+                </div>
             </form>
         </div>
     </body>

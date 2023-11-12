@@ -19,118 +19,152 @@
         />
         <link
             rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
+        <link
+            rel="stylesheet"
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
+        <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico" />
+        <title>Occasional | Register</title>
     </head>
-    <script src="script.js"></script>
 
     <body>
-        <div style="align-items: right; display: flex; margin-bottom: 60px;">
-            <div class="navbar-brand occasional">
-                <img src="/static/img/OC_Variant3.png" width="50" height="50" class="d-inline-block align-bottom" alt="">
-            </div> 
-            <div class="occasional d-inline-block" style="margin-left: 10px; color: black; margin-top: 12px;">OCCASIONAL</div>
-            <div class="body-text" style="margin-left: 68%; margin-top: 15px; margin-right: 1%;">
-                Already have an account?
+        <div style="display: flex; margin-bottom: 60px; justify-content: space-between;">
+            <div style="display: flex;">
+                <div class="navbar-brand occasional">
+                    <img src="/static/img/OC_Variant3.png" width="50" height="50" class="d-inline-block align-bottom" alt="">
+                </div> 
+                <div class="occasional d-inline-block" style="margin-left: 10px; color: black; margin-top: 12px;">OCCASIONAL</div>
             </div>
-            <a href="/auth/login" class="sign-in" style="text-decoration: none; margin-top: 4px;">
-                Sign In
-            </a>
+            <div style="display: flex;">
+                <div class="body-text" style="margin-left: 80; margin-top: 15px; margin-right: 10px;">
+                    Already have an account?
+                </div>
+                <a href="/auth/login" class="sign-in" style="text-decoration: none; margin-top: 4px;">
+                    Sign In
+                </a>
+            </div>
         </div>
-        <div class="boxUser">
-            <h2>Create an Occasional Account</h2>
-            <h3>One account for all club, faculty, and campus events.</h3>
-            <form action="" method="POST">
-                <table>
-                    {% if form.first_name.errors %}
-                        {% for error in form.first_name.errors %}
-                            <tr>
-                                <td style="text-align: left;">
-                                    <span class="error-auth">{{error}}</span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                    <tr>
-                        <td>{{form.first_name()}}</td>
-                    </tr>
+        <div class="sign-container">
+            <h2 style="text-align: center">Create an Occasional Account</h2>
+            <h3 style="text-align: center">
+                One account for all club, faculty, and campus events
+            </h3>
+            <form name="" method="POST">
+                {{form.hidden_tag()}}
+                <div class="flex-container">
+                    <div class="label-bold" style="margin-bottom: 10px">
+                        {{form.first_name.label}}
+                    </div>
+                    {{ form.first_name(class="search-form", style="width: 100%")
+                    }} {% if form.first_name.errors %} {% for error in
+                    form.first_name.errors %}
+                    <div style="text-align: left; margin-bottom:8px; width:100%;">
+                        <span class="error-auth">{{error}}</span>
+                    </div>
+                    {% endfor %} {% endif %}
+                    <div class="label-bold" style="margin-bottom: 10px">
+                        {{form.last_name.label}}
+                    </div>
+                    {{ form.last_name(class="search-form", style="width: 100%")
+                    }} {% if form.last_name.errors %} {% for error in
+                    form.last_name.errors %}
+                    <div style="text-align: left; margin-bottom:8px; width:100%;">
+                        <span class="error-auth">{{error}}</span>
+                    </div>
+                    {% endfor %} {% endif %}
+                    <div class="label-bold" style="margin-bottom: 10px">
+                        {{form.email.label}}
+                    </div>
+                    {{ form.email(class="search-form", style="width: 100%") }}
+                    {% if form.email.errors %} {% for error in form.email.errors
+                    %}
+                    <div style="text-align: left; margin-bottom:8px; width:100%;">
+                        <span class="error-auth">{{error}}</span>
+                    </div>
+                    {% endfor %} {% endif %}
+                    <div class="label-bold" style="margin-bottom: 10px">
+                        {{form.username.label}}
+                    </div>
+                    {{ form.username(class="search-form", style="width: 100%")
+                    }} {% if form.username.errors %} {% for error in
+                    form.username.errors %}
+                    <div style="text-align: left; margin-bottom:8px; width:100%;">
+                        <span class="error-auth">{{error}}</span>
+                    </div>
+                    {% endfor %} {% endif %}
+                    <div class="label-bold" style="margin-bottom: 10px">
+                        <div
+                            style="
+                                display: flex;
+                                gap: 0.5rem;
+                                align-items: center;
+                                justify-content: center;
+                            "
+                        >
+                            {{form.password.label}}
+                            <span class="tooltip"
+                                ><span
+                                    class="material-symbols-outlined"
+                                    style="font-size: 20px; margin-top: 2px;"
+                                >
+                                    info </span
+                                ><span
+                                    class="tooltiptext"
+                                    style="width: 300px; text-align: left;"
+                                    >
+                                    <p style="margin-left: 1rem;">Password Requirements:</p>
+                                    <ul>
+                                        <li>Minimum 8 characters</li>
+                                        <li>At least 1 lowercase letter</li>
+                                        <li>At least 1 uppercase letter</li>
+                                        <li>At least 1 number</li>
+                                        <li>At least 1 special character</li>
+                                    </ul>
+                                </span></span
+                            >
+                        </div>
+                    </div>
+                    {{ form.password(class="search-form", style="width: 100%")
+                    }} {% if form.password.errors %} {% for error in
+                    form.password.errors %}
+                    <div style="text-align: left; margin-bottom:8px; width:100%;">
+                        <span class="error-auth">{{error}}</span>
+                    </div>
+                    {% endfor %} {% endif %}
+                    <div class="label-bold" style="margin-bottom: 10px">
+                        {{form.password2.label}}
+                    </div>
+                    {{ form.password2(class="search-form", style="width: 100%")
+                    }} {% if form.password2.errors %} {% for error in
+                    form.password2.errors %}
+                    <div style="text-align: left; margin-bottom:8px; width:100%;">
+                        <span class="error-auth">{{error}}</span>
+                    </div>
+                    {% endfor %} {% endif %}
 
-                    {% if form.last_name.errors %}
-                        {% for error in form.last_name.errors %}
-                            <tr>
-                                <td style="text-align: left;">
-                                    <span class="error-auth">{{error}}</span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                    <tr>
-                        <td>{{form.last_name()}}</td>
-                    </tr>
-
-                    {% if form.email.errors %}
-                        {% for error in form.email.errors %}
-                            <tr>
-                                <td style="text-align: left;">
-                                    <span class="error-auth">{{error}}</span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                    <tr>
-                        <td>{{form.email()}}</td>
-                    </tr>
-
-                    {% if form.username.errors %}
-                        {% for error in form.username.errors %}
-                            <tr>
-                                <td style="text-align: left;">
-                                    <span class="error-auth">{{error}}</span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                    <tr>
-                        <td>{{form.username()}}</td>
-                    </tr>
-
-                    {% if form.password.errors %}
-                        {% for error in form.password.errors %}
-                            <tr>
-                                <td style="text-align: left;">
-                                    <span class="error-auth">{{error}}</span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                    <tr>
-                        <td>{{form.password()}}</td>
-                    </tr>
-
-                    {% if form.password2.errors %}
-                        {% for error in form.password2.errors %}
-                            <tr>
-                                <td style="text-align: left;">
-                                    <span class="error-auth">{{error}}</span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                    <tr>
-                        <td>{{form.password2()}}</td>
-                    </tr>
-                </table>
-                {{form.submit(class="button-main", style="margin-top: 30px; margin-bottom: 30px;")}}
+                    <div class="flex-container flex-center" style="width: 100%">
+                        {{form.submit(class="button-main", style="margin:1rem
+                        0")}}
+                    </div>
+                    <h6
+                        style="
+                            text-align: center;
+                            width: 100%;
+                            margin: 2rem 0 0 0;
+                        "
+                    >
+                        Want to register as an organization?
+                        <a
+                            id="nonbutton"
+                            style="text-decoration: none"
+                            href="/auth/register-org"
+                            >Click here.</a
+                        >
+                    </h6>
+                </div>
             </form>
-            <h6>
-                Want to register as an organization?
-                <a
-                    id="nonbutton"
-                    style="text-decoration: none; color: darkblue !important;"
-                    href="/auth/register-org"
-                    >Click here.</a
-                >
-            </h6>
         </div>
     </body>
 </html>
