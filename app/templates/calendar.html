@@ -163,13 +163,13 @@
                     if(eventExistsThisDay[i] == true){
                         days += `<div class="event_exists"></div>`
                     }
-                    days+=`<div class="number">${i}</div></div>`;
+                    days+=`<div class="number" id=${i}>${i}</div></div>`;
                 }else{
                     days += `<div class="day day_info" id=${i}>`;
                     if(eventExistsThisDay[i] == true){
                         days += `<div class="event_exists"></div>`
                     }
-                    days+=`<div class="number">${i}</div></div>`
+                    days+=`<div class="number" id=${i}>${i}</div></div>`
                 }
             }
 
@@ -233,7 +233,7 @@
         }
 
         function attach_day_click (){
-            [...document.querySelectorAll('.day_info')].forEach(function(item) {
+            [...document.querySelectorAll(".day_info, .number")].forEach(function(item) {
                 item.addEventListener('click', function(item) {
                 calInfoDate = item.target.id;
                 calInfoMonth = currentMonth;
@@ -247,7 +247,7 @@
             let calendar_info = "";
             calendar_info += `<div class="title" style="color: var(--White); margin-bottom: 0px;">
                 ${months[calInfoMonth]} ${calInfoDate}, ${calInfoYear}</div>`;
-                calendarInfo.innerHTML = calendar_info;
+            calendarInfo.innerHTML = calendar_info;
             calendar_info += `<hr class="underline_white" style="width:100%; margin-bottom: 0px;"></hr>`;
             getEventsThisDay();
             if(eventsThisDay.length == 0){
