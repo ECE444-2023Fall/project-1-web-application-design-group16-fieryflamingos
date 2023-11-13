@@ -166,6 +166,12 @@ class TestOrganizationUser(unittest.TestCase):
     def tearDown(self):
         self.org_user.delete()
         self.app_context.pop()
+        
+    def test_save_picture(self):
+        with open("./tests/pic.PNG", 'rb') as picture:
+            self.org_user.profile_image.replace(picture, filename="pic.PNG") 
+            self.org_user = self.org_user.save()
+        self.assertIsNotNone(self.org_user.profile_image)
 
 
 """ for Lab 5 - written by Mohammed Amir """
