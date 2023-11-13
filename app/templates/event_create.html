@@ -1,67 +1,69 @@
-{% import "bootstrap/wtf.html" as wtf %}
 {% extends 'base.html' %}
+{% block title %} Create {% endblock %}
 {% block content %}
 <!DOCTYPE html>
 <html>
   <body>
     <div class="container">
 
-      <h3>Create</h3>
-
-      {% if error %}
-      <p class="alert alert-danger col-sm-4" role="danger">
-        <strong>Error:</strong> {{ error }}
-      </p>
-      {% endif %}
+      <div class="title" style="margin-bottom: 20px;">
+        Create Event
+      </div>
 
       <form action="" method="POST">
+        {% if form.errors %} {% for field, errors in form.errors.items() %}
+        {% for error in errors %}
+          <div style="text-align: left">
+              <span class="error-auth">{{error}}</span>
+          </div>
+          {% endfor %}{% endfor %} {% endif %}
         {{form.hidden_tag()}}
-        <div class="label-bold" style="margin-bottom: 10px;">
+        <div class="label-bold">
           {{form.title.label}}
         </div>
         {{ form.title(class="search-form", style="width: 100%") }}
       
-        <div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
+        <div style="display: flex; margin-top: 10px;">
           <div class="label-bold" style="width: 50%;">
-            {{form.from_date.label}}
+            {{form.from_date.label(style="margin-bottom: 0px;")}}
           </div>
           <div class="label-bold" style="width: 50%;">
-            {{form.to_date.label}}
+            {{form.to_date.label(style="margin-bottom: 0px;")}}
           </div>
         </div>
       
         <div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
           <div style="width: 50%;">
-            {{ form.from_date(class="search-form", style="width: 90%") }}
+            {{ form.from_date(class="search-form", style="width: 90%; margin-bottom: 0px;") }}
           </div>
           <div style="width: 50%;">
-            {{ form.to_date(class="search-form", style="width: 100%") }}
+            {{ form.to_date(class="search-form", style="width: 100%; margin-bottom: 0px;") }}
           </div>
         </div>
 
-        <div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
+        <div style="display: flex;">
           <div class="label-bold" style="width: 50%;">
-            {{form.location_address.label}}
+            {{form.location_address.label(style="margin-bottom: 0px;")}}
           </div>
           <div class="label-bold" style="width: 50%;">
-            {{form.location_room.label}}
+            {{form.location_room.label(style="margin-bottom: 0px;")}}
             
           </div>
         </div>
       
         <div style="display: flex; margin-top: 10px; margin-bottom: 10px;">
           <div style="width: 50%;">
-            {{ form.location_address(class="search-form", style="width: 90%") }}
+            {{ form.location_address(class="search-form", style="width: 90%; margin-bottom: 0px;") }}
           </div>
           <div >
-            {{ form.location_room(class="search-form", style="width: 100%") }}
+            {{ form.location_room(class="search-form", style="width: 90%; margin-bottom: 0px;") }}
           </div>
         </div>
         <div class="label-bold" style="margin-top: 10px; margin-bottom: 10px;">
-          {{form.registration_open_until.label}}
+          {{form.registration_open_until.label(style="margin-bottom: 0px;")}}
         </div>
         <div style="width: 50%;">
-          {{ form.registration_open_until(class="search-form", style="width: 100%") }}
+          {{ form.registration_open_until(class="search-form", style="width: 90%") }}
         </div>
         <div class="label-bold" style="margin-top: 10px; margin-bottom: 10px;">
           {{form.targeted_preferences.label}}

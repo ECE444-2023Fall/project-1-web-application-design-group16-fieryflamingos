@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %} Event Detail {% endblock %}
+{% block title %} Event Details {% endblock %}
 {% block content %}
 
 <body>
@@ -243,7 +243,11 @@
 						Average Rating: 
 					</div>
 					<div class="label">
+						{% if avg_rating != '--' %}
 						{{avg_rating}} stars
+						{% else %}
+						No Ratings
+						{% endif %}
 					</div>
 				</div>
 			</div>

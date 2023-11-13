@@ -1,6 +1,16 @@
 {% extends 'base.html' %}
 {% block title %} Dashboard {% endblock %}
 {% block content %}
-    <h1>User Not Found</h1>
-    <p>It's possible that the user you are looking for might have been deleted.</p>
+<div class="events-title" style="display: flex; margin-top: 6%; margin-right: 10%; margin-left: 10%; margin-bottom: 5%;">
+    <div style="flex: 50%">
+      <div class="main-title" style="margin-bottom: 40px;">
+        User Not Found
+      </div>
+      <div class="time-label" style="margin-bottom: 8px;">
+        <span class="body-text">
+          It's possible that the user you are looking for might have been deleted. 
+        </span>
+      </div>
+    </div>
+</div>
 {% endblock %}
