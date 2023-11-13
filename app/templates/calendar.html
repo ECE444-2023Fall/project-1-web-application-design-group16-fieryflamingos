@@ -256,7 +256,7 @@
                     No Events</div>`
             }else{
                 for(var i = 0; i < eventsThisDay.length; i++){
-                    calendar_info +=  `<a href="/event/${eventsThisDay[i].id}" style="text-decoration: none"><div class="row"> <div class="col-11 subtitle" style="color: var(--White); 
+                    calendar_info +=  `<a href="/event/${eventsThisDay[i].id}" style="text-decoration: none; pointer: cursor;"><div class="row"> <div class="col-11 subtitle" style="color: var(--White); 
                     margin-top: 32px; margin-left: 20px;"> ${eventsThisDay[i].from_time} - ${eventsThisDay[i].to_time}
                     </div></div><div class = "row"> <div class="col-11 label" style="text-overflow: ellipsis; 
                     overflow: hidden; text-wrap: nowrap; color: var(--White); margin-top: 8px; margin-left: 20px;">
