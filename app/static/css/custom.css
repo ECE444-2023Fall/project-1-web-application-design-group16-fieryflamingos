@@ -601,7 +601,7 @@ hr.underline_upp {
     margin-left: auto;
     margin-right: -12%;
     display: none;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .menu li:hover{
@@ -615,6 +615,7 @@ hr.underline_upp {
     margin-left: auto;
     margin-right: 10%;
     padding: 0;
+    z-index: 1;
 }
   
 .menu > li {
@@ -630,8 +631,8 @@ hr.underline_upp {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 15px;
-  z-index: 1;
+  margin-top: 20px;
+  z-index: 2;
 }
 
 #menu-toggle {
@@ -696,7 +697,7 @@ background: rgba(255, 255, 255, 0);
       }
     .menu {
         position: absolute;
-        margin-top: 21px;
+        margin-top: 18px;
         right: -20%;
         top: 0;
         flex-direction: column;
