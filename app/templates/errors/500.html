@@ -1,14 +1,16 @@
-{% extends "layout.html" %}
-
-{% block head %}
-    {{ super() }}
-{% endblock %}
-
+{% extends 'base.html' %}
+{% block title %} Server Error {% endblock %}
 {% block content %}
-
-    <div class="error-box" align="center">
-        <img class="ui medium image error-image" src="{{ url_for('static', filename='img/error.png') }}">
-        <h1 class="ui header">{{ message }}<h1>
+<div class="events-title" style="display: flex; margin-top: 6%; margin-right: 10%; margin-left: 10%; margin-bottom: 5%;">
+    <div style="flex: 50%">
+      <div class="main-title" style="margin-bottom: 40px;">
+        Server error
+      </div>
+      <div class="time-label" style="margin-bottom: 8px;">
+        <span class="body-text">
+          There was an issue with the server. Please try again later.
+        </span>
+      </div>
     </div>
-
+</div>
 {% endblock %}

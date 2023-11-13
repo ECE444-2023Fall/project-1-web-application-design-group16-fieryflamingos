@@ -1,3 +1,16 @@
-ERROR 403
-
-Invalid Access
+{% extends 'base.html' %}
+{% block title %} Permission Denied {% endblock %}
+{% block content %}
+<div class="events-title" style="display: flex; margin-top: 6%; margin-right: 10%; margin-left: 10%; margin-bottom: 5%;">
+    <div style="flex: 50%">
+      <div class="main-title" style="margin-bottom: 40px;">
+        Permission Denied
+      </div>
+      <div class="time-label" style="margin-bottom: 8px;">
+        <span class="body-text">
+          You do not have the privileges to view this page.
+        </span>
+      </div>
+    </div>
+</div>
+{% endblock %}
