@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} Profile {% endblock %} {% block
+{% extends 'base.html' %} {% block title %} Update Profile {% endblock %} {% block
 content %}
 <div style="background-color: #F1F5F9; height: auto;">
     <div style="margin-left: 15%; margin-right: 15%; display: flex; padding-top: 40px; padding-bottom: 40px; ">
@@ -6,23 +6,23 @@ content %}
             {{ form.hidden_tag() }}
             <div style="padding-top: 40px; padding-left: 50px; padding-bottom: 40px;">
                 <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <div style="display: flex; gap: 20px; height: 50px;">
+                    <div style="display: flex; gap: 20px; height: 50px; width: 50%;">
                         {{ form.first_name(class="search-form") }}
                         {{ form.last_name(class="search-form") }}
                     </div>
                 </div>
-                <hr style="margin-bottom: 10px; width: 100%;">
+                <hr style="margin-bottom: 10px; width: 80%;">
                 <div class="body-text" style="margin-bottom: 10px;">
                     {{ user.email }}
                 </div>
-                <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
+                <div style="display: flexbox; flex-direction: row; justify-content: flex-start; width: 90%;">
                     {{ form.preferences() }}
                 </div>
                 <div style="display: flex; margin-top: 20px;">
                     <div style="margin-right: 20px;">
                         {{ form.submit(class="button-main") }}
                     </div>
-                    <a class="button-cancel" href="/profile" style="text-decoration: none;">Cancel</a>
+                    <a class="button-cancel" href="/profile" style="text-decoration: none; margin-top: 40px;">Cancel</a>
                 </div> 
             </div>
         </form>  

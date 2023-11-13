@@ -303,12 +303,12 @@ class Event(Document):
     
     # get recommended events based on preferences
     @staticmethod
-    def get_recommended(preferences, select=4):
+    def get_recommended(user_id, preferences, select=4):
         # make sure events are only within the next week
         today = datetime.now()
         
         # get 4 events closest to today
-        recommended_events = Event.objects(targeted_preferences__in=preferences, event_date__from_date__gte=today) \
+        recommended_events = Event.objects(attendees__author_id__ne=user_id, targeted_preferences__in=preferences, event_date__from_date__gte=today) \
             .exclude("attendees", "description") \
             .order_by("+event_date__from_date")[:select]
         return recommended_events

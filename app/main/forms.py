@@ -105,6 +105,16 @@ class TagField(Field):
                     raise ValueError(self.gettext("Invalid tag value: {}".format(value)))
 
 
+def event_date_check(form, field):
+    if form.to_date.data:
+        if field.data > form.to_date.data:
+            raise ValidationError("'Start Date' cannot be later than 'End Date'")
+
+def registration_event_date_check(form, field):
+    if form.from_date.data:
+        if field.data > form.to_date.data:
+            raise ValidationError("'Registration Open Until' cannot be later than 'Start Date'")
+
 """ Events creation form """
 class EventForm(FlaskForm):
     location_place = StringField("Place")
@@ -116,9 +126,9 @@ class EventForm(FlaskForm):
     targeted_preferences = TagField("Interests", choices=Preference.get_preferences_as_tuple())
     description = StringField("Description", widget=TextArea(), validators=[Length(0, 10000, message="Length must be less than 10000 characters.")])
 
-    from_date = DateTimeLocalField("Start Date*", format="%Y-%m-%dT%H:%M", validators=[DataRequired()])
+    from_date = DateTimeLocalField("Start Date*", format="%Y-%m-%dT%H:%M", validators=[DataRequired(), event_date_check])
     to_date = DateTimeLocalField("End Date*", format="%Y-%m-%dT%H:%M", validators=[DataRequired()])
-    registration_open_until = DateTimeLocalField("Registration Open Until", format="%Y-%m-%dT%H:%M", validators=[Optional()])
+    registration_open_until = DateTimeLocalField("Registration Open Until", format="%Y-%m-%dT%H:%M", validators=[Optional(), registration_event_date_check])
 
     submit = SubmitField("Create Event")
 

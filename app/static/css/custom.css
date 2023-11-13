@@ -48,6 +48,19 @@ a.no-color:hover {
     line-height: normal;
 }
 
+.flex-container {
+    display:flex;
+    flex-wrap:wrap;
+}
+
+.flex-center {
+    justify-content: center;
+}
+
+.flex-space-between {
+    justify-content: space-betwen;
+}
+
 .nav-link:hover{
  color: var(--UofT-Blue);
 }
@@ -63,9 +76,11 @@ a.no-color:hover {
 }
 
 .rec-sec{
-    height: 600px;
+    display: flex;
+    flex-direction: column;
     background-color: var(--Light-Grey); 
-    min-width: 1000px;
+    min-width: 700px;
+    padding-bottom: 20px;
 }
 
 .lower-sec{
@@ -74,10 +89,11 @@ a.no-color:hover {
 }
 
 .upp-sec{
+    display: flex;
+    flex-direction: column;
     margin: 90px 12%;
     background-color: var(--UofT-Blue); 
-    height: 1100px;
-    min-width: 1000px;
+    min-width: 700px;
 }
 .cards{
     margin: 0 12%;
@@ -290,6 +306,11 @@ hr.underline_upp {
     transform: scale(1.01);
 }
 
+.card-container{
+    background-color: white;
+    padding: 60px;
+}
+
 .main-title{
     color: #000000;
     font-family: Inter;
@@ -457,14 +478,15 @@ hr.underline_upp {
 }
 
 .card.medium{
-    transition: 0.5s;
+    transition: 0.7s;
+    margin-bottom: 8px;
 }
 
 .card.medium:hover{
-    background-color: var(--Mint);
-    transition: 0.5s;
+    background-color: #f8fafc
+    transition: 0.7s;
     transform: scale(1.05);
-    margin-bottom: 0px;
+    overflow: hidden;
 }
 
 .card_hover{
@@ -472,8 +494,7 @@ hr.underline_upp {
     margin-top: 28px;
     margin-right: 35px;
     margin-left: 35px;
-    margin-bottom: 5px;
-    transition: 0.7s
+    transition: 0.7s;
 }
 
 .card_normal{
@@ -520,15 +541,17 @@ hr.underline_upp {
     font-family: Inter;
     font-size: 14px;
     font-weight: 450;
+    position: relative;
 }
 
+
 .days .day:not(.prev):not(.next):hover{
-    background-color: var(--Mint);
+    background-color: #cbd5e1
     transform: scale(1.08);
 }
 
 .days .day.today{
-    background-color: var(--Mint) 
+    background-color: #cbd5e1
 }
 
 .days .day.next,
@@ -548,30 +571,163 @@ hr.underline_upp {
     align-items: center; 
     justify-content: center; 
     margin-bottom: 20px; 
-    margin-right: 10px;
-<<<<<<< HEAD
+    margin-right: 20px;
     margin-top: 50px;
     height: 520px;
     display: inline-block;  
-    overflow: auto; 
+    overflow-x: hidden; 
+    overflow-y: auto;
     padding: 20px 20px;
 }
 
 .day_info{
-    display: inline-block;
-}
-=======
-    margin-top: 20px;
-    height: 460px;
+    position: inline-block;
 }
 
-@media (max-width: 1430px) {
+.number{
+    position: absolute;
+}
 
-    .rec-sec {
-      height: 1000px;
+.event_exists{
+    position: absolute; 
+    top: 4px; 
+    height: 2px; 
+    width: 80%;
+    background-color:var(--UofT-Blue);
+}
+
+.hamburger{
+    padding: 0; 
+    margin-left: auto;
+    margin-right: -12%;
+    display: none;
+    margin-bottom: 12px;
+}
+
+.menu li:hover{
+    color:white;
+    cursor:pointer;
+  }
+  
+.menu {
+    width: 50px;
+    list-style-type: none;
+    margin-left: auto;
+    margin-right: 10%;
+    padding: 0;
+    z-index: 1;
+}
+  
+.menu > li {
+    margin: 0 1rem;
+    overflow: hidden;
+}
+/*Container for menu button  */
+.menu-button-container {
+  display: none;
+  height: 100%;
+  width: 30px;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  z-index: 2;
+}
+
+#menu-toggle {
+    display: none;
+}
+
+/*  Creating the menu button */
+.menu-button,
+.menu-button::before,
+.menu-button::after {
+  display: block;
+  background-color: var(--UofT-Blue);
+  position: absolute;
+  height: 6px;
+  width: 32px;
+  border-radius: 3px;
+}
+
+.menu-button::before {
+    content: '';
+    margin-top: -8px;
+}
+  
+.menu-button::after {
+    content: '';
+    margin-top: 8px;
+}
+
+/*  Adding Functionality to the Hamburger Menu with CSS  */
+#menu-toggle:checked + .menu-button-container .menu-button::before {
+    margin-top: 0px;
+    transform: rotate(45deg);
+    background-color: var(--White);
+    width: 24px;
+    height: 5px;
+}
+  
+#menu-toggle:checked + .menu-button-container .menu-button {
+background: rgba(255, 255, 255, 0);
+}
+  
+#menu-toggle:checked + .menu-button-container .menu-button::after {
+    margin-top: 0px;
+    /*  transforms the hamburger icon into a cross  */
+    transform: rotate(-45deg);
+    background-color: var(--White);
+    width: 24px;
+    height: 5px;
+}
+
+@media screen and (max-width: 1050px){
+    .banner{
+        display: none;
+    }
+
+    .hamburger{
+        display: flex;
+    }
+
+    .menu-button-container {
+        display: flex;
+      }
+    .menu {
+        position: absolute;
+        margin-top: 18px;
+        right: -20%;
+        top: 0;
+        flex-direction: column;
+        width: 200px;
+        justify-content: center;
+        align-items: center;
+    }
+    #menu-toggle ~ .menu li {
+        height: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+    #menu-toggle:checked ~ .menu li {
+        border: 1px solid var(--UofT-Blue);
+        height: 2.5em;
+        padding: 0.5em;
+    }
+    .menu > li {
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        padding: 0.5em 0;
+        width: 100%;
+        color: var(--White);
+        background-color: var(--UofT-Blue);
+    
+    }
+    .menu > li:not(:last-child) {
+        border-bottom: 1px solid #444;
+    
     }
 }
-
-
-
->>>>>>> refs/remotes/origin/calendar_dev
