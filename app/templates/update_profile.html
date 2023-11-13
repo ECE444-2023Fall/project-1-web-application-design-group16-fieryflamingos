@@ -6,16 +6,16 @@ content %}
             {{ form.hidden_tag() }}
             <div style="padding-top: 40px; padding-left: 50px; padding-bottom: 40px;">
                 <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <div style="display: flex; gap: 20px; height: 50px;">
+                    <div style="display: flex; gap: 20px; height: 50px; width: 50%;">
                         {{ form.first_name(class="search-form") }}
                         {{ form.last_name(class="search-form") }}
                     </div>
                 </div>
-                <hr style="margin-bottom: 10px; width: 100%;">
+                <hr style="margin-bottom: 10px; width: 80%;">
                 <div class="body-text" style="margin-bottom: 10px;">
                     {{ user.email }}
                 </div>
-                <div style="display: flexbox; flex-direction: row; justify-content: flex-start;">
+                <div style="display: flexbox; flex-direction: row; justify-content: flex-start; width: 90%;">
                     {{ form.preferences() }}
                 </div>
                 <div style="display: flex; margin-top: 20px;">
