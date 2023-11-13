@@ -265,8 +265,11 @@ def event_details(id):
 
                 attendee_list.append(attendee.email) 
         attendee_list = ";".join(attendee_list)
-    
-        avg_rating = avg_rating / comments_with_rating
+
+        if comments_with_rating:
+            avg_rating = avg_rating / comments_with_rating
+        else:
+            avg_rating = "--"
 
     user_is_organizer = current_user.role == "organization"
 
