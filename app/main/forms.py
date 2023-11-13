@@ -110,6 +110,11 @@ def event_date_check(form, field):
         if field.data > form.to_date.data:
             raise ValidationError("'Start Date' cannot be later than 'End Date'")
 
+def registration_event_date_check(form, field):
+    if form.from_date.data:
+        if field.data > form.to_date.data:
+            raise ValidationError("'Registration Open Until' cannot be later than 'Start Date'")
+
 """ Events creation form """
 class EventForm(FlaskForm):
     location_place = StringField("Place")
@@ -123,7 +128,7 @@ class EventForm(FlaskForm):
 
     from_date = DateTimeLocalField("Start Date*", format="%Y-%m-%dT%H:%M", validators=[DataRequired(), event_date_check])
     to_date = DateTimeLocalField("End Date*", format="%Y-%m-%dT%H:%M", validators=[DataRequired()])
-    registration_open_until = DateTimeLocalField("Registration Open Until", format="%Y-%m-%dT%H:%M", validators=[Optional()])
+    registration_open_until = DateTimeLocalField("Registration Open Until", format="%Y-%m-%dT%H:%M", validators=[Optional(), registration_event_date_check])
 
     submit = SubmitField("Create Event")
 
