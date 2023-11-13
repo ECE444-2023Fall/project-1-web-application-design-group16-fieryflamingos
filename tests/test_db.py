@@ -167,6 +167,20 @@ class TestOrganizationUser(unittest.TestCase):
         self.org_user.delete()
         self.app_context.pop()
 
+ # test organization user password
+    def test_get_user_password_unique(self):
+        # Get user from database
+        org_user1 = OrganizationUser(
+                email='johndoe2@mail.utoronto.ca',
+                password='Password123@',
+                name="John Doe Organization"
+        )
+        org_user2 = OrganizationUser(
+            email='johndoe@mail.utoronto.ca',
+            password='Password123@',
+            name="John Doe Organization2"
+        )
+        self.assertNotEqual(org_user1.password_hash, org_user2.password_hash)
 
 """ for Lab 5 - written by Mohammed Amir """
 class TestRSVP(unittest.TestCase):
