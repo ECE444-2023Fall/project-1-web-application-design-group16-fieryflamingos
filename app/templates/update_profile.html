@@ -6,9 +6,15 @@ content %}
             {{ form.hidden_tag() }}
             <div style="padding-top: 40px; padding-left: 50px; padding-bottom: 40px;">
                 <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <div style="display: flex; gap: 20px; height: 50px; width: 50%;">
-                        {{ form.first_name(class="search-form") }}
-                        {{ form.last_name(class="search-form") }}
+                    <div style="display: flex; gap: 20px; width: 100%;">
+                        <div style="display:flex; flex-direction:column">
+                            {{form.first_name.label}}
+                            {{ form.first_name(class="search-form", style="width:100%") }}
+                        </div>
+                        <div style="display:flex; flex-direction:column">
+                            {{form.last_name.label}}
+                            {{ form.last_name(class="search-form", style="width:100%") }}
+                        </div>
                     </div>
                 </div>
                 <hr style="margin-bottom: 10px; width: 80%;">

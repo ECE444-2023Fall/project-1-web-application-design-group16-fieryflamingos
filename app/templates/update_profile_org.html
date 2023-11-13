@@ -1,143 +1,220 @@
-{% extends 'base.html' %} {% block title %} Update Profile {% endblock %} 
-{% block content %}
-<div style="background-color: #F1F5F9; height: auto;">
-    <div style="margin-left: 15%; margin-right: 15%; display: flex; padding-top: 40px; padding-bottom: 40px; ">
+{% extends 'base.html' %} {% block title %} Update Profile {% endblock %} {%
+block content %}
+<div style="background-color: #f1f5f9; height: auto">
+    <div
+        style="
+            margin-left: 15%;
+            margin-right: 15%;
+            display: flex;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        "
+    >
         <form action="" method="POST">
             {{ form.hidden_tag() }}
-            <div style="padding-top: 40px; padding-left: 50px; padding-bottom: 40px;">
-                <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                    <div style="display: flex; gap: 20px; height: 50px;">
-                        {{form.name(class="search-form", maxlength=50)}}
+            <div
+                style="
+                    padding-top: 40px;
+                    padding-left: 50px;
+                    padding-bottom: 40px;
+                "
+            >
+                <div
+                    style="
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                    "
+                >
+                    <div
+                        style="
+                            display: flex;
+                            gap: 20px;
+                            height: 50px;
+                            width: 100%;
+                        "
+                    >
+                        <div style="display: flex; flex-direction: column; width:100%">
+                            {{form.name.label}} {{form.name(class="search-form",
+                            maxlength=50, style="width:100%")}}
+                        </div>
                     </div>
                 </div>
-                <hr style="margin-bottom: 10px; width: 100%;">
-                <div class="body-text" style="margin-bottom: 10px;">
+                <hr style="margin-bottom: 10px; width: 100%" />
+                <div class="body-text" style="margin-bottom: 10px">
                     {{ user.email }}
                 </div>
-                <div style="display: flex; margin-top: 20px;">
-                    <div style="margin-right: 20px;">
+                <div style="display: flex; margin-top: 20px">
+                    <div style="margin-right: 20px">
                         {{ form.submit(class="button-main") }}
                     </div>
-                    <a class="button-cancel" href="/profile" style="text-decoration: none; margin-top: 40px;">Cancel</a>
-                </div> 
+                    <a
+                        class="button-cancel"
+                        href="/profile"
+                        style="text-decoration: none; margin-top: 40px"
+                        >Cancel</a
+                    >
+                </div>
             </div>
-        </form>  
+        </form>
     </div>
 </div>
 
-<div id="upcoming-events" style="background-color: #25355A; margin-top: 40px; margin-left: 10%; margin-right: 10%;">
-    <div style="padding: 60px;">
-        <div style="display: flex; justify-content: space-between;">
-            <div class="main-title" style="color: white !important; margin-bottom: 40px;">
+<div
+    id="upcoming-events"
+    style="
+        background-color: #25355a;
+        margin-top: 40px;
+        margin-left: 10%;
+        margin-right: 10%;
+    "
+>
+    <div style="padding: 60px">
+        <div style="display: flex; justify-content: space-between">
+            <div
+                class="main-title"
+                style="color: white !important; margin-bottom: 40px"
+            >
                 Upcoming Events
             </div>
-            <a class="label" style="color: white; margin-top: 25px; margin-right: 10px;" href="#past-events">
+            <a
+                class="label"
+                style="color: white; margin-top: 25px; margin-right: 10px"
+                href="#past-events"
+            >
                 Go to Past Events
             </a>
         </div>
         {% if not future_events %}
-            <div style="display: flex; position: relative;width: 100%;">
-                <div class="body-text" style="color: white;">
-                    No Upcoming Events, Find and RSVP for events using the Discover tab
+        <div style="display: flex; position: relative; width: 100%">
+            <div class="body-text" style="color: white">
+                No Upcoming Events, Find and RSVP for events using the Discover
+                tab
+            </div>
+        </div>
+        {% else %} {% for event in future_events %}
+        <a href="/event/{{event.id}}" style="text-decoration: none">
+            <div
+                class="white-card-container"
+                style="
+                    flex: 60%;
+                    margin-bottom: 30px;
+                    border-radius: 4px;
+                    padding: 50px;
+                    background-color: #f8fafc;
+                "
+            >
+                <div class="title" style="margin-bottom: 16px">
+                    {{event.title}}
+                </div>
+                <hr style="margin-bottom: 20px; width: auto" />
+                <div
+                    style="
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: space-between;
+                        margin-bottom: 16px;
+                        gap: 8px;
+                    "
+                >
+                    <div style="display: flex; min-width: calc(50% - 8px)">
+                        <span class="label-bold" style="margin-right: 6px">
+                            Organizer:
+                        </span>
+                        <div class="label">{{event.organizer.name}}</div>
+                    </div>
+                    <div style="display: flex; min-width: calc(50% - 8px)">
+                        <span class="label-bold" style="margin-right: 6px">
+                            Time:
+                        </span>
+                        <div class="label">
+                            {{ event.event_date.from_date.strftime('%b %d, %Y
+                            %I:%M') }} - {{
+                            event.event_date.to_date.strftime('%I:%M
+                            %p').lstrip('0')|upper }}
+                        </div>
+                    </div>
+                    <div style="display: flex; min-width: calc(50% - 8px)">
+                        <span class="label-bold" style="margin-right: 6px">
+                            Location:
+                        </span>
+                        <div class="label">
+                            {{event.location.address}}, {{event.location.room}}
+                        </div>
+                    </div>
                 </div>
             </div>
-        {% else %}
-        {% for event in future_events %}
-            <a href="/event/{{event.id}}" style="text-decoration: none">
-                <div class="white-card-container" style="flex: 60%; margin-bottom: 30px; border-radius: 4px; padding: 50px; background-color: #f8fafc;">
-                    <div class="title" style="margin-bottom: 16px;" >
-                        {{event.title}}
-                    </div>
-                    <hr style="margin-bottom: 20px; width: auto;">
-                    <div style="display: flex; flex-wrap:wrap; justify-content:space-between; margin-bottom: 16px; gap:8px;">
-                        <div style="display: flex; min-width:calc(50% - 8px)">
-                            <span class="label-bold" style="margin-right: 6px;">
-                                Organizer: 
-                            </span>
-                            <div class="label">
-                                {{event.organizer.name}}
-                            </div>
-                        </div>
-                        <div style="display: flex; min-width:calc(50% - 8px)">
-                            <span class="label-bold" style="margin-right: 6px;">
-                                Time: 
-                            </span>
-                            <div class="label">
-                                {{ event.event_date.from_date.strftime('%b %d, %Y %I:%M') }} - {{ event.event_date.to_date.strftime('%I:%M %p').lstrip('0')|upper }}
-                            </div>
-                        </div>
-                        <div style="display: flex; min-width:calc(50% - 8px)">
-                            <span class="label-bold" style="margin-right: 6px;">
-                                Location: 
-                            </span>
-                            <div class="label">
-                                {{event.location.address}}, {{event.location.room}}
-                            </div>
-                        </div>
-                    </div>
-                            
-                </div>
-            </a>			
-        {% endfor %}
-        {% endif %}
-    </div>   
+        </a>
+        {% endfor %} {% endif %}
+    </div>
 </div>
-<div id="past-events" style="background-color: #F1F5F9; margin-top: 40px;">
-    <div style="margin-left: 10%; margin-right: 10%; padding: 40px;">
-        <div style="display: flex; justify-content: space-between;">
-            <div class="main-title" style="margin-bottom: 40px;">
+<div id="past-events" style="background-color: #f1f5f9; margin-top: 40px">
+    <div style="margin-left: 10%; margin-right: 10%; padding: 40px">
+        <div style="display: flex; justify-content: space-between">
+            <div class="main-title" style="margin-bottom: 40px">
                 Past Events
             </div>
-            <a class="label" style="margin-top: 25px; margin-right: 10px;" href="#upcoming-events">
+            <a
+                class="label"
+                style="margin-top: 25px; margin-right: 10px"
+                href="#upcoming-events"
+            >
                 Go to Upcoming Events
             </a>
         </div>
         {% if not past_events %}
-            <div style="display: flex; position: relative;width: 100%;">
-                <div class="body-text">
-                    No Past Events
+        <div style="display: flex; position: relative; width: 100%">
+            <div class="body-text">No Past Events</div>
+        </div>
+        {% else %} {% for event in past_events %}
+        <a href="/event/{{event.id}}" style="text-decoration: none">
+            <div
+                class="white-card-container"
+                style="flex: 60%; margin-bottom: 30px"
+            >
+                <div class="title" style="margin-bottom: 16px">
+                    {{event.title}}
+                </div>
+                <hr style="margin-bottom: 20px; width: auto" />
+                <div
+                    style="
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: space-between;
+                        margin-bottom: 16px;
+                        gap: 8px;
+                    "
+                >
+                    <div style="display: flex; min-width: calc(50% - 8px)">
+                        <span class="label-bold" style="margin-right: 6px">
+                            Organizer:
+                        </span>
+                        <div class="label">{{event.organizer.name}}</div>
+                    </div>
+                    <div style="display: flex; min-width: calc(50% - 8px)">
+                        <span class="label-bold" style="margin-right: 6px">
+                            Time:
+                        </span>
+                        <div class="label">
+                            {{ event.event_date.from_date.strftime('%b %d, %Y
+                            %I:%M') }} - {{
+                            event.event_date.to_date.strftime('%I:%M
+                            %p').lstrip('0')|upper }}
+                        </div>
+                    </div>
+                    <div style="display: flex; min-width: calc(50% - 8px)">
+                        <span class="label-bold" style="margin-right: 6px">
+                            Location:
+                        </span>
+                        <div class="label">
+                            {{event.location.address}}, {{event.location.room}}
+                        </div>
+                    </div>
                 </div>
             </div>
-        {% else %}
-        {% for event in past_events %}
-            <a href="/event/{{event.id}}" style="text-decoration: none">
-                <div class="white-card-container" style="flex: 60%; margin-bottom: 30px;">
-                    <div class="title" style="margin-bottom: 16px;" >
-                        {{event.title}}
-                    </div>
-                    <hr style="margin-bottom: 20px; width: auto;">
-                    <div style="display: flex; flex-wrap:wrap; justify-content:space-between; margin-bottom: 16px; gap:8px;">
-                        <div style="display: flex; min-width:calc(50% - 8px)">
-                            <span class="label-bold" style="margin-right: 6px;">
-                                Organizer: 
-                            </span>
-                            <div class="label">
-                                {{event.organizer.name}}
-                            </div>
-                        </div>
-                        <div style="display: flex; min-width:calc(50% - 8px)">
-                            <span class="label-bold" style="margin-right: 6px;">
-                                Time: 
-                            </span>
-                            <div class="label">
-                                {{ event.event_date.from_date.strftime('%b %d, %Y %I:%M') }} - {{ event.event_date.to_date.strftime('%I:%M %p').lstrip('0')|upper }}
-                            </div>
-                        </div>
-                        <div style="display: flex; min-width:calc(50% - 8px)">
-                            <span class="label-bold" style="margin-right: 6px;">
-                                Location: 
-                            </span>
-                            <div class="label">
-                                {{event.location.address}}, {{event.location.room}}
-                            </div>
-                        </div>
-                    </div>
-                            
-                </div>
-            </a>			
-        {% endfor %}
-        {% endif %}
-    </div>   
+        </a>
+        {% endfor %} {% endif %}
+    </div>
 </div>
-    
+
 {% endblock %}
