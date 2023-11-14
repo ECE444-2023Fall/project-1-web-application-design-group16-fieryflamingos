@@ -132,6 +132,71 @@ class TestIntegration(unittest.TestCase):
         fetched_event = Event.objects(title='Integration Test Event').get()
         fetched_comment = EventComment.objects(content='Integration Test Comment').get()
         self.assertIn(reply.id, fetched_comment.replies)
+    
+    def test_regular_user_attending_event_and_comment_interaction(self):
+        # Create a regular user
+        regular_user = RegularUser(
+            first_name='Alice',
+            last_name='Smith',
+            email='alice@mail.utoronto.ca',
+            password='Password@123',
+            preferences=['preference1', 'preference2'],
+        )
+        regular_user.save()
+
+        # Create an event that the regular user is attending
+        fixed_time = datetime(2023, 10, 23, 12, 0)
+        event = Event(
+            event_date={"from_date": fixed_time, "to_date": fixed_time},
+            title='Integration Test Event',
+            location={"place": 'Place', "address": 'Address', "room": 'Room'},
+            targeted_preferences=['preference1', 'preference2'],
+            organizer={"author_id": 1, "name": "Test Organizer"},
+            description='Event description',
+            attendees=[{"author_id": regular_user.id, "name": regular_user.get_full_name()}]
+        )
+        event.save()
+
+        # Add a comment to the event
+        comment = EventComment(
+            event_id=event.id,
+            author={"author_id": 1, "name": "Test User"},
+            content="Integration Test Comment",
+            likes=0,
+            rating=5
+        )
+        comment.save()
+
+        # Fetch the user and check if the comment is associated with the attended event
+        fetched_regular_user = RegularUser.objects(email=regular_user.email).get()
+        self.assertIn(comment.id, fetched_regular_user.attending_events[0]['comments'])
+
+    def test_event_and_multiple_attendees_interaction(self):
+        # Create an event
+        fixed_time = datetime(2023, 10, 23, 12, 0)
+        event = Event(
+            event_date={"from_date": fixed_time, "to_date": fixed_time},
+            title='Integration Test Event',
+            location={"place": 'Place', "address": 'Address', "room": 'Room'},
+            targeted_preferences=['preference1', 'preference2'],
+            organizer={"author_id": 1, "name": "Test Organizer"},
+            description='Event description',
+            attendees=[]
+        )
+        event.save()
+
+        # Add multiple attendees to the event
+        attendees = [
+            {"author_id": 2, "name": "Attendee 1"},
+            {"author_id": 3, "name": "Attendee 2"},
+            {"author_id": 4, "name": "Attendee 3"}
+        ]
+        event.update(add_to_set__attendees=attendees)
+
+        # Fetch the event and check if all attendees are associated with the event
+        fetched_event = Event.objects(title='Integration Test Event').get()
+        attendee_ids = [attendee['author_id'] for attendee in fetched_event.attendees]
+        self.assertCountEqual(attendee_ids, [2, 3, 4])
 
 if __name__ == '__main__':
     unittest.main()
